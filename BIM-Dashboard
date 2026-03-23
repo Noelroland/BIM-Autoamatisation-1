@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="night">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Noel's Learning Hub V2</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Syne:wght@400;500;600;700;800&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+
+/* ═══ NIGHT THEME ═══ */
+[data-theme="night"]{
+  --bg-base:#0a0a0a;--bg-surface:#131313;--bg-raised:#1a1a1a;--bg-hover:#222;
+  --border:#252525;--border-subtle:#1e1e1e;
+  --gold:#d4a843;--gold-dim:#8a6d2f;--gold-glow:rgba(212,168,67,0.10);--gold-glow-strong:rgba(212,168,67,0.22);
+  --gold-gradient:linear-gradient(135deg,#d4a843,#f0d078,#d4a843);
+  --accent:#00e5ff;--accent-glow:rgba(0,229,255,0.12);--accent-dim:rgba(0,229,255,0.4);
+  --white:#f0ede6;--muted:#7a7870;--muted-2:#3e3e3c;
+  --green:#4e9b6f;--green-glow:rgba(78,155,111,0.15);--red:#c75050;
+  --card-shadow:0 4px 20px rgba(0,0,0,0.4),0 1px 3px rgba(0,0,0,0.3);
+  --card-shadow-hover:0 8px 32px rgba(0,0,0,0.5),0 2px 8px rgba(212,168,67,0.08);
+  --text-primary:#f0ede6;--text-secondary:#7a7870;--text-dim:#3e3e3c;
+  --hero-wash:linear-gradient(180deg,rgba(212,168,67,0.04) 0%,transparent 60%);
+  --noise-opacity:0.035;
+}
+
+/* ═══ DAY THEME ═══ */
+[data-theme="day"]{
+  --bg-base:#f2ede3;--bg-surface:#e8e3d8;--bg-raised:#ddd8cc;--bg-hover:#d4cfbf;
+  --border:#c8c3b5;--border-subtle:#d0cbbe;
+  --gold:#9a7a28;--gold-dim:#b8972e;--gold-glow:rgba(154,122,40,0.08);--gold-glow-strong:rgba(154,122,40,0.18);
+  --gold-gradient:linear-gradient(135deg,#9a7a28,#c8a634,#9a7a28);
+  --accent:#0090a8;--accent-glow:rgba(0,144,168,0.10);--accent-dim:rgba(0,144,168,0.35);
+  --white:#1a1810;--muted:#5a5850;--muted-2:#8a887e;
+  --green:#3a7a52;--green-glow:rgba(58,122,82,0.12);--red:#b04040;
+  --card-shadow:0 2px 12px rgba(0,0,0,0.06),0 1px 3px rgba(0,0,0,0.04);
+  --card-shadow-hover:0 4px 20px rgba(0,0,0,0.08),0 2px 6px rgba(154,122,40,0.06);
+  --text-primary:#1a1810;--text-secondary:#5a5850;--text-dim:#8a887e;
+  --hero-wash:linear-gradient(180deg,rgba(154,122,40,0.04) 0%,transparent 60%);
+  --noise-opacity:0.025;
+}
+
+html{-webkit-text-size-adjust:100%;}
+body{
+  font-family:'Space Grotesk',sans-serif;color:var(--text-primary);
+  background:var(--bg-base);min-height:100vh;overflow:hidden;
+  -webkit-font-smoothing:antialiased;transition:background .4s,color .4s;
+}
+
+/* ═══ NOISE TEXTURE OVERLAY ═══ */
+body::before{
+  content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
+  opacity:var(--noise-opacity);
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat:repeat;background-size:256px 256px;
+}
+
+/* ═══ LAYOUT ═══ */
+.app{display:grid;grid-template-columns:230px 1fr;grid-template-rows:auto 1fr;height:100vh;overflow:hidden;}
+
+/* ═══ TOPBAR ═══ */
+.topbar{
+  grid-column:1/-1;display:flex;align-items:center;padding:0 28px;gap:16px;
+  background:var(--bg-surface);border-bottom:1px solid var(--border-subtle);
+  z-index:10;height:56px;position:relative;
+}
+.topbar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);opacity:0.3;}
+
+.topbar-brand{display:flex;align-items:baseline;gap:8px;}
+.topbar-brand .name{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text-primary);letter-spacing:-0.5px;}
+.topbar-brand .name em{font-style:normal;background:var(--gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.topbar-brand .sub{
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;
+  background:var(--gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  font-weight:600;margin-left:16px;
+}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:14px;}
+
+/* Streak chip */
+.streak-chip{
+  display:flex;align-items:center;gap:6px;
+  padding:5px 12px;border-radius:20px;
+  background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.15);
+  animation:streakPulse 3s ease-in-out infinite;
+}
+@keyframes streakPulse{0%,100%{box-shadow:0 0 8px rgba(212,168,67,0.1)}50%{box-shadow:0 0 16px rgba(212,168,67,0.25)}}
+.streak-chip svg{color:var(--gold);width:14px;height:14px;}
+.streak-chip .val{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--gold);}
+.streak-chip .lbl{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+
+/* Lang pills */
+.lang-pills{display:flex;gap:0;border-radius:6px;overflow:hidden;border:1px solid var(--border);}
+.lang-pill{
+  padding:6px 12px;border:none;cursor:pointer;
+  font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;letter-spacing:1px;
+  color:var(--muted);background:var(--bg-raised);transition:all .2s;
+}
+.lang-pill:not(:last-child){border-right:1px solid var(--border);}
+.lang-pill.active{color:var(--gold);background:var(--gold-glow);}
+.theme-toggle{
+  width:32px;height:32px;border-radius:8px;border:1px solid var(--border);
+  background:var(--bg-raised);cursor:pointer;display:flex;align-items:center;justify-content:center;
+  color:var(--gold);transition:all .2s;
+}
+.theme-toggle:hover{background:var(--bg-hover);border-color:var(--gold-dim);}
+
+/* ═══ SIDEBAR ═══ */
+.sidebar{
+  background:var(--bg-surface);border-right:1px solid var(--border-subtle);
+  display:flex;flex-direction:column;padding:20px 0;overflow-y:auto;scrollbar-width:none;
+}
+.sidebar::-webkit-scrollbar{display:none;}
+.sidebar-section{padding:0 16px;margin-bottom:28px;}
+.sidebar-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted-2);margin-bottom:10px;padding-left:10px;}
+.sidebar-item{
+  display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;
+  cursor:pointer;transition:all .15s;color:var(--muted);font-size:13px;font-weight:500;
+  margin-bottom:2px;position:relative;
+}
+.sidebar-item:hover{background:var(--bg-hover);color:var(--text-primary);}
+.sidebar-item.active{background:var(--gold-glow);color:var(--gold);}
+.sidebar-item.active::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:0 2px 2px 0;background:var(--gold);}
+.sidebar-item svg{flex-shrink:0;width:16px;height:16px;}
+
+/* ── CERTIFICATION VERTICAL TRACK ── */
+.cert-track{padding:0 16px 0 28px;position:relative;}
+.cert-track::before{content:'';position:absolute;left:34px;top:14px;bottom:14px;width:2px;background:var(--border);border-radius:1px;}
+.cert-node{
+  display:flex;align-items:center;gap:12px;padding:8px 0;position:relative;cursor:pointer;
+  transition:all .15s;
+}
+.cert-node:hover .cert-name{color:var(--text-primary);}
+.cert-dot{
+  width:12px;height:12px;border-radius:50%;flex-shrink:0;position:relative;z-index:2;
+  transition:all .3s;
+}
+.cert-dot.done{background:var(--gold);box-shadow:0 0 10px var(--gold-glow-strong);}
+.cert-dot.next{background:var(--accent);box-shadow:0 0 8px var(--accent-glow);animation:certPulse 2s ease infinite;}
+.cert-dot.locked{background:transparent;border:2px solid var(--muted-2);opacity:0.5;}
+@keyframes certPulse{0%,100%{box-shadow:0 0 8px var(--accent-glow)}50%{box-shadow:0 0 18px rgba(0,229,255,0.3)}}
+.cert-dot.done::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:var(--bg-base);}
+.cert-name{font-size:12px;font-weight:500;color:var(--muted);transition:color .15s;}
+.cert-node.done .cert-name{color:var(--gold);}
+.cert-node.locked .cert-name{color:var(--muted-2);opacity:0.5;}
+
+.sidebar-footer{margin-top:auto;padding:16px 20px;text-align:center;}
+.sidebar-footer .version{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--muted-2);letter-spacing:2px;}
+
+/* ═══ MAIN ═══ */
+.main{overflow-y:auto;padding:28px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;position:relative;}
+.main::before{content:'';position:absolute;top:0;left:0;right:0;height:200px;background:var(--hero-wash);pointer-events:none;z-index:0;}
+.main::-webkit-scrollbar{width:4px;}
+.main::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.main>*{position:relative;z-index:1;}
+
+/* ═══ HERO KPI ROW ═══ */
+.kpi-row{display:flex;gap:16px;margin-bottom:28px;}
+.kpi-card{
+  flex:1;background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:14px;
+  padding:20px 24px;transition:border-color .25s,box-shadow .25s,transform .25s;
+  position:relative;overflow:hidden;
+}
+.kpi-card::before{content:'';position:absolute;inset:0;border-radius:14px;opacity:0;transition:opacity .25s;
+  background:linear-gradient(135deg,var(--gold-glow) 0%,transparent 60%);pointer-events:none;}
+.kpi-card:hover{border-color:var(--gold-dim);box-shadow:var(--card-shadow-hover);transform:translateY(-1px);}
+.kpi-card:hover::before{opacity:1;}
+.kpi-label{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+
+/* Lab Level (overall progress) */
+.kpi-value{font-family:'Syne',sans-serif;font-size:44px;font-weight:800;color:var(--text-primary);line-height:1;letter-spacing:-2px;
+  transition:color .3s;}
+.kpi-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-top:6px;letter-spacing:0.5px;}
+
+/* Progress bar — smooth gradient fill */
+.progress-bar{height:4px;border-radius:3px;background:var(--border);margin-top:12px;overflow:hidden;position:relative;}
+.progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold),var(--accent));transition:width 1.2s cubic-bezier(.4,0,.2,1);position:relative;}
+.progress-fill::after{content:'';position:absolute;right:0;top:-1px;bottom:-1px;width:12px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3));border-radius:0 3px 3px 0;filter:blur(2px);}
+
+/* Dot grid */
+.dot-grid{display:flex;flex-wrap:wrap;gap:3px;margin-top:10px;}
+.dot-grid .dot{width:5px;height:5px;border-radius:50%;background:var(--border);transition:all .4s;}
+.dot-grid .dot.done{background:var(--gold);box-shadow:0 0 4px var(--gold-glow-strong);}
+
+/* Streak card */
+.streak-big{font-family:'Syne',sans-serif;font-size:48px;font-weight:800;color:var(--gold);line-height:1;display:flex;align-items:baseline;gap:8px;letter-spacing:-2px;}
+.streak-big svg{width:28px;height:28px;color:var(--gold);}
+.streak-dots{display:flex;gap:5px;margin-top:10px;}
+.streak-dot{width:9px;height:9px;border-radius:50%;background:var(--border);transition:all .3s;}
+.streak-dot.lit{background:var(--green);box-shadow:0 0 8px var(--green-glow);}
+
+/* ═══ SECTION HEADERS ═══ */
+.sec-hdr{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.sec-bar{width:3px;height:18px;border-radius:2px;background:var(--gold);flex-shrink:0;}
+.sec-title{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);}
+.sec-line{flex:1;height:1px;background:var(--border-subtle);}
+.sec-count{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--muted-2);}
+
+/* ═══ QUEST CARDS (MODULE STAGES) ═══ */
+.modules-list{display:flex;flex-direction:column;gap:10px;margin-bottom:28px;}
+.module-card{
+  background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:14px;
+  overflow:hidden;transition:border-color .25s,box-shadow .25s,transform .25s;
+}
+.module-card:hover{border-color:var(--border);box-shadow:var(--card-shadow);transform:scale(1.005);}
+.module-card.complete{border-color:rgba(78,155,111,0.25);}
+.module-hdr{display:flex;align-items:center;gap:14px;padding:16px 20px;cursor:pointer;-webkit-user-select:none;user-select:none;transition:background .12s;}
+.module-hdr:hover{background:var(--bg-hover);}
+
+/* Large icon with circular bg */
+.module-icon{
+  width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  background:var(--gold-glow);color:var(--gold);flex-shrink:0;font-size:20px;
+  border:1px solid rgba(212,168,67,0.12);transition:all .25s;
+}
+.module-card:hover .module-icon{border-color:rgba(212,168,67,0.25);box-shadow:0 0 12px var(--gold-glow);}
+.module-card.complete .module-icon{background:var(--green-glow);color:var(--green);border-color:rgba(78,155,111,0.15);}
+
+.module-info{flex:1;min-width:0;}
+.module-top{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;}
+.module-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;letter-spacing:0.2px;}
+.module-dur{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted-2);background:var(--bg-raised);padding:3px 8px;border-radius:5px;border:1px solid var(--border-subtle);}
+.module-badge{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1px;padding:3px 8px;border-radius:5px;}
+.module-badge.done{background:var(--green-glow);color:var(--green);border:1px solid rgba(78,155,111,0.2);}
+
+/* Bold fraction display */
+.module-bar-row{display:flex;align-items:center;gap:10px;}
+.module-track{flex:1;height:3px;border-radius:2px;background:var(--border);overflow:hidden;}
+.module-fill{height:3px;border-radius:2px;transition:width 1s cubic-bezier(.4,0,.2,1);}
+.module-frac{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text-primary);letter-spacing:-0.5px;}
+.module-frac span{color:var(--muted);font-weight:400;font-size:11px;}
+.module-toggle{font-size:10px;color:var(--muted-2);flex-shrink:0;width:16px;text-align:center;transition:transform .2s;}
+.module-toggle.open{transform:rotate(180deg);}
+
+/* Criteria body */
+.criteria-body{display:none;padding:0 20px 14px;border-top:1px solid var(--border-subtle);}
+.criteria-body.open{display:block;padding-top:14px;}
+.criterion{display:flex;align-items:flex-start;gap:10px;padding:7px 10px;border-radius:8px;cursor:pointer;-webkit-user-select:none;user-select:none;margin-bottom:2px;transition:background .12s;}
+.criterion:hover{background:var(--bg-hover);}
+.criterion.checked{opacity:0.45;}
+.cbox{
+  width:18px;height:18px;border-radius:5px;flex-shrink:0;margin-top:1px;
+  border:1.5px solid var(--border);background:var(--bg-raised);
+  display:flex;align-items:center;justify-content:center;transition:all .2s;
+}
+.cbox.on{border-color:var(--gold);background:var(--gold);color:var(--bg-base);}
+.cbox.on::after{content:'✓';font-size:11px;font-weight:700;animation:checkIn .25s ease;}
+@keyframes checkIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.cbox.pop{animation:cboxPop .25s ease;}
+@keyframes cboxPop{0%{transform:scale(1)}40%{transform:scale(1.2)}100%{transform:scale(1)}}
+.c-text{font-size:12px;line-height:1.6;color:var(--text-primary);}
+.criterion.checked .c-text{text-decoration:line-through;text-decoration-color:var(--gold-dim);color:var(--muted);}
+.tt{color:var(--accent);border-bottom:1px dotted var(--accent-dim);cursor:pointer;transition:all .12s;}
+.tt:hover{background:var(--accent-glow);border-radius:3px;padding:0 2px;}
+
+/* Lab Notebook (notes) */
+.note-wrap{display:none;padding:0 20px 14px;}
+.note-wrap.open{display:block;}
+.note-lbl-row{display:flex;align-items:center;gap:8px;padding:0 20px;margin-top:2px;}
+.note-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted-2);}
+/* FIX L1: hidden by default */
+.note-saved{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--green);opacity:0;transition:opacity .3s;letter-spacing:1px;}
+.note-saved.show{opacity:1;}
+.note-area{
+  width:100%;border:1px solid var(--border-subtle);border-radius:8px;padding:10px 12px;
+  font-family:'Space Grotesk',sans-serif;font-size:11px;color:var(--text-primary);
+  background:var(--bg-base);resize:none;outline:none;min-height:48px;
+  transition:border-color .15s,box-shadow .15s;
+  box-shadow:inset 0 2px 4px rgba(0,0,0,0.1);
+  background-image:repeating-linear-gradient(transparent,transparent 23px,var(--border-subtle) 23px,var(--border-subtle) 24px);
+  background-size:100% 24px;background-position:0 10px;line-height:24px;
+}
+.note-area:focus{border-color:var(--gold);box-shadow:inset 0 2px 4px rgba(0,0,0,0.1),0 0 0 2px var(--gold-glow);}
+.note-area::placeholder{color:var(--muted-2);font-style:italic;}
+
+/* ═══ ARTIFACTS ═══ */
+.arts-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px;}
+.art-card{
+  min-width:140px;max-width:180px;flex:1;
+  background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:14px;
+  border-left:3px solid var(--art-color,var(--gold));padding:16px;cursor:pointer;
+  transition:all .25s;position:relative;
+}
+.art-card:hover{border-color:var(--border);box-shadow:var(--card-shadow);transform:translateY(-3px);}
+.art-icon{font-size:20px;margin-bottom:8px;}
+/* FIX M2: ellipsis on long names */
+.art-name{font-size:11px;font-weight:600;letter-spacing:0.3px;line-height:1.3;margin-bottom:4px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.art-type{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+
+/* ═══ ASIDE PANELS ═══ */
+.aside-panel{
+  background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:14px;
+  padding:18px;margin-bottom:16px;transition:border-color .25s,box-shadow .25s;
+}
+.aside-panel:hover{border-color:var(--border);box-shadow:var(--card-shadow);}
+
+/* Achievement shelf milestones */
+.ms-item{display:flex;gap:8px;align-items:flex-start;padding:4px 0;transition:all .2s;}
+.ms-item:hover .ms-name{color:var(--gold);}
+.ms-track{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:14px;}
+.ms-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px;}
+.ms-dot.done{background:var(--gold);box-shadow:0 0 8px var(--gold-glow-strong);}
+.ms-dot.active{background:var(--accent);animation:msPulse 2s ease infinite;}
+.ms-dot.upcoming{background:transparent;border:1.5px solid var(--muted-2);}
+@keyframes msPulse{0%,100%{box-shadow:0 0 4px var(--accent-glow)}50%{box-shadow:0 0 14px rgba(0,229,255,0.3)}}
+.ms-line{width:1.5px;flex:1;min-height:10px;background:var(--border-subtle);}
+.ms-content{padding-bottom:6px;}
+.ms-name{font-size:11px;font-weight:500;color:var(--text-primary);transition:color .15s;}
+.ms-item.ms-done .ms-name{color:var(--gold);}
+.ms-item.ms-done{border-left:2px solid var(--gold);padding-left:6px;margin-left:-8px;border-radius:2px;background:var(--gold-glow);}
+.ms-item.ms-upcoming .ms-name{color:var(--muted-2);opacity:0.5;}
+.ms-desc{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);margin-top:1px;}
+.ms-item.ms-upcoming .ms-desc{color:var(--muted-2);opacity:0.5;}
+
+/* Progress summary */
+.summary-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border-subtle);}
+.summary-row:last-child{border-bottom:none;}
+.summary-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted-2);}
+.summary-val{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;letter-spacing:-0.3px;}
+
+/* Next Experiment card */
+.next-up{margin-top:12px;padding:12px;border-radius:10px;background:var(--accent-glow);border:1px solid rgba(0,229,255,0.12);
+  animation:nextPulse 4s ease-in-out infinite;}
+@keyframes nextPulse{0%,100%{box-shadow:0 0 0 transparent}50%{box-shadow:0 0 12px var(--accent-glow)}}
+.next-up-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);margin-bottom:4px;}
+.next-up-text{font-size:11px;line-height:1.5;}
+
+/* ═══ RESET ═══ */
+.reset-btn{
+  font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted-2);background:transparent;border:1px solid var(--border-subtle);
+  border-radius:8px;padding:7px 14px;cursor:pointer;transition:all .2s;
+}
+.reset-btn:hover{color:var(--red);border-color:var(--red);background:rgba(199,80,80,0.06);}
+
+/* ═══ POPUPS ═══ */
+.popup-ov{position:fixed;inset:0;z-index:500;background:rgba(10,10,10,0.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);display:none;overflow-y:auto;}
+.popup-ov.open{display:block;}
+@media(min-width:760px){.popup-ov{display:none;align-items:center;justify-content:center;padding:32px;}.popup-ov.open{display:flex;}}
+.popup-panel{position:relative;min-height:100vh;max-width:740px;margin:0 auto;background:var(--bg-surface);border-left:3px solid var(--pa,var(--gold));animation:popIn .25s ease;}
+@media(min-width:760px){.popup-panel{min-height:unset;max-height:88vh;overflow-y:auto;border-radius:14px;}}
+@keyframes popIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:translateX(0)}}
+.pp-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg-surface);z-index:10;}
+.pp-eye{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--pa,var(--gold));overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60%;}
+.pp-x{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);background:var(--bg-raised);border:1px solid var(--border);padding:8px 16px;border-radius:8px;cursor:pointer;min-height:36px;display:flex;align-items:center;transition:all .15s;}
+.pp-x:hover{border-color:var(--gold-dim);color:var(--gold);}
+.pp-body{padding:24px;}
+.pp-title{font-family:'Syne',sans-serif;font-size:clamp(22px,4vw,38px);font-weight:800;line-height:1;margin-bottom:4px;letter-spacing:-1px;}
+.pp-sub{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
+.pp-hr{height:1px;background:var(--border-subtle);margin:16px 0;}
+.pp-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--pa,var(--gold));margin-bottom:8px;}
+.pp-text{font-size:13px;line-height:1.8;color:var(--muted);margin-bottom:12px;}
+.pp-code{background:var(--bg-base);border-left:3px solid var(--pa,var(--gold));padding:10px 14px;border-radius:0 8px 8px 0;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:14px;white-space:pre-wrap;word-break:break-all;}
+.pp-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.pp-tag{font-family:'JetBrains Mono',monospace;font-size:10px;padding:5px 10px;border-radius:6px;background:var(--bg-raised);border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .12s;}
+.pp-tag:hover{border-color:var(--accent-dim);color:var(--accent);}
+.pp-btn{display:flex;align-items:center;justify-content:center;width:100%;padding:14px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;background:var(--gold);color:var(--bg-base);border:none;cursor:pointer;font-weight:600;transition:all .12s;text-decoration:none;margin-top:6px;}
+.pp-btn:hover{opacity:0.9;}
+.pp-btn-danger{display:flex;align-items:center;justify-content:center;width:100%;padding:12px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;background:rgba(199,80,80,0.08);color:var(--red);border:1px solid rgba(199,80,80,0.2);cursor:pointer;transition:all .12s;margin-top:6px;}
+.pp-btn-danger:hover{background:rgba(199,80,80,0.15);}
+
+/* Glossary */
+.gloss-grid{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.gloss-btn{font-family:'JetBrains Mono',monospace;font-size:9px;padding:5px 10px;border-radius:6px;background:var(--bg-raised);border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .12s;min-height:32px;display:inline-flex;align-items:center;}
+.gloss-btn.sel,.gloss-btn:active{background:var(--accent-glow);color:var(--accent);border-color:var(--accent-dim);}
+.gloss-det{display:none;animation:popIn .2s ease;}.gloss-det.show{display:block;}
+.py-tabs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;}
+.py-tab{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:5px 10px;border-radius:6px;cursor:pointer;border:1px solid var(--border);background:var(--bg-raised);color:var(--muted);transition:all .12s;display:inline-flex;align-items:center;gap:5px;}
+.py-tab.sel{background:var(--gold-glow);color:var(--gold);border-color:var(--gold-dim);}
+.py-cnt{font-size:8px;opacity:.6;background:rgba(0,0,0,.1);border-radius:3px;padding:0 3px;}
+.py-sec{display:none;}.py-sec.show{display:block;}
+.py-term{background:var(--bg-raised);border:1px solid var(--border-subtle);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:12px;margin-bottom:8px;}
+.py-term-name{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold);margin-bottom:6px;font-weight:500;}
+
+/* ADD MODAL */
+.modal-ov{position:fixed;inset:0;background:rgba(10,10,10,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:600;display:none;align-items:flex-end;justify-content:center;}
+.modal-ov.open{display:flex;}
+@media(min-width:600px){.modal-ov{align-items:center;padding:24px;}}
+.modal{background:var(--bg-surface);border:1px solid var(--border);border-top:3px solid var(--gold);border-radius:14px 14px 0 0;padding:24px;width:100%;max-width:440px;max-height:90vh;overflow-y:auto;animation:modalUp .2s ease;}
+@media(min-width:600px){.modal{border-radius:14px;}}
+@keyframes modalUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.m-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:16px;}
+.modal label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px;}
+.modal input,.modal textarea,.modal select{
+  width:100%;background:var(--bg-base);border:1px solid var(--border);border-radius:8px;
+  padding:10px 12px;font-size:14px;color:var(--text-primary);font-family:'Space Grotesk',sans-serif;
+  outline:none;margin-bottom:12px;transition:border-color .12s;
+}
+.modal input:focus,.modal textarea:focus,.modal select:focus{border-color:var(--gold);}
+.modal textarea{resize:vertical;min-height:56px;}
+.modal select option{background:var(--bg-surface);}
+.modal-btns{display:flex;gap:8px;justify-content:flex-end;margin-top:4px;}
+.btn-c,.btn-s{padding:10px 18px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .12s;min-height:40px;display:inline-flex;align-items:center;}
+.btn-c{border:1px solid var(--border);background:transparent;color:var(--muted);}
+.btn-c:hover{border-color:var(--gold-dim);}
+.btn-s{border:none;background:var(--gold);color:var(--bg-base);}
+.btn-s:hover{opacity:0.9;}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--gold);color:var(--bg-base);padding:8px 20px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;opacity:0;transition:all .2s;pointer-events:none;z-index:700;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ═══ SCROLL-TRIGGERED FADE-IN ═══ */
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease;}
+.fade-in.visible{opacity:1;transform:translateY(0);}
+
+/* ═══ MOBILE ═══ */
+@media(max-width:700px){
+  .app{grid-template-columns:1fr;grid-template-rows:56px 1fr;}
+  .sidebar{display:none;position:fixed;left:0;top:56px;bottom:0;width:260px;z-index:50;box-shadow:4px 0 24px rgba(0,0,0,0.3);}
+  .sidebar.open{display:flex;}
+  .hamburger{display:flex !important;}
+  .main{padding:16px;}
+  .kpi-row{flex-direction:column;}
+  .main > * > div[style*="grid-template-columns"]{grid-template-columns:1fr !important;}
+  .arts-row{flex-direction:column;}
+  .art-card{max-width:100%;}
+}
+.hamburger{
+  display:none;width:36px;height:36px;border-radius:8px;border:1px solid var(--border);
+  background:var(--bg-raised);cursor:pointer;align-items:center;justify-content:center;
+  color:var(--muted);font-size:18px;transition:all .2s;margin-right:8px;flex-shrink:0;
+}
+.hamburger:hover{color:var(--gold);border-color:var(--gold-dim);}
+
+/* Linktree manual popup reuse styles */
+.lt-tabs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px;}
+.lt-tab{font-family:'JetBrains Mono',monospace;font-size:10px;padding:6px 12px;border-radius:6px;cursor:pointer;border:1px solid var(--border);background:var(--bg-raised);color:var(--muted);transition:all .12s;}
+.lt-tab.sel{background:var(--gold-glow);color:var(--gold);border-color:var(--gold-dim);}
+.lt-sec{display:none;}.lt-sec.show{display:block;}
+.lt-swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:6px;margin-bottom:12px;}
+.lt-sw{border-radius:8px;overflow:hidden;border:1px solid var(--border-subtle);cursor:pointer;}
+.lt-sw-block{height:48px;}.lt-sw-info{background:var(--bg-raised);padding:6px 8px;}
+.lt-sw-name{font-size:9px;font-weight:600;margin-bottom:1px;}.lt-sw-hex{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--muted);}
+.lt-sw-use{font-size:7px;color:var(--muted-2);margin-top:1px;}
+.lt-contrast{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:10px;}
+@media(min-width:480px){.lt-contrast{grid-template-columns:repeat(4,1fr);}}
+.lt-cr{border-radius:8px;padding:10px;text-align:center;}.lt-cr-ratio{font-size:14px;font-weight:800;margin-bottom:1px;}
+.lt-cr-lbl{font-size:7px;opacity:.6;}.lt-cr-grade{font-size:7px;margin-top:3px;padding:1px 5px;border-radius:12px;display:inline-block;}
+.lt-specimen{background:var(--bg-base);border-radius:8px;padding:14px;margin-bottom:8px;border:1px solid var(--border-subtle);}
+.lt-spec-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--muted-2);margin-bottom:6px;}
+.lt-display{font-family:'Syne',sans-serif;font-size:clamp(24px,4vw,40px);font-weight:800;line-height:1;}
+.lt-ui-bold{font-size:clamp(14px,2.5vw,20px);font-weight:800;line-height:1.2;}
+.lt-mono-eg{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--green);line-height:1.5;}
+.lt-scale-row{display:flex;align-items:baseline;gap:8px;padding:6px 0;border-bottom:1px solid var(--border-subtle);}.lt-scale-row:last-child{border-bottom:none;}
+.lt-scale-lbl{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--muted-2);width:44px;flex-shrink:0;text-transform:uppercase;letter-spacing:1px;}
+.lt-btns{display:flex;flex-wrap:wrap;gap:6px;}
+.lt-btn-d{padding:6px 14px;border-radius:32px;font-size:11px;font-weight:600;cursor:pointer;border:none;}
+.lt-btn-dark{background:#1A1A1A;color:#F5F2E8;}.lt-btn-green{background:#8BE04E;color:#1A1A1A;}.lt-btn-ghost{background:transparent;border:2px solid #F5F2E8;color:#F5F2E8;padding:4px 12px;}
+.lt-badge-row{display:flex;flex-wrap:wrap;gap:5px;}
+.lt-badge{padding:2px 8px;border-radius:16px;font-size:8px;font-weight:700;letter-spacing:.3px;}
+.b-green{background:rgba(139,224,78,.15);color:#8BE04E;}.b-purple{background:rgba(123,63,228,.2);color:#b48af7;}.b-yellow{background:rgba(255,228,77,.15);color:#c8a800;}.b-new{background:#8BE04E;color:#1A1A1A;}
+.lt-link-card{background:var(--bg-base);border:1px solid var(--border-subtle);border-radius:8px;padding:8px;display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.lt-link-icon{width:26px;height:26px;background:rgba(139,224,78,.12);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
+.lt-link-text{font-size:11px;font-weight:600;}.lt-link-sub{font-size:9px;color:var(--muted-2);}
+.lt-sp-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.lt-sp-block{background:var(--gold);border-radius:2px;height:18px;flex-shrink:0;opacity:.7;}
+.lt-sp-val{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--muted);min-width:28px;}.lt-sp-desc{font-size:10px;color:var(--muted);}
+.skip-note{display:inline-flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:4px;margin-bottom:8px;}
+.sk-rel{background:rgba(78,155,111,.08);color:var(--green);border:1px solid rgba(78,155,111,.15);}
+.sk-skip{background:rgba(199,80,80,.08);color:var(--red);border:1px solid rgba(199,80,80,.15);}
+
+/* iPad + iOS fixes */
+@supports(-webkit-touch-callout:none){
+  .app{height:-webkit-fill-available;}
+  body{height:-webkit-fill-available;}
+}
+@media(max-width:1024px) and (min-width:701px){
+  .app{grid-template-columns:200px 1fr;}
+  .main{padding:20px;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <button class="hamburger" onclick="document.querySelector('.sidebar').classList.toggle('open')" aria-label="Menu">☰</button>
+    <div class="topbar-brand">
+      <div class="name">Noel's <em>Learning Hub</em></div>
+      <div class="sub" id="headerSub">BIM // AUTOMATION SPECIALIST // ROAD TO CHF 95K</div>
+    </div>
+    <div class="topbar-right">
+      <div class="streak-chip">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 1c0 3-4 5-4 9a5 5 0 0010 0c0-4-4-6-4-9z"/><path d="M9 18c-1.5 0-2.5-1-2.5-2.5S9 12 9 12s2.5 2 2.5 3.5S10.5 18 9 18z"/></svg>
+        <span class="val" id="topStreakVal">0</span>
+        <span class="lbl">streak</span>
+      </div>
+      <div class="lang-pills" id="langPills">
+        <button class="lang-pill active" onclick="setLang('en')">EN</button>
+        <button class="lang-pill" onclick="setLang('de')">DE</button>
+        <button class="lang-pill" onclick="setLang('ru')">RU</button>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme" id="themeBtn">
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="4"/><path d="M9 1v2M9 15v2M1 9h2M15 9h2M3.5 3.5l1.4 1.4M13.1 13.1l1.4 1.4M3.5 14.5l1.4-1.4M13.1 4.9l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">// Navigation</div>
+      <div class="sidebar-item active" data-nav="dashboard">
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="6" height="6" rx="1"/><rect x="10" y="2" width="6" height="6" rx="1"/><rect x="2" y="10" width="6" height="6" rx="1"/><rect x="10" y="10" width="6" height="6" rx="1"/></svg>
+        Dashboard
+      </div>
+      <div class="sidebar-item" data-nav="path">
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4h12M3 9h12M3 14h8"/></svg>
+        Learning Path
+      </div>
+      <div class="sidebar-item" data-nav="vocab">
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h5a2 2 0 012 2v11a1.5 1.5 0 00-1.5-1.5H2V3z"/><path d="M16 3h-5a2 2 0 00-2 2v11a1.5 1.5 0 011.5-1.5H16V3z"/></svg>
+        Vocabulary
+      </div>
+      <div class="sidebar-item" data-nav="artifacts">
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h10a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V4a2 2 0 012-2z"/><path d="M7 2v14"/><path d="M2 7h5"/></svg>
+        Artifacts
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">// Certifications</div>
+      <div class="cert-track">
+        <div class="cert-node done" data-cert="entry"><div class="cert-dot done"></div><span class="cert-name">Entry Level ✓</span></div>
+        <div class="cert-node" data-cert="foundation"><div class="cert-dot next"></div><span class="cert-name">Foundation</span></div>
+        <div class="cert-node locked" data-cert="practitioner"><div class="cert-dot locked"></div><span class="cert-name">Practitioner</span></div>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="version" id="lastUpdated">V2 // UPDATED: —</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main" id="mainScroll">
+    <!-- KPI ROW -->
+    <div class="kpi-row fade-in">
+      <div class="kpi-card">
+        <div class="kpi-label" id="overallLbl">// LAB LEVEL</div>
+        <div style="display:flex;align-items:flex-end;gap:16px;">
+          <div class="kpi-value" id="overallPct">0%</div>
+          <div class="kpi-sub" id="overallSub">0 of 57 criteria</div>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="overallFill" style="width:0%"></div></div>
+        <div class="dot-grid" id="dotGrid"></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label" id="streakLbl">// STREAK BOOST</div>
+        <div class="streak-big">
+          <span id="streakVal">0</span>
+          <svg width="28" height="28" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 1c0 3-4 5-4 9a5 5 0 0010 0c0-4-4-6-4-9z"/><path d="M9 18c-1.5 0-2.5-1-2.5-2.5S9 12 9 12s2.5 2 2.5 3.5S10.5 18 9 18z"/></svg>
+        </div>
+        <div class="kpi-sub" id="streakSub">days in a row</div>
+        <div class="streak-dots" id="streakDots"></div>
+      </div>
+    </div>
+
+    <!-- 2-column -->
+    <div style="display:grid;grid-template-columns:1fr 250px;gap:20px;">
+      <div>
+        <!-- LEARNING PATH -->
+        <div class="sec-hdr fade-in"><div class="sec-bar"></div><span class="sec-title" id="secTtlPath">// LEARNING PATH</span><span class="sec-line"></span><span class="sec-count" id="secBadgePath">5 stages · 57 criteria</span></div>
+        <div class="modules-list" id="pathEl"></div>
+
+        <!-- ARTIFACTS -->
+        <div class="sec-hdr fade-in"><div class="sec-bar"></div><span class="sec-title" id="secTtlArt">// ARTIFACTS & TOOLS</span><span class="sec-line"></span><span class="sec-count" id="artCount">0 saved</span></div>
+        <div class="arts-row fade-in" id="artGrid"></div>
+
+        <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+          <button class="reset-btn" id="resetBtn" onclick="openResetDialog()">⚠ Reset All Data</button>
+        </div>
+      </div>
+
+      <!-- ASIDE -->
+      <div>
+        <div class="aside-panel fade-in">
+          <div class="kpi-label" id="achievementsLbl">// ACHIEVEMENTS</div>
+          <div style="margin-top:10px;">
+            <div class="ms-item ms-done"><div class="ms-track"><div class="ms-dot done"></div><div class="ms-line"></div></div><div class="ms-content"><div class="ms-name">Entry Level openBIM</div><div class="ms-desc">buildingSMART · 3/3 modules</div></div></div>
+            <div class="ms-item ms-active"><div class="ms-track"><div class="ms-dot active"></div><div class="ms-line"></div></div><div class="ms-content"><div class="ms-name">Python Foundations</div><div class="ms-desc">16-week plan · Module 1</div></div></div>
+            <div class="ms-item ms-upcoming"><div class="ms-track"><div class="ms-dot upcoming"></div><div class="ms-line"></div></div><div class="ms-content"><div class="ms-name">Foundation Certification</div><div class="ms-desc">buildingSMART · next target</div></div></div>
+            <div class="ms-item ms-upcoming"><div class="ms-track"><div class="ms-dot upcoming"></div></div><div class="ms-content"><div class="ms-name">First GitHub Project</div><div class="ms-desc">Archicad API automation script</div></div></div>
+          </div>
+        </div>
+        <div class="aside-panel fade-in">
+          <div class="kpi-label" id="progressLbl">// PROGRESS OVERVIEW</div>
+          <div id="rightSummary" style="margin-top:8px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- POPUP -->
+<div class="popup-ov" id="popupOv" onclick="if(event.target===this)closePopup()">
+  <div class="popup-panel" id="popupPanel">
+    <div class="pp-bar"><div class="pp-eye" id="ppEye">—</div><button class="pp-x" onclick="closePopup()">✕ CLOSE</button></div>
+    <div class="pp-body" id="ppBody"></div>
+  </div>
+</div>
+
+<!-- ADD MODAL — FIX M2: maxlength="60" on name input -->
+<div class="modal-ov" id="addModal" onclick="if(event.target===this)closeAdd()">
+  <div class="modal">
+    <div class="m-title" id="addModalTitle">Add Artifact</div>
+    <label>Name</label><input type="text" id="inp-name" placeholder="e.g. IFC Wall Inspector" autocomplete="off" maxlength="60">
+    <label>Description</label><textarea id="inp-desc" placeholder="What does it do?"></textarea>
+    <label>Claude Chat URL</label><input type="url" id="inp-url" placeholder="https://claude.ai/chat/..." autocorrect="off" autocapitalize="none">
+    <label>Type</label>
+    <select id="inp-type"><option>Tool</option><option>Dashboard</option><option>Script</option><option>Reference</option><option>Exercise</option></select>
+    <label>Icon (emoji)</label><input type="text" id="inp-icon" placeholder="🔧" maxlength="4" autocomplete="off">
+    <div class="modal-btns"><button class="btn-c" onclick="closeAdd()">Cancel</button><button class="btn-s" onclick="saveArt()">Save</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+   BIM LEARNING HUB V2 \u2014 ALL BUGS FIXED
+   C1-C5, H1-H2, M1-M2, L1
+\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */
+
+var S=(function(){var m={},ok=false;try{localStorage.setItem("_x","1");localStorage.removeItem("_x");ok=true;}catch(e){}return{get:function(k){try{return ok?localStorage.getItem(k):(m[k]||null);}catch(e){return m[k]||null;}},set:function(k,v){try{if(ok)localStorage.setItem(k,v);else m[k]=v;}catch(e){m[k]=v;}},remove:function(k){try{if(ok)localStorage.removeItem(k);}catch(e){delete m[k];}}}})();
+var KEY="bim-v12";
+var AMAP={Dashboard:"#FF6B1A",Tool:"#00e5ff",Script:"#9BCC3A",Reference:"#d4a843",Exercise:"#C87AFF"};
+var DEFS_ARTS=[
+  {id:1,name:"BIM Glossary",desc:"All key BIM + IT terms \u2014 IFC, ifcopenshell, MCP, BCF, ISO 19650, Python, ArchiCAD.",url:"#",type:"Reference",icon:"\uD83D\uDCD6",date:"2026-03-12",bi:"gloss"},
+  {id:2,name:"Linktree Design Manual",desc:"Corporate Design Manual \u2014 Color System, Typography, UI Components, Spacing.",url:"#",type:"Reference",icon:"\u2733\uFE0F",date:"2026-03-09",bi:"lt"},
+  {id:3,name:"Python Vocabulary",desc:"35 core Python terms with definitions and code examples \u2014 Basics, Data Types, Control Flow, Functions.",url:"#",type:"Reference",icon:"\uD83D\uDC0D",date:"2026-03-18",bi:"pyv"},
+  {id:4,name:"BIM 2.0 Catalog",desc:"9 next-gen architecture tools \u2014 cloud BIM, generative design, AI documentation.",url:"#",type:"Tool",icon:"\uD83D\uDE80",date:"2026-03-23",bi:"bim2"}
+];
+
+var st;
+function load(){try{var r=S.get(KEY);st=r?JSON.parse(r):null;}catch(e){st=null;}
+  /* FIX C4: default state has NO checked criteria (true zero) */
+  if(!st){st={checked:{},open:{},notes:{},artifacts:JSON.parse(JSON.stringify(DEFS_ARTS))};}
+  if(!st.notes)st.notes={};
+  if(!st.checked)st.checked={};
+  /* Migration: add BIM 2.0 Catalog if missing for existing users */
+  if(st.artifacts&&!st.artifacts.some(function(a){return a.bi==="bim2";})){
+    st.artifacts.push({id:4,name:"BIM 2.0 Catalog",desc:"9 next-gen architecture tools.",url:"#",type:"Tool",icon:"\uD83D\uDE80",date:"2026-03-23",bi:"bim2"});
+    save();
+  }
+}
+function save(){try{S.set(KEY,JSON.stringify(st));}catch(e){}}
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+
+var STAGES=[
+  {id:1,color:"#3B82F6",icon:"\uD83D\uDC0D",criteria:[{id:"p1"},{id:"p2"},{id:"p3"},{id:"p10"},{id:"p11"},{id:"p12"},{id:"p13"},{id:"p14"},{id:"p15"},{id:"p4"},{id:"p5"},{id:"p6"},{id:"p7"},{id:"p8"},{id:"p9"}]},
+  {id:2,color:"#10B981",icon:"\uD83D\uDCCB",criteria:[{id:"b1"},{id:"b2"},{id:"b3"},{id:"b4"},{id:"b5"},{id:"b6"},{id:"b7"},{id:"b8"},{id:"b9"},{id:"b10"},{id:"b11"}]},
+  {id:3,color:"#F59E0B",icon:"\u2699\uFE0F",criteria:[{id:"a1"},{id:"a2"},{id:"a3"},{id:"a4"},{id:"a5"},{id:"a6"},{id:"a7"},{id:"a8"},{id:"a9"},{id:"a10"},{id:"a11"}]},
+  {id:4,color:"#8B5CF6",icon:"\uD83D\uDD17",criteria:[{id:"i1"},{id:"i2"},{id:"i3"},{id:"i4"},{id:"i5"},{id:"i6"},{id:"i7"},{id:"i8"},{id:"i9"},{id:"i10"}]},
+  {id:5,color:"#EF4444",icon:"\uD83C\uDFC6",criteria:[{id:"pr1"},{id:"pr2"},{id:"pr3"},{id:"pr4"},{id:"pr5"},{id:"pr6"},{id:"pr7"},{id:"pr8"},{id:"pr9"},{id:"pr10"}]}
+];
+
+var LANG="en";
+var STAGES_EN=[
+  {title:"Python Basics",duration:"4 weeks",criteria:["Installed Python and VS Code","Ran first script (print)","Understand variables, data types","Understand math operators","Understand type conversion","Can use input()","Understand assignment operators","Understand comments and code structure","Understand del","Understand if / else / elif","Understand for and while loops","Understand functions","Can work with files and folders","Can read/write Excel via Python","Wrote an Excel automation script"]},
+  {title:"buildingSMART Foundation",duration:"6 weeks",criteria:["Registered on edubim-campus.de","Understand openBIM","Understand IFC structure","Know ISO 19650","Understand BCF, IDM, MVD, bSDD","Building lifecycle from data perspective","Can explain openBIM to a colleague","Completed all course modules","Passed Foundation exam \u2713","Received certificate and badge","Added certificate to LinkedIn"]},
+  {title:"Archicad Python API",duration:"8 weeks",criteria:["Installed archicad package","Connected Python to Archicad","First script \u2014 counted walls","Script 1: list elements by type","Script 2: check property completeness","Script 3: export check to Excel","Script 4: bulk attribute modification","Script 5: automated IFC export","Created GitHub account","Set up repo with README EN/DE","Showed script to colleague"]},
+  {title:"ifcopenshell + IFC",duration:"8 weeks",criteria:["Installed ifcopenshell","Understand IFC file structure","Opened IFC from Archicad via Python","Can read element properties","Understand IfcWall, IfcSpace, Pset, IfcRel","Script: validate IFC Pset completeness","Script: extract IFC data to Excel","Completed IFC-101 on osarch.org","Completed course on aeco.dev","Added ifcopenshell scripts to GitHub"]},
+  {title:"buildingSMART Practitioner",duration:"10 weeks",criteria:["Registered for Practitioner Coordination","Completed Practitioner e-learning","Attended Part I seminar","Attended Part II seminar","Passed Practitioner exam \u2713","Received bCP certificate","Updated CV with certs + GitHub","Updated LinkedIn profile","Started applying for BIM roles","Completed first interview"]}
+];
+
+/* \u2550\u2550\u2550 FIX M1: TRANSLATION MAP \u2550\u2550\u2550 */
+var I18N={
+  en:{labLevel:"// LAB LEVEL",streak:"// STREAK BOOST",path:"// LEARNING PATH",arts:"// ARTIFACTS & TOOLS",
+      total:"Total",done:"Done",left:"Left",saved:"saved",addArt:"Add Artifact",reset:"\u26A0 Reset All Data",
+      nextExp:"// NEXT EXPERIMENT",progress:"// PROGRESS OVERVIEW",achievements:"// ACHIEVEMENTS"},
+  de:{labLevel:"// LAB-LEVEL",streak:"// SERIE",path:"// LERNPFAD",arts:"// ARTEFAKTE",
+      total:"Gesamt",done:"Erledigt",left:"Offen",saved:"gespeichert",addArt:"Hinzuf\u00FCgen",reset:"\u26A0 Alles zur\u00FCcksetzen",
+      nextExp:"// N\u00C4CHSTES EXPERIMENT",progress:"// FORTSCHRITT",achievements:"// ERFOLGE"},
+  ru:{labLevel:"// \u0423\u0420\u041E\u0412\u0415\u041D\u042C",streak:"// \u0421\u0415\u0420\u0418\u042F",path:"// \u041F\u0423\u0422\u042C",arts:"// \u0410\u0420\u0422\u0415\u0424\u0410\u041A\u0422\u042B",
+      total:"\u0412\u0441\u0435\u0433\u043E",done:"\u0413\u043E\u0442\u043E\u0432\u043E",left:"\u041E\u0441\u0442\u0430\u043B\u043E\u0441\u044C",saved:"\u0441\u043E\u0445\u0440\u0430\u043D\u0435\u043D\u043E",addArt:"\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C",reset:"\u26A0 \u0421\u0431\u0440\u043E\u0441\u0438\u0442\u044C \u0432\u0441\u0451",
+      nextExp:"// \u0421\u041B\u0415\u0414\u0423\u042E\u0429\u0418\u0419 \u0428\u0410\u0413",progress:"// \u041F\u0420\u041E\u0413\u0420\u0415\u0421\u0421",achievements:"// \u0414\u041E\u0421\u0422\u0418\u0416\u0415\u041D\u0418\u042F"}
+};
+function t(key){return (I18N[LANG]||I18N.en)[key]||(I18N.en[key]||key);}
+
+function applyI18n(){
+  var ol=document.getElementById("overallLbl");if(ol)ol.textContent=t("labLevel");
+  var sl=document.getElementById("streakLbl");if(sl)sl.textContent=t("streak");
+  var sp=document.getElementById("secTtlPath");if(sp)sp.textContent=t("path");
+  var sa=document.getElementById("secTtlArt");if(sa)sa.textContent=t("arts");
+  var rb=document.getElementById("resetBtn");if(rb)rb.textContent=t("reset");
+  var pl=document.getElementById("progressLbl");if(pl)pl.textContent=t("progress");
+  var al=document.getElementById("achievementsLbl");if(al)al.textContent=t("achievements");
+}
+
+function setLang(l){LANG=l;S.set("bim-lang",l);
+  document.querySelectorAll(".lang-pill").forEach(function(b){b.classList.toggle("active",b.textContent.trim()===l.toUpperCase());});
+  applyI18n();renderArts();renderRightSummary();
+}
+window.setLang=setLang;
+
+/* \u2550\u2550\u2550 POPUP \u2550\u2550\u2550 */
+function openPopup(html,eye,accent){
+  accent=accent||"#d4a843";
+  var pn=document.getElementById("popupPanel");pn.style.setProperty("--pa",accent);
+  document.getElementById("ppEye").textContent=eye||"";
+  document.getElementById("ppBody").innerHTML=html;
+  document.getElementById("popupOv").classList.add("open");
+}
+function closePopup(){document.getElementById("popupOv").classList.remove("open");}
+window.closePopup=closePopup;
+function openVocab(term){showToast("VOCAB: "+term);}
+window.openVocab=openVocab;
+
+/* \u2550\u2550\u2550 VOCABULARY DATA \u2550\u2550\u2550 */
+var VOCAB={
+  "Python":{cat:"IT // Language",def:"The programming language for BIM automation scripts.",rel:["VS Code","ifcopenshell","pip","GitHub"]},
+  "VS Code":{cat:"IT // Editor",def:"Visual Studio Code \u2014 free code editor for Python BIM scripts.",rel:["Python","pip","GitHub"]},
+  "pip":{cat:"IT // Package Manager",def:"Python\u0027s package installer for ifcopenshell, pandas, openpyxl.",rel:["Python","ifcopenshell","archicad"]},
+  "Excel":{cat:"IT // Data Format",def:"Microsoft Excel (.xlsx) \u2014 used in construction for schedules and reports. Python reads/writes via openpyxl or pandas.",rel:["Python","pandas","openpyxl"]},
+  "pandas":{cat:"IT // Library",def:"Python library for data manipulation \u2014 organize IFC element data into tables.",rel:["Python","Excel","ifcopenshell"]},
+  "openpyxl":{cat:"IT // Library",def:"Python library for reading/writing Excel with cell-level control.",rel:["Python","Excel","pandas"]},
+  "GitHub":{cat:"IT // Version Control",def:"Platform for storing code \u2014 your professional BIM automation portfolio.",rel:["Python","VS Code","archicad"]},
+  "IFC":{cat:"BIM // Standard",def:"Industry Foundation Classes \u2014 ISO 16739 open standard for sharing BIM models between software.",rel:["ifcopenshell","buildingSMART","ArchiCAD","BCF","MVD"]},
+  "ifcopenshell":{cat:"BIM // Library",def:"Open-source Python library for reading, writing and manipulating IFC files.",rel:["IFC","Python","pip","IfcWall","Pset"]},
+  "openBIM":{cat:"BIM // Concept",def:"Vendor-neutral collaborative approach based on open standards (IFC, BCF, bSDD).",rel:["IFC","BCF","buildingSMART","MVD","bSDD"]},
+  "buildingSMART":{cat:"BIM // Organisation",def:"Non-profit maintaining IFC, BCF, IDM, MVD and bSDD standards.",rel:["IFC","openBIM","BCF","IDM","MVD","bSDD"]},
+  "ISO 19650":{cat:"BIM // Standard",def:"International standard for BIM information management over a building\u0027s lifecycle.",rel:["BIM","openBIM","buildingSMART","BCF"]},
+  "BCF":{cat:"BIM // Standard",def:"BIM Collaboration Format \u2014 open format for communicating design issues on BIM elements.",rel:["IFC","openBIM","buildingSMART","IDM"]},
+  "IDM":{cat:"BIM // Standard",def:"Information Delivery Manual \u2014 who needs what information, when, and in what form.",rel:["openBIM","buildingSMART","MVD","BCF"]},
+  "MVD":{cat:"BIM // Standard",def:"Model View Definition \u2014 subset of IFC schema for a specific use case.",rel:["IFC","IDM","buildingSMART","openBIM"]},
+  "bSDD":{cat:"BIM // Standard",def:"buildingSMART Data Dictionary \u2014 online library of classification systems and property definitions.",rel:["openBIM","buildingSMART","IFC","Pset"]},
+  "ArchiCAD":{cat:"BIM // Software",def:"Graphisoft\u0027s BIM authoring software \u2014 exports IFC and supports Python scripting.",rel:["IFC","archicad","archicad-mcp","BIM"]},
+  "archicad":{cat:"IT // Package",def:"Official Python package by Graphisoft for controlling ArchiCAD via scripts.",rel:["Python","pip","ArchiCAD","IFC","GitHub"]},
+  "archicad-mcp":{cat:"IT // MCP",def:"Community MCP server connecting Claude AI to a live ArchiCAD session via Tapir add-on.",rel:["archicad","MCP","IFC","Python"]},
+  "MCP":{cat:"IT // Protocol",def:"Model Context Protocol \u2014 Anthropic\u0027s standard for Claude to interact with external tools in real time.",rel:["archicad-mcp","Claude API","Python"]},
+  "Claude API":{cat:"IT // API",def:"Anthropic\u0027s API for programmatic Claude access \u2014 send IFC data for analysis or code generation.",rel:["MCP","Python","ifcopenshell"]},
+  "IfcWall":{cat:"BIM // IFC Entity",def:"IFC entity representing a wall \u2014 one of the most common entities in ifcopenshell.",rel:["IFC","ifcopenshell","Pset","IfcSpace"]},
+  "IfcSpace":{cat:"BIM // IFC Entity",def:"IFC entity representing a room or spatial zone with area and volume.",rel:["IFC","ifcopenshell","IfcWall","Pset"]},
+  "Pset":{cat:"BIM // IFC Concept",def:"Property Set \u2014 named group of properties attached to IFC elements. Checking Pset completeness is core QA.",rel:["IFC","ifcopenshell","IfcWall","bSDD"]},
+  "IfcRelDefinesByProperties":{cat:"BIM // IFC Relation",def:"IFC relationship linking a property set to building elements.",rel:["IFC","ifcopenshell","Pset"]},
+  "osarch.org":{cat:"BIM // Community",def:"Open Source Architecture \u2014 hosts IFC-101 course and ifcopenshell examples.",rel:["IFC","ifcopenshell","openBIM"]},
+  "aeco.dev":{cat:"BIM // Learning",def:"Learning platform for AEC developers with ifcopenshell courses.",rel:["ifcopenshell","IFC","Python"]},
+  "edubim-campus.de":{cat:"BIM // Certification",def:"Official buildingSMART Germany e-learning platform for Foundation and Practitioner.",rel:["buildingSMART","openBIM","ISO 19650"]},
+  "README":{cat:"IT // Documentation",def:"README.md \u2014 front page of a GitHub repository explaining the project.",rel:["GitHub","Python","ifcopenshell"]}
+};
+
+var PYTHON_VOCAB={
+  "print()":{cat:"Basics",def:"Outputs text or values to the console.",ex:"print(\u0027Hello\u0027)\nprint(42)"},
+  "variable":{cat:"Basics",def:"A named container that stores a value.",ex:"wall_count = 42\nproject = \u0027SBB Bern\u0027"},
+  "comment":{cat:"Basics",def:"Text Python ignores. # for single-line.",ex:"# Count walls\ncount = len(walls)  # int"},
+  "f-string":{cat:"Basics",def:"Embed variables in strings with f\u0027...\u0027 syntax.",ex:"print(f\u0027Walls: {count}\u0027)"},
+  "import":{cat:"Basics",def:"Loads an external module into your script.",ex:"import ifcopenshell\nfrom pathlib import Path"},
+  "int":{cat:"Data Types",def:"Integer \u2014 whole numbers for counts, indices.",ex:"wall_count = 42\nfloor = int(\u00273\u0027)"},
+  "float":{cat:"Data Types",def:"Floating-point \u2014 decimals for dimensions.",ex:"elevation = 3.15\narea = 24.75"},
+  "str":{cat:"Data Types",def:"String \u2014 text data for names, GUIDs, paths.",ex:"name = \u0027IfcWall\u0027\nupper = name.upper()"},
+  "bool":{cat:"Data Types",def:"Boolean \u2014 True or False.",ex:"is_valid = True\nresult = (10 > 5)"},
+  "list":{cat:"Data Types",def:"Ordered mutable collection. model.by_type() returns a list.",ex:"walls = model.by_type(\u0027IfcWall\u0027)\nnames = [\u0027a\u0027,\u0027b\u0027]\nnames.append(\u0027c\u0027)"},
+  "dict":{cat:"Data Types",def:"Key-value pairs. get_psets() returns a dict.",ex:"psets = {\u0027Pset_WallCommon\u0027: {\u0027FireRating\u0027: \u0027EI60\u0027}}"},
+  "tuple":{cat:"Data Types",def:"Ordered immutable collection for fixed data.",ex:"point = (10.5, 20.3, 0.0)"},
+  "None":{cat:"Data Types",def:"Python\u0027s null value \u2014 absence of a value.",ex:"val = pset.get(\u0027FireRating\u0027, None)"},
+  "if / elif / else":{cat:"Control Flow",def:"Conditional branching for validation logic.",ex:"if count == 0:\n    print(\u0027No walls\u0027)\nelse:\n    print(count)"},
+  "for loop":{cat:"Control Flow",def:"Iterate over every item \u2014 core of BIM automation.",ex:"for wall in model.by_type(\u0027IfcWall\u0027):\n    print(wall.Name)"},
+  "while loop":{cat:"Control Flow",def:"Repeat while condition is True.",ex:"count = 0\nwhile count < 5:\n    count += 1"},
+  "break / continue":{cat:"Control Flow",def:"break exits loop; continue skips to next iteration.",ex:"for w in walls:\n    if not w.Name: continue"},
+  "try / except":{cat:"Control Flow",def:"Error handling for IFC files with missing data.",ex:"try:\n    model = ifcopenshell.open(\u0027m.ifc\u0027)\nexcept FileNotFoundError:\n    print(\u0027Not found\u0027)"},
+  "def":{cat:"Functions",def:"Define a reusable function.",ex:"def count_walls(model):\n    return len(model.by_type(\u0027IfcWall\u0027))"},
+  "return":{cat:"Functions",def:"Send a value back from a function.",ex:"def get_rating(w):\n    return psets.get(\u0027FireRating\u0027)"},
+  "lambda":{cat:"Functions",def:"Small anonymous one-line function.",ex:"sorted(walls, key=lambda w: w.Name or \u0027\u0027)"},
+  "open()":{cat:"Files",def:"Open a file for reading or writing.",ex:"with open(\u0027report.txt\u0027,\u0027w\u0027) as f:\n    f.write(\u0027Done\u0027)"},
+  "pathlib":{cat:"Files",def:"Modern library for cross-platform file paths.",ex:"from pathlib import Path\np = Path(\u0027model.ifc\u0027)"},
+  "json":{cat:"Files",def:"Read and write JSON data.",ex:"import json\njson.dump(data, f, indent=2)"},
+  "arithmetic":{cat:"Operators",def:"Basic math: + - * / // % **",ex:"area = w * h\nremainder = 10 % 3"},
+  "comparison":{cat:"Operators",def:"Compare values: == != < > <= >=",ex:"wall.Name == \u0027W-01\u0027\ncount > 0"},
+  "logical":{cat:"Operators",def:"Combine booleans: and / or / not",ex:"if wall.Name and wall.ObjectType:\n    print(\u0027valid\u0027)"},
+  "int()":{cat:"Type Conversion",def:"Convert to integer.",ex:"int(\u002742\u0027)  # 42\nint(3.9)  # 3"},
+  "float()":{cat:"Type Conversion",def:"Convert to float.",ex:"float(\u00273.14\u0027)  # 3.14"},
+  "str()":{cat:"Type Conversion",def:"Convert to string.",ex:"str(42)  # \u002742\u0027"},
+  "list()":{cat:"Type Conversion",def:"Convert iterable to list.",ex:"walls = list(model.by_type(\u0027IfcWall\u0027))"},
+  "input()":{cat:"Input / Output",def:"Read user input from terminal.",ex:"name = input(\u0027Project name: \u0027)"}
+};
+var PY_CATS=["Basics","Data Types","Control Flow","Functions","Files","Operators","Type Conversion","Input / Output"];
+
+/* \u2550\u2550\u2550 GLOSSARY POPUP (BIM Glossary artifact) \u2550\u2550\u2550 */
+function openGlossary(){
+  var terms=Object.keys(VOCAB);
+  var nav=terms.map(function(tm){return "<button class=\"gloss-btn\" data-term=\""+esc(tm)+"\">" +esc(tm)+"</button>";}).join("");
+  var dets=terms.map(function(tm){
+    var d=VOCAB[tm];
+    var rels=(d.rel||[]).map(function(r){return "<span class=\"pp-tag\" data-term=\""+esc(r)+"\">"+esc(r)+"</span>";}).join("");
+    return "<div class=\"gloss-det\" id=\"gd-"+esc(tm)+"\">"
+      +"<div class=\"pp-title\" style=\"font-size:clamp(20px,4vw,32px)\">"+esc(tm)+"</div>"
+      +"<div class=\"pp-sub\">"+esc(d.cat)+"</div><div class=\"pp-hr\"></div>"
+      +"<div class=\"pp-lbl\">// Definition</div><div class=\"pp-text\">"+esc(d.def)+"</div>"
+      +(rels?"<div class=\"pp-lbl\">// See also</div><div class=\"pp-tags\">"+rels+"</div>":"")
+      +"</div>";
+  }).join("");
+  var html="<div class=\"pp-title\">BIM + IT Vocabulary</div>"
+    +"<div class=\"pp-sub\">"+terms.length+" terms // BIM Standards \u00B7 IFC Entities \u00B7 Python \u00B7 Tools</div>"
+    +"<div class=\"pp-hr\"></div>"
+    +"<div class=\"pp-lbl\">// Select a term</div>"
+    +"<div class=\"gloss-grid\">"+nav+"</div>"
+    +"<div class=\"pp-hr\"></div>"
+    +"<div id=\"gloss-dets\">"+dets+"</div>";
+  openPopup(html,"// BIM + IT VOCABULARY","#00e5ff");
+  setTimeout(function(){document.querySelectorAll(".gloss-btn[data-term],.pp-tag[data-term]").forEach(function(b){b.addEventListener("click",function(){glossSel(this.getAttribute("data-term"));});});},50);
+}
+window.openGlossary=openGlossary;
+function glossSel(term){
+  document.querySelectorAll(".gloss-det").forEach(function(d){d.classList.remove("show");});
+  document.querySelectorAll(".gloss-btn").forEach(function(b){b.classList.remove("sel");});
+  var det=document.getElementById("gd-"+term);if(det)det.classList.add("show");
+  document.querySelectorAll(".gloss-btn").forEach(function(b){if(b.textContent===term)b.classList.add("sel");});
+}
+window.glossSel=glossSel;
+
+/* \u2550\u2550\u2550 PYTHON VOCAB POPUP \u2550\u2550\u2550 */
+function openPyVocab(){
+  var terms=Object.keys(PYTHON_VOCAB);
+  var tabs=PY_CATS.map(function(c,i){
+    var cnt=terms.filter(function(tm){return PYTHON_VOCAB[tm].cat===c;}).length;
+    return "<button class=\"py-tab"+(i===0?" sel":"")+"\" data-idx=\""+i+"\" data-pytab=\"1\">"+esc(c)+" <span class=\"py-cnt\">"+cnt+"</span></button>";
+  }).join("");
+  var secs=PY_CATS.map(function(c,i){
+    var catTerms=terms.filter(function(tm){return PYTHON_VOCAB[tm].cat===c;});
+    var content=catTerms.map(function(tm){
+      var d=PYTHON_VOCAB[tm];
+      return "<div class=\"py-term\"><div class=\"py-term-name\">"+esc(tm)+"</div>"
+        +"<div class=\"pp-text\" style=\"margin-bottom:8px\">"+esc(d.def)+"</div>"
+        +(d.ex?"<div class=\"pp-code\">"+esc(d.ex)+"</div>":"")+"</div>";
+    }).join("");
+    return "<div class=\"py-sec"+(i===0?" show":"")+"\" data-idx=\""+i+"\">"+content+"</div>";
+  }).join("");
+  var html="<div class=\"pp-title\">Python Vocabulary</div>"
+    +"<div class=\"pp-sub\">"+terms.length+" terms // Basics \u00B7 Types \u00B7 Flow \u00B7 Functions \u00B7 Files</div>"
+    +"<div class=\"pp-hr\"></div><div class=\"py-tabs\">"+tabs+"</div><div class=\"py-body\">"+secs+"</div>";
+  openPopup(html,"// PYTHON VOCABULARY","#F59E0B");
+  setTimeout(function(){document.querySelectorAll("[data-pytab]").forEach(function(t){t.addEventListener("click",function(){pyTab(this);});});},50);
+}
+window.openPyVocab=openPyVocab;
+function pyTab(btn){
+  var idx=btn.getAttribute("data-idx");var body=btn.closest(".pp-body");
+  body.querySelectorAll(".py-tab").forEach(function(b){b.classList.remove("sel");});
+  body.querySelectorAll(".py-sec").forEach(function(s){s.classList.remove("show");});
+  btn.classList.add("sel");
+  var sec=body.querySelector(".py-sec[data-idx=\""+idx+"\"]");if(sec)sec.classList.add("show");
+}
+window.pyTab=pyTab;
+
+/* \u2550\u2550\u2550 LINKTREE MANUAL POPUP \u2550\u2550\u2550 */
+function openLinktree(){
+  function sw(hex,name,nc,use){return "<div class=\"lt-sw\" data-hex=\""+hex+"\"><div class=\"lt-sw-block\" style=\"background:"+hex+(hex==="#F5F2E8"?";border:1px solid rgba(0,0,0,.1)":"")+"\"></div><div class=\"lt-sw-info\"><div class=\"lt-sw-name\" style=\"color:"+nc+"\">"+name+"</div><div class=\"lt-sw-hex\">"+hex+"</div><div class=\"lt-sw-use\">"+use+"</div></div></div>";}
+  var html="<div class=\"pp-title\" style=\"letter-spacing:-1px;text-transform:none;font-size:clamp(24px,5vw,40px)\">Linktree<span style=\"color:#8BE04E\">\u2733</span></div>"
+    +"<div class=\"pp-sub\">Corporate Design Manual // Study-plan filtered</div><div class=\"pp-hr\"></div>"
+    +"<div class=\"lt-tabs\"><button class=\"lt-tab sel\" data-tab=\"colors\">Colors</button><button class=\"lt-tab\" data-tab=\"type\">Typography</button><button class=\"lt-tab\" data-tab=\"comp\">Components</button></div>"
+    +"<div class=\"lt-sec show\" id=\"lts-colors\"><div class=\"pp-lbl\">// Palette \u2014 tap to copy hex</div>"
+    +"<div class=\"lt-swatches\">"+sw("#8BE04E","Green","#4a8a10","Primary CTA")+sw("#1A1A1A","Obsidian","#ccc","Background")+sw("#F5F2E8","Cream","#333","Text")+sw("#7B3FE4","Purple","#b48af7","Premium")+sw("#FFE44D","Yellow","#c8a800","Badges")+"</div></div>"
+    +"<div class=\"lt-sec\" id=\"lts-type\"><div class=\"lt-specimen\"><div class=\"lt-spec-lbl\">DM Serif Display \u2014 Headlines</div><div class=\"lt-display\">Linktree</div></div>"
+    +"<div class=\"lt-specimen\"><div class=\"lt-spec-lbl\">Bricolage Grotesque \u2014 UI & Body</div><div class=\"lt-ui-bold\">Schedule posts and grow your audience</div></div>"
+    +"<div class=\"lt-specimen\"><div class=\"lt-spec-lbl\">DM Mono \u2014 Metadata</div><div class=\"lt-mono-eg\">linktr.ee/username \u00B7 US$12/mo \u00B7 AAA</div></div></div>"
+    +"<div class=\"lt-sec\" id=\"lts-comp\"><div class=\"pp-lbl\">// Buttons</div>"
+    +"<div style=\"background:#141414;border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:16px;margin-bottom:12px\"><div class=\"lt-btns\"><button class=\"lt-btn-d lt-btn-dark\">Log in</button><button class=\"lt-btn-d lt-btn-green\">Sign up free</button><button class=\"lt-btn-d lt-btn-ghost\">Learn more</button></div></div>"
+    +"<div class=\"pp-lbl\">// Badges</div><div class=\"lt-badge-row\"><span class=\"lt-badge b-new\">NEW</span><span class=\"lt-badge b-green\">Pro Feature</span><span class=\"lt-badge b-purple\">Premium</span><span class=\"lt-badge b-yellow\">Recommended</span></div></div>";
+  openPopup(html,"// LINKTREE DESIGN MANUAL","#8BE04E");
+  setTimeout(function(){document.querySelectorAll("[data-hex]").forEach(function(s){s.addEventListener("click",function(){ltCopy(this.getAttribute("data-hex"));});});document.querySelectorAll("[data-tab]").forEach(function(t){t.addEventListener("click",function(){ltTab(this.getAttribute("data-tab"));});});},50);
+}
+window.openLinktree=openLinktree;
+function ltCopy(hex){try{navigator.clipboard.writeText(hex).then(function(){showToast("COPIED "+hex);});}catch(e){showToast(hex);}}
+window.ltCopy=ltCopy;
+function ltTab(id){
+  document.querySelectorAll(".lt-sec").forEach(function(s){s.classList.remove("show");});
+  document.querySelectorAll(".lt-tab").forEach(function(t){t.classList.remove("sel");});
+  var s=document.getElementById("lts-"+id);if(s)s.classList.add("show");
+  document.querySelectorAll(".lt-tab").forEach(function(t){if(t.getAttribute("onclick")&&t.getAttribute("onclick").indexOf("\u0027"+id+"\u0027")>-1)t.classList.add("sel");});
+}
+window.ltTab=ltTab;
+
+/* === BIM 2.0 CATALOG === */
+var BIM2_TOOLS=[
+  {id:"arcol",name:"Arcol",tag:"Cloud-native BIM for feasibility & collaboration",cat:"BIM 2.0 Authoring",stage:"Early-stage \u2192 Feasibility",url:"https://arcol.io",color:"#2563EB",rel:4,desc:"Combines massing, floorplans, metrics, cost estimating, and presentations in one cloud platform. Real-time multiplayer, parametric modeling, shadow studies, auto-generated feasibility data. Exports to Revit.",feat:["Real-time multiplayer","Integrated cost metrics","Revit mass export","Rhino/GH integration planned"],price:"Subscription, free trial",founded:"2021",funding:"$5M+ seed"},
+  {id:"snaptrude",name:"Snaptrude",tag:"Browser-based concept-to-BIM in one click",cat:"BIM 2.0 Authoring",stage:"Concept \u2192 Schematic \u2192 BIM",url:"https://snaptrude.com",color:"#8B5CF6",rel:5,desc:"Browser-based platform: Program, Design, Present, BIM modes. AI-powered programming from prompts, one-click massing-to-BIM, bi-directional Revit sync. V3 added AI adjacency packing and rendering.",feat:["AI Program from prompts","One-click massing to BIM","Bi-directional Revit","Real-time collaboration"],price:"Free student plan, paid teams",founded:"2019",funding:"Venture-backed"},
+  {id:"motif",name:"Motif",tag:"Next-gen BIM from ex-Autodesk leadership",cat:"BIM 2.0 Collaboration",stage:"Design Review \u2192 Collaboration",url:"https://motif.io",color:"#EC4899",rel:4,desc:"Founded by former Autodesk co-CEO Amar Hanspal. Cloud-based infinite canvas for design review with live streaming from Revit/Rhino. AI rendering built in. Long-term roadmap: full BIM authoring. $46M raised.",feat:["Live model streaming","Infinite canvas","3D markup & sketching","AI rendering"],price:"$25/month per user",founded:"2023",funding:"$46M"},
+  {id:"qonic",name:"Qonic",tag:"Solid-modeling BIM rebuilt from scratch",cat:"BIM 2.0 Authoring",stage:"Design \u2192 Construction",url:"https://qonic.com",color:"#059669",rel:4,desc:"Built by former Bricsys team. Cloud-based solid modeler with NURBS and direct modeling. Imports IFC, Revit, Rhino, SketchUp. Database-driven, API-first platform.",feat:["NURBS solid modeling","Import IFC/RVT/Rhino/SKP","API-first platform","Design-to-construction"],price:"Free beta",founded:"~2021",funding:"Private"},
+  {id:"rayon",name:"Rayon",tag:"Unified CAD for drawing, styling & presenting",cat:"2D CAD",stage:"Schematic \u2192 Documentation",url:"https://rayon.design",color:"#F59E0B",rel:3,desc:"Web-based CAD: drafting, styling, layout in one tool. Smart wall networks, 3000+ blocks, material styling, AI tracing. Real-time multiplayer, DWG/PDF import.",feat:["Draw/style/present in one","Smart wall tools","3000+ CAD blocks","AI tracing"],price:"Free students, paid pros",founded:"~2021",funding:"Private"},
+  {id:"hypar",name:"Hypar",tag:"Code-driven generative building design",cat:"Generative Design",stage:"Early-stage \u2192 Space Planning",url:"https://hypar.io",color:"#06B6D4",rel:3,desc:"Open platform for encoding design rules into reusable, AI-supported modules. ML-powered space planning for healthcare, workplaces, data centers. Free tier + Revit integration.",feat:["Code-driven automation","ML space planning","Custom modules","Free tier + Revit"],price:"Free tier available",founded:"2018",funding:"Venture-backed"},
+  {id:"testfit",name:"TestFit",tag:"Real-time generative site planning",cat:"Generative Design",stage:"Feasibility \u2192 Site Planning",url:"https://testfit.io",color:"#EF4444",rel:4,desc:"AI-driven site planning: input site dimensions, zoning, typology \u2014 get instant unit counts, parking ratios, cost estimates. Strong for multifamily. Exports to Revit.",feat:["Instant site feasibility","Real-time metrics","Multifamily focus","Revit export"],price:"~$250/month",founded:"2017",funding:"Venture-backed"},
+  {id:"finch3d",name:"Finch 3D",tag:"AI-optimized floor plan layouts",cat:"Generative Design",stage:"Schematic \u2192 Floor Plans",url:"https://finch3d.com",color:"#10B981",rel:3,desc:"AI + graph technology for optimized floor plans based on adjacency, circulation, daylight. Instant performance feedback and error detection. Revit plugin.",feat:["AI floor plan generation","Daylight optimization","Instant feedback","Revit plugin"],price:"Free tier, ~$50/mo pro",founded:"2019",funding:"Venture-backed"},
+  {id:"swapp",name:"SWAPP",tag:"AI-automated construction documentation",cat:"AI Documentation",stage:"DD \u2192 Construction Docs",url:"https://swapp.ai",color:"#7C3AED",rel:5,desc:"Automates construction documents: learns firm standards, auto-generates plans, elevations, RCPs, schedules, MEP layouts. Potentially halves documentation time. Leader in automated drawing production.",feat:["AI learns firm standards","Auto-generates full CDs","Code compliance","Halves doc time"],price:"Enterprise pricing",founded:"2018",funding:"Venture-backed"}
+];
+var BIM2_CATS=["All","BIM 2.0 Authoring","BIM 2.0 Collaboration","Generative Design","2D CAD","AI Documentation"];
+
+function openBim2Catalog(){
+  var cats=BIM2_CATS.map(function(c){return "<button class=\"gloss-btn\" data-bim2cat=\""+esc(c)+"\">"+esc(c)+"</button>";}).join("");
+  var cards=BIM2_TOOLS.map(function(t){
+    var dots="";for(var n=1;n<=5;n++){dots+="<div style=\"width:7px;height:7px;border-radius:50%;background:"+(n<=t.rel?t.color:"#ddd")+"\"></div>";}
+    var feats=t.feat.map(function(f){return "<span style=\"padding:4px 10px;background:"+t.color+"10;border:1px solid "+t.color+"25;border-radius:6px;font-size:11px;color:#555\">"+esc(f)+"</span>";}).join("");
+    return "<div class=\"bim2-card\" data-bim2cat=\""+esc(t.cat)+"\" data-bim2id=\""+t.id+"\" style=\"background:var(--bg-raised);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:12px;cursor:pointer;transition:all .2s;border-left:3px solid "+t.color+"\">"
+      +"<div style=\"display:flex;align-items:center;gap:12px;margin-bottom:10px\">"
+      +"<div style=\"width:40px;height:40px;border-radius:10px;background:"+t.color+"15;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:"+t.color+"\">"+t.name[0]+"</div>"
+      +"<div style=\"flex:1\"><div style=\"display:flex;align-items:center;gap:8px\"><strong style=\"font-size:15px\">"+esc(t.name)+"</strong>"
+      +"<span style=\"font-size:10px;color:"+t.color+";background:"+t.color+"12;padding:2px 8px;border-radius:20px\">"+esc(t.cat)+"</span></div>"
+      +"<div style=\"font-size:12px;color:var(--text-secondary);margin-top:2px\">"+esc(t.tag)+"</div></div></div>"
+      +"<div style=\"font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:10px\">"+esc(t.desc)+"</div>"
+      +"<div style=\"display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px\">"+feats+"</div>"
+      +"<div style=\"display:flex;align-items:center;gap:16px;font-size:11px;color:var(--text-dim)\">"
+      +"<span>Founded: "+esc(t.founded)+"</span>"
+      +"<span>"+esc(t.price)+"</span>"
+      +"<span>"+esc(t.funding)+"</span>"
+      +"<div style=\"margin-left:auto;display:flex;gap:3px\">"+dots+"</div>"
+      +"</div>"
+      +"<a href=\""+esc(t.url)+"\" target=\"_blank\" rel=\"noopener\" style=\"display:inline-block;margin-top:10px;padding:6px 16px;background:"+t.color+";color:#fff;border-radius:8px;font-size:11px;font-weight:600;text-decoration:none\">Visit Website \u2197</a>"
+      +"</div>";
+  }).join("");
+
+  var html="<div class=\"pp-title\">BIM 2.0 Catalog</div>"
+    +"<div class=\"pp-sub\">9 Next-Gen Architecture Tools</div>"
+    +"<div class=\"pp-hr\"></div>"
+    +"<div class=\"pp-text\">Legacy tools were built before the cloud, before AI, before real-time collaboration. These startups are rewriting the rules.</div>"
+    +"<div class=\"pp-hr\"></div>"
+    +"<input type=\"text\" id=\"bim2Search\" placeholder=\"Filter tools...\" style=\"width:100%;padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg-raised);color:var(--text-primary);font-size:11px;outline:none;margin-bottom:12px\">"
+    +"<div class=\"gloss-grid\" id=\"bim2Cats\" style=\"margin-bottom:16px\">"+cats+"</div>"
+    +"<div id=\"bim2Cards\">"+cards+"</div>"
+    +"<div class=\"pp-hr\"></div>"
+    +"<div style=\"background:var(--bg-raised);border-radius:12px;padding:20px;border:1px solid var(--border)\">"
+    +"<div class=\"pp-lbl\">// What This Means For You</div>"
+    +"<div class=\"pp-text\"><strong>Watch now:</strong> Snaptrude and Arcol for design speed. SWAPP for cutting documentation time in half. Motif for the long game. Qonic for precision solid modeling.</div>"
+    +"<div class=\"pp-text\"><strong>Your move:</strong> Pick one tool that solves your biggest bottleneck, trial it on a real project, and build from there.</div>"
+    +"</div>";
+
+  openPopup(html,"// BIM 2.0 CATALOG","#2563EB");
+
+  setTimeout(function(){
+    var catsEl=document.getElementById("bim2Cats");
+    if(catsEl)catsEl.addEventListener("click",function(e){
+      var b=e.target.closest("[data-bim2cat]");if(!b)return;
+      var cat=b.getAttribute("data-bim2cat");
+      catsEl.querySelectorAll(".gloss-btn").forEach(function(x){x.classList.remove("sel");});
+      b.classList.add("sel");
+      document.querySelectorAll(".bim2-card").forEach(function(c){
+        c.style.display=(cat==="All"||c.getAttribute("data-bim2cat")===cat)?"":"none";
+      });
+    });
+    var search=document.getElementById("bim2Search");
+    if(search)search.addEventListener("input",function(){
+      var q=this.value.toLowerCase();
+      document.querySelectorAll(".bim2-card").forEach(function(c){
+        c.style.display=c.textContent.toLowerCase().indexOf(q)>-1?"":"none";
+      });
+    });
+  },50);
+}
+window.openBim2Catalog=openBim2Catalog;
+
+/* === ARTIFACTS \u2014 FIX C2: seeded cards open rich popups, user cards open detail modal === */
+function openArt(id){
+  var a=null;(st.artifacts||[]).forEach(function(x){if(x.id==id)a=x;});if(!a)return;
+  /* Route seeded artifacts to their rich interactive popups */
+  if(a.bi==="gloss"){openGlossary();return;}
+  if(a.bi==="pyv"){openPyVocab();return;}
+  if(a.bi==="lt"){openLinktree();return;}
+  if(a.bi==="bim2"){openBim2Catalog();return;}
+  /* User-created artifacts get detail modal */
+  var accent=AMAP[a.type]||"#d4a843";
+  /* FIX C5: show Claude URL button if url exists and is not empty */
+  var urlBtn="";
+  if(a.url&&a.url!=="#"&&a.url.trim()!==""){
+    urlBtn="<a class=\"pp-btn\" href=\""+esc(a.url)+"\" target=\"_blank\" rel=\"noopener\">\u2197 OPEN IN CLAUDE</a>";
+  }
+  var html="<div class=\"pp-title\">"+esc(a.name)+"</div><div class=\"pp-sub\">"+esc(a.type)+" // "+esc(a.date)+"</div><div class=\"pp-hr\"></div>"
+    +"<div class=\"pp-lbl\">// Definition</div><div class=\"pp-text\">"+esc(a.desc)+"</div>"
+    +urlBtn
+    +"<div class=\"pp-hr\"></div>"
+    +"<button class=\"pp-btn-danger\" onclick=\"deleteArt("+a.id+")\">\uD83D\uDDD1 DELETE</button>";
+  openPopup(html,"// "+a.type.toUpperCase()+" \u2014 "+a.name.toUpperCase().slice(0,28),accent);
+}
+window.openArt=openArt;
+
+/* FIX H2: confirm before deleting */
+function deleteArt(id){
+  if(!confirm("Delete this artifact permanently?"))return;
+  st.artifacts=(st.artifacts||[]).filter(function(a){return a.id!=id;});
+  save();renderArts();closePopup();showToast("DELETED \u2713");
+}
+window.deleteArt=deleteArt;
+
+/* FIX H1: clear all fields when opening add modal */
+function openAdd(){
+  document.getElementById("inp-name").value="";
+  document.getElementById("inp-desc").value="";
+  document.getElementById("inp-url").value="";
+  document.getElementById("inp-type").selectedIndex=0;
+  document.getElementById("inp-icon").value="";
+  document.getElementById("addModal").classList.add("open");
+}
+function closeAdd(){document.getElementById("addModal").classList.remove("open");}
+function saveArt(){
+  var name=(document.getElementById("inp-name").value||"").trim();if(!name){showToast("ENTER A NAME");return;}
+  if(!st.artifacts)st.artifacts=[];
+  st.artifacts.push({id:Date.now(),name:name,desc:(document.getElementById("inp-desc").value||"").trim()||"\u2014",url:(document.getElementById("inp-url").value||"").trim()||"",type:document.getElementById("inp-type").value,icon:(document.getElementById("inp-icon").value||"").trim()||"\uD83D\uDCC4",date:new Date().toISOString().split("T")[0]});
+  save();renderArts();closeAdd();showToast("SAVED \u2713");
+}
+window.openAdd=openAdd;window.closeAdd=closeAdd;window.saveArt=saveArt;
+
+/* \u2550\u2550\u2550 NOTES \u2014 FIX L1: saved indicator hidden by default, shown only on input \u2550\u2550\u2550 */
+function saveNote(el){
+  var noteKey=el.getAttribute("data-notekey");var stageId=parseInt(el.getAttribute("data-stageid"));
+  S.set(noteKey,el.value);if(!st.notes)st.notes={};st.notes[stageId]=el.value;save();
+  var saved=document.getElementById("note-saved-"+stageId);
+  if(saved){saved.classList.add("show");clearTimeout(saved._t);saved._t=setTimeout(function(){saved.classList.remove("show");},2000);}
+}
+window.saveNote=saveNote;
+
+/* \u2550\u2550\u2550 STREAK \u2550\u2550\u2550 */
+function updateStreak(){
+  var data;try{data=JSON.parse(S.get("bim-streak")||"null");}catch(e){data=null;}
+  if(!data)data={count:0,lastVisit:""};
+  var today=new Date().toISOString().split("T")[0];
+  var yesterday=new Date(Date.now()-86400000).toISOString().split("T")[0];
+  if(data.lastVisit===today){}
+  else if(data.lastVisit===yesterday){data.count++;data.lastVisit=today;}
+  else if(!data.lastVisit){data.count=1;data.lastVisit=today;}
+  else{data.count=1;data.lastVisit=today;}
+  S.set("bim-streak",JSON.stringify(data));
+  var el=document.getElementById("streakVal");if(el){el.textContent=data.count;el.style.animation="none";el.offsetHeight;el.style.animation="bounceIn 0.5s ease";}
+  var topV=document.getElementById("topStreakVal");if(topV)topV.textContent=data.count;
+  var sub=document.getElementById("streakSub");if(sub)sub.textContent="days in a row \u00B7 "+new Date().toLocaleDateString("de-CH");
+  var dotsEl=document.getElementById("streakDots");
+  if(dotsEl){var m=7,pos=data.count%m||(data.count>0&&data.count%m===0?m:0);var h="";for(var i=0;i<m;i++)h+="<div class=\"streak-dot"+(i<pos?" lit":"")+"\"></div>";dotsEl.innerHTML=h;}
+  var chip=document.querySelector(".streak-chip");
+  if(chip&&data.count>=7)chip.style.animationDuration="1.5s";
+  if(chip&&data.count>=30)chip.style.boxShadow="0 0 20px rgba(212,168,67,0.35)";
+}
+
+/* \u2550\u2550\u2550 OVERALL \u2550\u2550\u2550 */
+function updateOverall(){
+  var total=0,done=0;
+  STAGES.forEach(function(s){s.criteria.forEach(function(c){total++;if(st.checked[c.id])done++;});});
+  var pct=total?Math.round(done/total*100):0;
+  var pe=document.getElementById("overallPct");
+  if(pe){animateCounter(pe,pct);}
+  var fill=document.getElementById("overallFill");if(fill){requestAnimationFrame(function(){requestAnimationFrame(function(){fill.style.width=pct+"%";});});}
+  var ps=document.getElementById("overallSub");if(ps)ps.textContent=done+" of "+total+" criteria completed";
+  var dg=document.getElementById("dotGrid");
+  if(dg){var dots="";STAGES.forEach(function(s){s.criteria.forEach(function(c){dots+="<div class=\"dot"+(st.checked[c.id]?" done":"")+"\"></div>";});});dg.innerHTML=dots;}
+}
+function animateCounter(el,target){
+  var start=parseInt(el.textContent)||0;if(start===target){el.textContent=target+"%";return;}
+  var diff=target-start;var duration=800;var startTime=null;
+  function step(ts){if(!startTime)startTime=ts;var p=Math.min((ts-startTime)/duration,1);var ease=1-Math.pow(1-p,3);
+    el.textContent=Math.round(start+diff*ease)+"%";if(p<1)requestAnimationFrame(step);}
+  requestAnimationFrame(step);
+}
+
+/* \u2550\u2550\u2550 RENDER PATH \u2550\u2550\u2550 */
+function renderPath(){
+  var el=document.getElementById("pathEl");if(!el)return;el.innerHTML="";
+  STAGES.forEach(function(stage,si){
+    var ls=STAGES_EN[si];
+    var total=stage.criteria.length;var done=stage.criteria.filter(function(c){return st.checked[c.id];}).length;
+    var pct=Math.round(done/total*100);var isOpen=!!st.open[stage.id];var isComplete=pct===100;
+    var card=document.createElement("div");card.className="module-card fade-in"+(isComplete?" complete":"");card.id="mod-"+stage.id;
+    var hdr=document.createElement("div");hdr.className="module-hdr";
+    hdr.setAttribute("onclick","toggleStage("+stage.id+")");
+    var completeBadge=isComplete?"<span class=\"module-badge done\">\u2713 COMPLETED</span>":"";
+    hdr.innerHTML="<div class=\"module-icon\">"+stage.icon+"</div>"
+      +"<div class=\"module-info\"><div class=\"module-top\"><span class=\"module-name\">"+esc(ls.title)+"</span><span class=\"module-dur\">"+esc(ls.duration)+"</span>"+completeBadge+"</div>"
+      +"<div class=\"module-bar-row\"><div class=\"module-track\"><div class=\"module-fill\" style=\"width:"+pct+"%;background:"+stage.color+"\"></div></div>"
+      +"<span class=\"module-frac\">"+done+"<span>/"+total+"</span></span></div></div>"
+      +"<div class=\"module-toggle"+(isOpen?" open":"")+"\">\u25BE</div>";
+    card.appendChild(hdr);
+    var body=document.createElement("div");body.className="criteria-body"+(isOpen?" open":"");body.id="cb-"+stage.id;
+    stage.criteria.forEach(function(c,ci){
+      var row=document.createElement("div");row.className="criterion"+(st.checked[c.id]?" checked":"");
+      row.setAttribute("data-cid",c.id);
+      (function(cid,sidx,sid){row.addEventListener("click",function(){toggleCheck(cid,sidx,sid);});})(c.id,si,stage.id);
+      row.innerHTML="<div class=\"cbox"+(st.checked[c.id]?" on":"")+"\"></div><span class=\"c-text\">"+esc(ls.criteria[ci])+"</span>";
+      body.appendChild(row);
+    });
+    card.appendChild(body);
+    /* Notes */
+    var noteLblRow=document.createElement("div");noteLblRow.className="note-lbl-row";noteLblRow.style.display=isOpen?"flex":"none";noteLblRow.id="nlr-"+stage.id;
+    /* FIX L1: note-saved starts hidden (opacity:0 via CSS, no .show class) */
+    noteLblRow.innerHTML="<div class=\"note-lbl\">// LAB NOTEBOOK</div><span class=\"note-saved\" id=\"note-saved-"+stage.id+"\">\u2713 saved</span>";
+    card.appendChild(noteLblRow);
+    var noteWrap=document.createElement("div");noteWrap.className="note-wrap"+(isOpen?" open":"");noteWrap.id="nw-"+stage.id;
+    var noteKey="notes_phase_"+si;
+    noteWrap.innerHTML="<textarea class=\"note-area\" data-stageid=\""+stage.id+"\" data-notekey=\""+noteKey+"\" oninput=\"saveNote(this)\" placeholder=\"What did you work on? Scripts, resources, observations\u2026\">"+(S.get(noteKey)||"")+"</textarea>";
+    card.appendChild(noteWrap);
+    el.appendChild(card);
+  });
+}
+
+function toggleStage(id){
+  st.open[id]=!st.open[id];save();
+  var body=document.getElementById("cb-"+id);if(body)body.className="criteria-body"+(st.open[id]?" open":"");
+  var nw=document.getElementById("nw-"+id);if(nw)nw.className="note-wrap"+(st.open[id]?" open":"");
+  var nlr=document.getElementById("nlr-"+id);if(nlr)nlr.style.display=st.open[id]?"flex":"none";
+  var card=document.getElementById("mod-"+id);if(card){var tog=card.querySelector(".module-toggle");if(tog)tog.classList.toggle("open",!!st.open[id]);}
+}
+window.toggleStage=toggleStage;
+
+/* \u2550\u2550\u2550 FIX C1: toggleCheck does INLINE update \u2014 no full re-render \u2550\u2550\u2550 */
+function toggleCheck(cid,si,stageId){
+  st.checked[cid]=!st.checked[cid];save();
+  var isOn=st.checked[cid];
+
+  /* confetti for exam milestones */
+  if(isOn&&(cid==="b9"||cid==="pr5")){if(typeof confetti==="function")confetti({particleCount:100,spread:80,origin:{y:0.7},colors:["#d4a843","#4e9b6f","#00e5ff"]});}
+
+  /* 1) Update the specific criterion row inline */
+  var row=document.querySelector(".criterion[data-cid=\""+cid+"\"]");
+  if(row){
+    row.classList.toggle("checked",isOn);
+    var box=row.querySelector(".cbox");
+    if(box){box.classList.toggle("on",isOn);box.classList.add("pop");setTimeout(function(){box.classList.remove("pop");},300);}
+  }
+
+  /* 2) Update the module card\u0027s progress bar, fraction, and badge */
+  var stage=STAGES[si];
+  var card=document.getElementById("mod-"+stageId);
+  if(stage&&card){
+    var total=stage.criteria.length;
+    var done=stage.criteria.filter(function(c){return st.checked[c.id];}).length;
+    var pct=Math.round(done/total*100);
+    var fill=card.querySelector(".module-fill");if(fill)fill.style.width=pct+"%";
+    var frac=card.querySelector(".module-frac");if(frac)frac.innerHTML=done+"<span>/"+total+"</span>";
+    /* Update complete state */
+    var isComplete=pct===100;
+    card.classList.toggle("complete",isComplete);
+    var existingBadge=card.querySelector(".module-badge");
+    if(isComplete&&!existingBadge){
+      var top=card.querySelector(".module-top");
+      if(top){var b=document.createElement("span");b.className="module-badge done";b.textContent="\u2713 COMPLETED";top.appendChild(b);}
+    }else if(!isComplete&&existingBadge){existingBadge.remove();}
+  }
+
+  /* 3) Update global progress and right summary */
+  updateOverall();
+  renderRightSummary();
+}
+window.toggleCheck=toggleCheck;
+
+/* \u2550\u2550\u2550 RIGHT SUMMARY \u2014 FIX M1: uses translation keys \u2550\u2550\u2550 */
+function renderRightSummary(){
+  var sum=document.getElementById("rightSummary");if(!sum)return;
+  var total=0,done=0;STAGES.forEach(function(s){s.criteria.forEach(function(c){total++;if(st.checked[c.id])done++;});});
+  var pct=total?Math.round(done/total*100):0;
+  var nextItem="\u2014";
+  outer:for(var si=0;si<STAGES.length;si++){var stage=STAGES[si];var ls=STAGES_EN[si];
+    for(var ci=0;ci<stage.criteria.length;ci++){if(!st.checked[stage.criteria[ci].id]){nextItem=ls.criteria[ci];break outer;}}}
+  sum.innerHTML="<div class=\"summary-row\"><span class=\"summary-lbl\">"+t("total")+"</span><span class=\"summary-val\">"+total+"</span></div>"
+    +"<div class=\"summary-row\"><span class=\"summary-lbl\">"+t("done")+"</span><span class=\"summary-val\" style=\"color:var(--green)\">"+done+" ("+pct+"%)</span></div>"
+    +"<div class=\"summary-row\"><span class=\"summary-lbl\">"+t("left")+"</span><span class=\"summary-val\" style=\"color:var(--gold)\">"+(total-done)+"</span></div>"
+    +"<div class=\"next-up\"><div class=\"next-up-lbl\">"+t("nextExp")+"</div><div class=\"next-up-text\">"+esc(nextItem)+"</div></div>";
+}
+
+/* \u2550\u2550\u2550 RENDER ARTIFACTS \u2014 FIX M1: translated labels \u2550\u2550\u2550 */
+function renderArts(){
+  var g=document.getElementById("artGrid");if(!g)return;g.innerHTML="";
+  (st.artifacts||[]).forEach(function(a){
+    var c=document.createElement("div");c.className="art-card";c.style.setProperty("--art-color",AMAP[a.type]||"#d4a843");
+    c.setAttribute("onclick","openArt("+a.id+")");
+    c.innerHTML="<div class=\"art-icon\">"+esc(a.icon||"\uD83D\uDCC4")+"</div><div class=\"art-name\" title=\""+esc(a.name)+"\">"+esc(a.name)+"</div><div class=\"art-type\">"+esc(a.type)+"</div>";
+    g.appendChild(c);
+  });
+  var add=document.createElement("div");add.className="art-card";add.style.cssText="border-left-color:var(--accent);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80px;opacity:0.5;";
+  add.setAttribute("onclick","openAdd()");add.innerHTML="<div style=\"font-size:24px;color:var(--accent);\">+</div><div class=\"art-type\">"+t("addArt")+"</div>";
+  g.appendChild(add);
+  var cnt=document.getElementById("artCount");if(cnt)cnt.textContent=(st.artifacts||[]).length+" "+t("saved");
+}
+
+/* \u2550\u2550\u2550 THEME \u2550\u2550\u2550 */
+function toggleTheme(){
+  var html=document.documentElement;var next=html.getAttribute("data-theme")==="night"?"day":"night";
+  html.setAttribute("data-theme",next);S.set("bim-theme",next);
+  var btn=document.getElementById("themeBtn");
+  if(btn)btn.innerHTML=next==="night"?"<svg width=\"16\" height=\"16\" viewBox=\"0 0 18 18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"><circle cx=\"9\" cy=\"9\" r=\"4\"/><path d=\"M9 1v2M9 15v2M1 9h2M15 9h2M3.5 3.5l1.4 1.4M13.1 13.1l1.4 1.4M3.5 14.5l1.4-1.4M13.1 4.9l1.4-1.4\"/></svg>":"<svg width=\"16\" height=\"16\" viewBox=\"0 0 18 18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"><path d=\"M15 11A7 7 0 017 3c0 5.5 4.5 8 8 8z\"/></svg>";
+}
+window.toggleTheme=toggleTheme;
+
+/* \u2550\u2550\u2550 FIX C4: RESET wipes to true zero state \u2550\u2550\u2550 */
+function openResetDialog(){
+  if(!confirm("Reset ALL progress? This cannot be undone."))return;
+  /* Wipe all keys */
+  ["bim-v12","bim-lang","bim-salary","bim-streak","bim-theme",
+   "notes_phase_0","notes_phase_1","notes_phase_2","notes_phase_3","notes_phase_4"
+  ].forEach(function(k){S.remove(k);});
+  /* Rebuild clean state with zero checked and seed artifacts */
+  st={checked:{},open:{},notes:{},artifacts:JSON.parse(JSON.stringify(DEFS_ARTS))};
+  save();
+  location.reload();
+}
+window.openResetDialog=openResetDialog;
+
+/* \u2550\u2550\u2550 TOAST \u2550\u2550\u2550 */
+var _tt;function showToast(msg){var t=document.getElementById("toast");if(!t)return;t.textContent=msg;t.classList.add("show");clearTimeout(_tt);_tt=setTimeout(function(){t.classList.remove("show");},2200);}
+
+/* \u2550\u2550\u2550 SCROLL FADE-IN OBSERVER \u2550\u2550\u2550 */
+function initScrollFade(){
+  document.querySelectorAll(".fade-in").forEach(function(el,i){
+    setTimeout(function(){el.classList.add("visible");},i*80);
+  });
+}
+
+/* \u2550\u2550\u2550 SIDEBAR NAV \u2550\u2550\u2550 */
+document.querySelectorAll(".sidebar-item[data-nav]").forEach(function(item){
+  item.addEventListener("click",function(){
+    document.querySelectorAll(".sidebar-item[data-nav]").forEach(function(i){i.classList.remove("active");});
+    this.classList.add("active");document.querySelector(".sidebar").classList.remove("open");
+    var nav=this.getAttribute("data-nav");
+    if(nav==="dashboard")document.querySelector(".main").scrollTo({top:0,behavior:"smooth"});
+    /* FIX C3: vocab opens the glossary popup */
+    if(nav==="vocab"){openGlossary();}
+    if(nav==="path"){var el=document.getElementById("pathEl");if(el)el.scrollIntoView({behavior:"smooth"});}
+    if(nav==="artifacts"){var el=document.getElementById("artGrid");if(el)el.scrollIntoView({behavior:"smooth"});}
+  });
+});
+document.querySelectorAll(".cert-node").forEach(function(item){
+  item.addEventListener("click",function(){
+    var cert=this.getAttribute("data-cert");document.querySelector(".sidebar").classList.remove("open");
+    if(cert==="entry")showToast("Entry Level \u2014 completed \u2713");
+    if(cert==="foundation"){var el=document.getElementById("mod-2");if(el){el.scrollIntoView({behavior:"smooth"});toggleStage(2);}}
+    if(cert==="practitioner"){var el=document.getElementById("mod-5");if(el){el.scrollIntoView({behavior:"smooth"});toggleStage(5);}}
+  });
+});
+
+/* \u2550\u2550\u2550 BOUNCE ANIMATION \u2550\u2550\u2550 */
+var style=document.createElement("style");
+style.textContent="@keyframes bounceIn{0%{transform:scale(0.3);opacity:0}50%{transform:scale(1.05)}70%{transform:scale(0.95)}100%{transform:scale(1);opacity:1}}";
+document.head.appendChild(style);
+
+/* \u2550\u2550\u2550 RENDER ALL \u2550\u2550\u2550 */
+function renderAll(){renderPath();renderArts();updateOverall();updateStreak();renderRightSummary();applyI18n();
+  var lu=document.getElementById("lastUpdated");if(lu)lu.textContent="V2 // UPDATED: "+new Date().toLocaleDateString("de-CH");
+  setTimeout(initScrollFade,100);
+}
+
+/* \u2550\u2550\u2550 INIT \u2550\u2550\u2550 */
+document.addEventListener("DOMContentLoaded",function(){
+  var savedLang=S.get("bim-lang");if(savedLang)LANG=savedLang;
+  document.querySelectorAll(".lang-pill").forEach(function(b){b.classList.toggle("active",b.textContent.trim()===LANG.toUpperCase());});
+  var savedTheme=S.get("bim-theme");if(savedTheme)document.documentElement.setAttribute("data-theme",savedTheme);
+  load();renderAll();
+});
+</script>
+</body>
+</html>
