@@ -10,42 +10,42 @@
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 
-/* ═══ NIGHT THEME ═══ */
+/* ═══ NIGHT THEME — Stone ═══ */
 [data-theme="night"]{
-  --bg-void:#060606;
-  --bg-base:#0a0a0a;--bg-surface:#131313;--bg-raised:#1a1a1a;--bg-hover:#222;
-  --bg-surface-glass:rgba(13,13,16,0.72);
-  --border:#252525;--border-subtle:#1e1e1e;--border-default:rgba(255,255,255,0.09);--border-strong:rgba(255,255,255,0.16);
-  --gold:#d4a843;--gold-dim:#8a6d2f;--gold-glow:rgba(212,168,67,0.10);--gold-glow-strong:rgba(212,168,67,0.22);
-  --gold-gradient:linear-gradient(135deg,#d4a843,#f0d078,#d4a843);
-  --accent:#00e5ff;--accent-glow:rgba(0,229,255,0.12);--accent-dim:rgba(0,229,255,0.4);
-  --white:#f0ede6;--muted:#7a7870;--muted-2:#3e3e3c;
-  --green:#4e9b6f;--green-glow:rgba(78,155,111,0.15);--green-subtle:rgba(78,155,111,0.08);--red:#c75050;--red-subtle:rgba(199,80,80,0.08);
-  --warning:#c8a84a;--warning-subtle:rgba(200,168,74,0.08);
+  --bg-void:#0e0e10;
+  --bg-base:#131316;--bg-surface:#1a1a1f;--bg-raised:#222228;--bg-hover:#28282f;
+  --bg-surface-glass:rgba(26,26,31,0.65);
+  --border:#2a2a32;--border-subtle:rgba(255,255,255,0.05);--border-default:rgba(255,255,255,0.08);--border-strong:rgba(255,255,255,0.13);
+  --gold:#b8a07a;--gold-dim:#6e5e42;--gold-glow:rgba(184,160,122,0.08);--gold-glow-strong:rgba(184,160,122,0.15);
+  --gold-gradient:linear-gradient(135deg,#b8a07a,#cdb48e,#b8a07a);
+  --accent:#7aaab8;--accent-glow:rgba(122,170,184,0.08);--accent-dim:rgba(122,170,184,0.35);
+  --white:#d4d4d8;--muted:#7e7e8a;--muted-2:#505060;
+  --green:#7abf9a;--green-glow:rgba(122,191,154,0.10);--green-subtle:rgba(122,191,154,0.06);--red:#c87878;--red-subtle:rgba(200,120,120,0.06);
+  --warning:#c8b06a;--warning-subtle:rgba(200,176,106,0.06);
   --card-shadow:0 4px 20px rgba(0,0,0,0.4),0 1px 3px rgba(0,0,0,0.3);
-  --card-shadow-hover:0 8px 32px rgba(0,0,0,0.5),0 2px 8px rgba(212,168,67,0.08);
-  --text-primary:#f0ede6;--text-secondary:#7a7870;--text-dim:#3e3e3c;
-  --hero-wash:linear-gradient(180deg,rgba(212,168,67,0.04) 0%,transparent 60%);
-  --noise-opacity:0.035;
+  --card-shadow-hover:0 8px 32px rgba(0,0,0,0.5),0 2px 8px rgba(184,160,122,0.06);
+  --text-primary:#d4d4d8;--text-secondary:#7e7e8a;--text-dim:#505060;
+  --hero-wash:linear-gradient(180deg,rgba(184,160,122,0.03) 0%,transparent 60%);
+  --noise-opacity:0.025;
 }
 
-/* ═══ DAY THEME ═══ */
+/* ═══ DAY THEME — Warm Paper ═══ */
 [data-theme="day"]{
-  --bg-void:#ece7dc;
-  --bg-base:#f2ede3;--bg-surface:#e8e3d8;--bg-raised:#ddd8cc;--bg-hover:#d4cfbf;
-  --bg-surface-glass:rgba(242,237,227,0.75);
-  --border:#c8c3b5;--border-subtle:#d0cbbe;--border-default:rgba(0,0,0,0.09);--border-strong:rgba(0,0,0,0.16);
-  --gold:#9a7a28;--gold-dim:#b8972e;--gold-glow:rgba(154,122,40,0.08);--gold-glow-strong:rgba(154,122,40,0.18);
-  --gold-gradient:linear-gradient(135deg,#9a7a28,#c8a634,#9a7a28);
-  --accent:#0090a8;--accent-glow:rgba(0,144,168,0.10);--accent-dim:rgba(0,144,168,0.35);
-  --white:#1a1810;--muted:#5a5850;--muted-2:#8a887e;
-  --green:#3a7a52;--green-glow:rgba(58,122,82,0.12);--green-subtle:rgba(58,122,82,0.08);--red:#b04040;--red-subtle:rgba(176,64,64,0.08);
-  --warning:#a09040;--warning-subtle:rgba(160,144,64,0.08);
+  --bg-void:#edeae4;
+  --bg-base:#f4f2ef;--bg-surface:#eae7e2;--bg-raised:#e2dfd9;--bg-hover:#d8d5cf;
+  --bg-surface-glass:rgba(244,242,239,0.72);
+  --border:#ccc9c2;--border-subtle:rgba(0,0,0,0.05);--border-default:rgba(0,0,0,0.08);--border-strong:rgba(0,0,0,0.14);
+  --gold:#8a7555;--gold-dim:#6a5a40;--gold-glow:rgba(138,117,85,0.08);--gold-glow-strong:rgba(138,117,85,0.14);
+  --gold-gradient:linear-gradient(135deg,#8a7555,#a08868,#8a7555);
+  --accent:#5a8a96;--accent-glow:rgba(90,138,150,0.08);--accent-dim:rgba(90,138,150,0.35);
+  --white:#2a2a2e;--muted:#6a6a72;--muted-2:#9a9a9e;
+  --green:#5a9a72;--green-glow:rgba(90,154,114,0.10);--green-subtle:rgba(90,154,114,0.06);--red:#a05858;--red-subtle:rgba(160,88,88,0.06);
+  --warning:#a09050;--warning-subtle:rgba(160,144,80,0.06);
   --card-shadow:0 2px 12px rgba(0,0,0,0.06),0 1px 3px rgba(0,0,0,0.04);
-  --card-shadow-hover:0 4px 20px rgba(0,0,0,0.08),0 2px 6px rgba(154,122,40,0.06);
-  --text-primary:#1a1810;--text-secondary:#5a5850;--text-dim:#8a887e;
-  --hero-wash:linear-gradient(180deg,rgba(154,122,40,0.04) 0%,transparent 60%);
-  --noise-opacity:0.025;
+  --card-shadow-hover:0 4px 20px rgba(0,0,0,0.08),0 2px 6px rgba(138,117,85,0.06);
+  --text-primary:#2a2a2e;--text-secondary:#6a6a72;--text-dim:#9a9a9e;
+  --hero-wash:linear-gradient(180deg,rgba(138,117,85,0.03) 0%,transparent 60%);
+  --noise-opacity:0.020;
 }
 
 :root {
@@ -74,14 +74,15 @@ body{
 
 /* ═══ NOISE TEXTURE OVERLAY ═══ */
 body::before{
-  content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
+  content:'';position:fixed;inset:0;z-index:2;pointer-events:none;
   opacity:var(--noise-opacity);
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat:repeat;background-size:256px 256px;
 }
 
+
 /* ═══ LAYOUT ═══ */
-.app{display:grid;grid-template-columns:230px 1fr;grid-template-rows:auto 1fr;height:100vh;overflow:hidden;}
+.app{display:grid;grid-template-columns:230px 1fr;grid-template-rows:auto 1fr;height:100vh;overflow:hidden;position:relative;z-index:1;}
 
 /* ═══ TOPBAR ═══ */
 .topbar{
@@ -90,29 +91,16 @@ body::before{
   border-bottom:1px solid var(--border-default);
   z-index:10;height:56px;position:relative;
 }
-.topbar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);opacity:0.3;}
 
-.topbar-brand{display:flex;align-items:baseline;gap:8px;}
-.topbar-brand .name{font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--text-primary);letter-spacing:-0.5px;}
-.topbar-brand .name em{font-style:normal;background:var(--gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+.topbar-brand{display:flex;flex-direction:column;gap:2px;justify-content:center;}
+.pix-brand-row{display:flex;align-items:flex-end;gap:6px;}
 .topbar-brand .sub{
-  font-family:var(--font-mono);font-size:9px;letter-spacing:2.5px;text-transform:uppercase;
-  background:var(--gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  font-weight:600;margin-left:16px;
+  font-family:var(--font-mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted-2);font-weight:500;
 }
 .topbar-right{margin-left:auto;display:flex;align-items:center;gap:14px;}
 
-/* Streak chip */
-.streak-chip{
-  display:flex;align-items:center;gap:6px;
-  padding:5px 12px;border-radius:20px;
-  background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.15);
-  animation:streakPulse 3s ease-in-out infinite;
-}
-@keyframes streakPulse{0%,100%{box-shadow:0 0 8px rgba(212,168,67,0.1)}50%{box-shadow:0 0 16px rgba(212,168,67,0.25)}}
-.streak-chip svg{color:var(--gold);width:14px;height:14px;}
-.streak-chip .val{font-family:var(--font-mono);font-size:12px;font-weight:600;color:var(--gold);}
-.streak-chip .lbl{font-family:var(--font-mono);font-size:8px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
 
 /* Lang pills */
 .lang-pills{display:flex;gap:0;border-radius:6px;overflow:hidden;border:1px solid var(--border);}
@@ -160,10 +148,10 @@ body::before{
   width:12px;height:12px;border-radius:50%;flex-shrink:0;position:relative;z-index:2;
   transition:all .3s;
 }
-.cert-dot.done{background:var(--gold);box-shadow:0 0 10px var(--gold-glow-strong);}
-.cert-dot.next{background:var(--accent);box-shadow:0 0 8px var(--accent-glow);animation:certPulse 2s ease infinite;}
+.cert-dot.done{background:var(--gold);}
+.cert-dot.next{background:var(--accent);animation:certPulse 2s ease infinite;}
 .cert-dot.locked{background:transparent;border:2px solid var(--muted-2);opacity:0.5;}
-@keyframes certPulse{0%,100%{box-shadow:0 0 8px var(--accent-glow)}50%{box-shadow:0 0 18px rgba(0,229,255,0.3)}}
+@keyframes certPulse{0%,100%{opacity:1}50%{opacity:0.5}}
 .cert-dot.done::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:var(--bg-base);}
 .cert-name{font-size:12px;font-weight:500;color:var(--muted);transition:color .15s;}
 .cert-node.done .cert-name{color:var(--gold);}
@@ -208,7 +196,7 @@ body::before{
 
 /* Progress bar — smooth gradient fill */
 .progress-bar{height:4px;border-radius:3px;background:var(--border);margin-top:12px;overflow:hidden;position:relative;}
-.progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold),var(--accent));transition:width 1.2s var(--ease-out);position:relative;}
+.progress-fill{height:100%;border-radius:3px;background:var(--gold);opacity:0.7;transition:width 1.2s var(--ease-out);position:relative;}
 .progress-fill::after{content:'';position:absolute;right:0;top:-1px;bottom:-1px;width:12px;
   background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3));border-radius:0 3px 3px 0;filter:blur(2px);}
 
@@ -258,9 +246,9 @@ body::before{
 .module-icon{
   width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
   background:var(--gold-glow);color:var(--gold);flex-shrink:0;font-size:20px;
-  border:1px solid rgba(212,168,67,0.12);transition:all .25s;
+  border:1px solid var(--border-default);transition:all .25s;
 }
-.module-card:hover .module-icon{border-color:rgba(212,168,67,0.25);box-shadow:0 0 12px var(--gold-glow);}
+.module-card:hover .module-icon{border-color:var(--gold);}
 .module-card.complete .module-icon{background:var(--green-glow);color:var(--green);border-color:rgba(78,155,111,0.15);}
 
 .module-info{flex:1;min-width:0;}
@@ -332,11 +320,11 @@ body::before{
 .art-card:hover{border-color:var(--gold-dim);box-shadow:var(--card-shadow-hover);transform:translateY(-3px);}
 .art-card-add{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:84px;
   background:transparent;border:1px dashed var(--border-default);border-left:1px dashed var(--border-default);opacity:0.55;}
-.art-card-add:hover{opacity:1;border-color:var(--accent);box-shadow:0 0 12px var(--accent-glow);transform:translateY(-2px);}
+.art-card-add:hover{opacity:1;border-color:var(--accent);transform:translateY(-2px);}
 .art-icon{width:32px;height:32px;margin-bottom:10px;color:var(--gold);display:flex;align-items:center;justify-content:center;
-  background:var(--gold-glow);border-radius:var(--radius-sm);border:1px solid rgba(212,168,67,0.14);}
+  background:var(--gold-glow);border-radius:var(--radius-sm);border:1px solid var(--border-default);}
 .art-add-icon{width:32px;height:32px;margin-bottom:8px;color:var(--accent);display:flex;align-items:center;justify-content:center;
-  background:var(--accent-glow);border-radius:var(--radius-sm);border:1px solid rgba(0,229,255,0.14);}
+  background:var(--accent-glow);border-radius:var(--radius-sm);border:1px solid var(--border-default);}
 .art-name{font-size:12px;font-weight:600;letter-spacing:0.2px;line-height:1.3;margin-bottom:3px;
   overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:var(--text-primary);}
 .art-type{font-family:var(--font-mono);font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
@@ -354,10 +342,10 @@ body::before{
 .ms-item:hover .ms-name{color:var(--gold);}
 .ms-track{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:14px;}
 .ms-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px;}
-.ms-dot.done{background:var(--gold);box-shadow:0 0 8px var(--gold-glow-strong);}
-.ms-dot.active{background:var(--accent);animation:msPulse 2s ease infinite;}
+.ms-dot.done{background:var(--gold);}
+.ms-dot.active{background:var(--accent);opacity:0.9;animation:msPulse 2s ease infinite;}
 .ms-dot.upcoming{background:transparent;border:1.5px solid var(--muted-2);}
-@keyframes msPulse{0%,100%{box-shadow:0 0 4px var(--accent-glow)}50%{box-shadow:0 0 14px rgba(0,229,255,0.3)}}
+@keyframes msPulse{0%,100%{opacity:1}50%{opacity:0.45}}
 .ms-line{width:1.5px;flex:1;min-height:10px;background:var(--border-subtle);}
 .ms-content{padding-bottom:6px;}
 .ms-name{font-size:11px;font-weight:500;color:var(--text-primary);transition:color .15s;}
@@ -374,7 +362,7 @@ body::before{
 .summary-val{font-family:var(--font-display);font-size:14px;font-weight:700;letter-spacing:-0.3px;}
 
 /* Next Experiment card */
-.next-up{margin-top:12px;padding:12px;border-radius:10px;background:var(--accent-glow);border:1px solid rgba(0,229,255,0.12);
+.next-up{margin-top:12px;padding:12px;border-radius:10px;background:var(--bg-raised);border:1px solid var(--border-default);border-left:3px solid var(--accent);
   animation:nextPulse 4s ease-in-out infinite;}
 @keyframes nextPulse{0%,100%{box-shadow:0 0 0 transparent}50%{box-shadow:0 0 12px var(--accent-glow)}}
 .next-up-lbl{font-family:var(--font-mono);font-size:8px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);margin-bottom:4px;}
@@ -532,15 +520,13 @@ body::before{
   <div class="topbar">
     <button class="hamburger" onclick="document.querySelector('.sidebar').classList.toggle('open')" aria-label="Menu">☰</button>
     <div class="topbar-brand">
-      <div class="name">Noel's <em>Learning Hub</em></div>
+      <div class="pix-brand-row">
+        <div id="brandName1"></div>
+        <div id="brandName2"></div>
+      </div>
       <div class="sub" id="headerSub">BIM // AUTOMATION SPECIALIST // ROAD TO CHF 95K</div>
     </div>
     <div class="topbar-right">
-      <div class="streak-chip">
-        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 1c0 3-4 5-4 9a5 5 0 0010 0c0-4-4-6-4-9z"/><path d="M9 18c-1.5 0-2.5-1-2.5-2.5S9 12 9 12s2.5 2 2.5 3.5S10.5 18 9 18z"/></svg>
-        <span class="val" id="topStreakVal">0</span>
-        <span class="lbl">streak</span>
-      </div>
       <div class="lang-pills" id="langPills">
         <button class="lang-pill active" onclick="setLang('en')">EN</button>
         <button class="lang-pill" onclick="setLang('de')">DE</button>
@@ -683,12 +669,13 @@ body::before{
 
 var S=(function(){var m={},ok=false;try{localStorage.setItem("_x","1");localStorage.removeItem("_x");ok=true;}catch(e){}return{get:function(k){try{return ok?localStorage.getItem(k):(m[k]||null);}catch(e){return m[k]||null;}},set:function(k,v){try{if(ok)localStorage.setItem(k,v);else m[k]=v;}catch(e){m[k]=v;}},remove:function(k){try{if(ok)localStorage.removeItem(k);}catch(e){delete m[k];}}}})();
 var KEY="bim-v12";
-var AMAP={Dashboard:"#FF6B1A",Tool:"#00e5ff",Script:"#9BCC3A",Reference:"#d4a843",Exercise:"#C87AFF"};
+var AMAP={Dashboard:"var(--gold)",Tool:"var(--accent)",Script:"var(--green)",Reference:"var(--gold)",Exercise:"var(--muted)"};
 var DEFS_ARTS=[
   {id:1,name:"BIM Glossary",desc:"All key BIM + IT terms \u2014 IFC, ifcopenshell, MCP, BCF, ISO 19650, Python, ArchiCAD.",url:"#",type:"Reference",icon:"\uD83D\uDCD6",date:"2026-03-12",bi:"gloss"},
   {id:2,name:"Linktree Design Manual",desc:"Corporate Design Manual \u2014 Color System, Typography, UI Components, Spacing.",url:"#",type:"Reference",icon:"\u2733\uFE0F",date:"2026-03-09",bi:"lt"},
   {id:3,name:"Python Vocabulary",desc:"35 core Python terms with definitions and code examples \u2014 Basics, Data Types, Control Flow, Functions.",url:"#",type:"Reference",icon:"\uD83D\uDC0D",date:"2026-03-18",bi:"pyv"},
-  {id:4,name:"BIM 2.0 Catalog",desc:"9 next-gen architecture tools \u2014 cloud BIM, generative design, AI documentation.",url:"#",type:"Tool",icon:"\uD83D\uDE80",date:"2026-03-23",bi:"bim2"}
+  {id:4,name:"BIM 2.0 Catalog",desc:"9 next-gen architecture tools \u2014 cloud BIM, generative design, AI documentation.",url:"#",type:"Tool",icon:"\uD83D\uDE80",date:"2026-03-23",bi:"bim2"},
+  {id:5,name:"AI Tools Guide",desc:"25 AI tools across LLMs, Image Gen, Coding, Research, Productivity, Video \u2014 April 2026.",url:"#",type:"Reference",icon:"\u2699",date:"2026-04-01",bi:"ai-tools"}
 ];
 
 var st;
@@ -700,6 +687,10 @@ function load(){try{var r=S.get(KEY);st=r?JSON.parse(r):null;}catch(e){st=null;}
   /* Migration: add BIM 2.0 Catalog if missing for existing users */
   if(st.artifacts&&!st.artifacts.some(function(a){return a.bi==="bim2";})){
     st.artifacts.push({id:4,name:"BIM 2.0 Catalog",desc:"9 next-gen architecture tools.",url:"#",type:"Tool",icon:"\uD83D\uDE80",date:"2026-03-23",bi:"bim2"});
+    save();
+  }
+  if(st.artifacts&&!st.artifacts.some(function(a){return a.bi==="ai-tools";})){
+    st.artifacts.push({id:5,name:"AI Tools Guide",desc:"25 AI tools \u2014 April 2026.",url:"#",type:"Reference",icon:"\u2699",date:"2026-04-01",bi:"ai-tools"});
     save();
   }
 }
@@ -722,21 +713,39 @@ var STAGES_EN=[
   {title:"ifcopenshell + IFC",duration:"8 weeks",criteria:["Installed ifcopenshell","Understand IFC file structure","Opened IFC from Archicad via Python","Can read element properties","Understand IfcWall, IfcSpace, Pset, IfcRel","Script: validate IFC Pset completeness","Script: extract IFC data to Excel","Completed IFC-101 on osarch.org","Completed course on aeco.dev","Added ifcopenshell scripts to GitHub"]},
   {title:"buildingSMART Practitioner",duration:"10 weeks",criteria:["Registered for Practitioner Coordination","Completed Practitioner e-learning","Attended Part I seminar","Attended Part II seminar","Passed Practitioner exam \u2713","Received bCP certificate","Updated CV with certs + GitHub","Updated LinkedIn profile","Started applying for BIM roles","Completed first interview"]}
 ];
+var STAGES_DE=[
+  {title:"Python Grundlagen",duration:"4 Wochen",criteria:["Python und VS Code installiert","Erstes Skript ausgef\u00FChrt (print)","Variablen und Datentypen verstehen","Mathematische Operatoren verstehen","Typkonvertierung verstehen","input() verwenden k\u00F6nnen","Zuweisungsoperatoren verstehen","Kommentare und Codestruktur verstehen","del verstehen","if / else / elif verstehen","for- und while-Schleifen verstehen","Funktionen verstehen","Mit Dateien und Ordnern arbeiten k\u00F6nnen","Excel via Python lesen/schreiben k\u00F6nnen","Ein Excel-Automatisierungsskript geschrieben"]},
+  {title:"buildingSMART Foundation",duration:"6 Wochen",criteria:["Auf edubim-campus.de registriert","openBIM verstehen","IFC-Struktur verstehen","ISO 19650 kennen","BCF, IDM, MVD, bSDD verstehen","Geb\u00E4udelebenszyklus aus Datenperspektive","openBIM einem Kollegen erkl\u00E4ren k\u00F6nnen","Alle Kursmodule abgeschlossen","Foundation-Pr\u00FCfung bestanden \u2713","Zertifikat und Badge erhalten","Zertifikat zu LinkedIn hinzugef\u00FCgt"]},
+  {title:"Archicad Python API",duration:"8 Wochen",criteria:["archicad-Paket installiert","Python mit Archicad verbunden","Erstes Skript \u2014 W\u00E4nde gez\u00E4hlt","Skript 1: Elemente nach Typ auflisten","Skript 2: Eigenschaftsvollst\u00E4ndigkeit pr\u00FCfen","Skript 3: Pr\u00FCfung nach Excel exportieren","Skript 4: Massenattribut\u00E4nderung","Skript 5: Automatisierter IFC-Export","GitHub-Konto erstellt","Repository mit README EN/DE eingerichtet","Skript einem Kollegen gezeigt"]},
+  {title:"ifcopenshell + IFC",duration:"8 Wochen",criteria:["ifcopenshell installiert","IFC-Dateistruktur verstehen","IFC aus Archicad via Python ge\u00F6ffnet","Elementeigenschaften lesen k\u00F6nnen","IfcWall, IfcSpace, Pset, IfcRel verstehen","Skript: IFC-Pset-Vollst\u00E4ndigkeit validieren","Skript: IFC-Daten nach Excel extrahieren","IFC-101 auf osarch.org abgeschlossen","Kurs auf aeco.dev abgeschlossen","ifcopenshell-Skripte zu GitHub hinzugef\u00FCgt"]},
+  {title:"buildingSMART Practitioner",duration:"10 Wochen",criteria:["F\u00FCr Practitioner Coordination registriert","Practitioner E-Learning abgeschlossen","Teil-I-Seminar besucht","Teil-II-Seminar besucht","Practitioner-Pr\u00FCfung bestanden \u2713","bCP-Zertifikat erhalten","Lebenslauf mit Zerts + GitHub aktualisiert","LinkedIn-Profil aktualisiert","Mit Bewerbungen f\u00FCr BIM-Stellen begonnen","Erstes Interview absolviert"]}
+];
+var STAGES_RU=[
+  {title:"\u041F\u044B\u0442\u043E\u043D: \u041E\u0441\u043D\u043E\u0432\u044B",duration:"4 \u043D\u0435\u0434\u0435\u043B\u0438",criteria:["\u0423\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u043B Python \u0438 VS Code","\u0417\u0430\u043F\u0443\u0441\u0442\u0438\u043B \u043F\u0435\u0440\u0432\u044B\u0439 \u0441\u043A\u0440\u0438\u043F\u0442 (print)","\u041F\u043E\u043D\u0438\u043C\u0430\u044E \u043F\u0435\u0440\u0435\u043C\u0435\u043D\u043D\u044B\u0435 \u0438 \u0442\u0438\u043F\u044B \u0434\u0430\u043D\u043D\u044B\u0445","\u041F\u043E\u043D\u0438\u043C\u0430\u044E \u043C\u0430\u0442\u0435\u043C\u0430\u0442\u0438\u0447\u0435\u0441\u043A\u0438\u0435 \u043E\u043F\u0435\u0440\u0430\u0442\u043E\u0440\u044B","\u041F\u043E\u043D\u0438\u043C\u0430\u044E \u043F\u0440\u0438\u0432\u0435\u0434\u0435\u043D\u0438\u0435 \u0442\u0438\u043F\u043E\u0432","\u0423\u043C\u0435\u044E \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C input()","\u041F\u043E\u043D\u0438\u043C\u0430\u044E \u043E\u043F\u0435\u0440\u0430\u0442\u043E\u0440\u044B \u043F\u0440\u0438\u0441\u0432\u0430\u0438\u0432\u0430\u043D\u0438\u044F","\u041F\u043E\u043D\u0438\u043C\u0430\u044E \u043A\u043E\u043C\u043C\u0435\u043D\u0442\u0430\u0440\u0438\u0438 \u0438 \u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0443 \u043A\u043E\u0434\u0430","\u041F\u043E\u043D\u0438\u043C\u0430\u044E del","\u041F\u043E\u043D\u0438\u043C\u0430\u044E if / else / elif","\u041F\u043E\u043D\u0438\u043C\u0430\u044E \u0446\u0438\u043A\u043B\u044B for \u0438 while","\u041F\u043E\u043D\u0438\u043C\u0430\u044E \u0444\u0443\u043D\u043A\u0446\u0438\u0438","\u0423\u043C\u0435\u044E \u0440\u0430\u0431\u043E\u0442\u0430\u0442\u044C \u0441 \u0444\u0430\u0439\u043B\u0430\u043C\u0438 \u0438 \u043F\u0430\u043F\u043A\u0430\u043C\u0438","\u0423\u043C\u0435\u044E \u0447\u0438\u0442\u0430\u0442\u044C/\u043F\u0438\u0441\u0430\u0442\u044C Excel \u0447\u0435\u0440\u0435\u0437 Python","\u041D\u0430\u043F\u0438\u0441\u0430\u043B \u0441\u043A\u0440\u0438\u043F\u0442 \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0437\u0430\u0446\u0438\u0438 Excel"]},
+  {title:"buildingSMART Foundation",duration:"6 \u043D\u0435\u0434\u0435\u043B\u044C",criteria:["\u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u043B\u0441\u044F \u043D\u0430 edubim-campus.de","\u041F\u043E\u043D\u0438\u043C\u0430\u044E openBIM","\u041F\u043E\u043D\u0438\u043C\u0430\u044E \u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0443 IFC","\u0417\u043D\u0430\u044E ISO 19650","\u041F\u043E\u043D\u0438\u043C\u0430\u044E BCF, IDM, MVD, bSDD","\u0416\u0438\u0437\u043D\u0435\u043D\u043D\u044B\u0439 \u0446\u0438\u043A\u043B \u0437\u0434\u0430\u043D\u0438\u044F \u0441 \u0442\u043E\u0447\u043A\u0438 \u0437\u0440\u0435\u043D\u0438\u044F \u0434\u0430\u043D\u043D\u044B\u0445","\u0423\u043C\u0435\u044E \u043E\u0431\u044A\u044F\u0441\u043D\u0438\u0442\u044C openBIM \u043A\u043E\u043B\u043B\u0435\u0433\u0435","\u0417\u0430\u0432\u0435\u0440\u0448\u0438\u043B \u0432\u0441\u0435 \u043C\u043E\u0434\u0443\u043B\u0438 \u043A\u0443\u0440\u0441\u0430","\u0421\u0434\u0430\u043B \u044D\u043A\u0437\u0430\u043C\u0435\u043D Foundation \u2713","\u041F\u043E\u043B\u0443\u0447\u0438\u043B \u0441\u0435\u0440\u0442\u0438\u0444\u0438\u043A\u0430\u0442 \u0438 \u0437\u043D\u0430\u0447\u043E\u043A","\u0414\u043E\u0431\u0430\u0432\u0438\u043B \u0441\u0435\u0440\u0442\u0438\u0444\u0438\u043A\u0430\u0442 \u0432 LinkedIn"]},
+  {title:"Archicad Python API",duration:"8 \u043D\u0435\u0434\u0435\u043B\u044C",criteria:["\u0423\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u043B \u043F\u0430\u043A\u0435\u0442 archicad","\u041F\u043E\u0434\u043A\u043B\u044E\u0447\u0438\u043B Python \u043A Archicad","\u041F\u0435\u0440\u0432\u044B\u0439 \u0441\u043A\u0440\u0438\u043F\u0442 \u2014 \u043F\u043E\u0434\u0441\u0447\u0451\u0442 \u0441\u0442\u0435\u043D","\u0421\u043A\u0440\u0438\u043F\u0442 1: \u0441\u043F\u0438\u0441\u043E\u043A \u044D\u043B\u0435\u043C\u0435\u043D\u0442\u043E\u0432 \u043F\u043E \u0442\u0438\u043F\u0443","\u0421\u043A\u0440\u0438\u043F\u0442 2: \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0430 \u043F\u043E\u043B\u043D\u043E\u0442\u044B \u0441\u0432\u043E\u0439\u0441\u0442\u0432","\u0421\u043A\u0440\u0438\u043F\u0442 3: \u044D\u043A\u0441\u043F\u043E\u0440\u0442 \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0438 \u0432 Excel","\u0421\u043A\u0440\u0438\u043F\u0442 4: \u043C\u0430\u0441\u0441\u043E\u0432\u043E\u0435 \u0438\u0437\u043C\u0435\u043D\u0435\u043D\u0438\u0435 \u0430\u0442\u0440\u0438\u0431\u0443\u0442\u043E\u0432","\u0421\u043A\u0440\u0438\u043F\u0442 5: \u0430\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0437\u0438\u0440\u043E\u0432\u0430\u043D\u043D\u044B\u0439 IFC-\u044D\u043A\u0441\u043F\u043E\u0440\u0442","\u0421\u043E\u0437\u0434\u0430\u043B \u0430\u043A\u043A\u0430\u0443\u043D\u0442 GitHub","\u041D\u0430\u0441\u0442\u0440\u043E\u0438\u043B \u0440\u0435\u043F\u043E\u0437\u0438\u0442\u043E\u0440\u0438\u0439 \u0441 README EN/DE","\u041F\u043E\u043A\u0430\u0437\u0430\u043B \u0441\u043A\u0440\u0438\u043F\u0442 \u043A\u043E\u043B\u043B\u0435\u0433\u0435"]},
+  {title:"ifcopenshell + IFC",duration:"8 \u043D\u0435\u0434\u0435\u043B\u044C",criteria:["\u0423\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u043B ifcopenshell","\u041F\u043E\u043D\u0438\u043C\u0430\u044E \u0441\u0442\u0440\u0443\u043A\u0442\u0443\u0440\u0443 IFC-\u0444\u0430\u0439\u043B\u0430","\u041E\u0442\u043A\u0440\u044B\u043B IFC \u0438\u0437 Archicad \u0447\u0435\u0440\u0435\u0437 Python","\u0423\u043C\u0435\u044E \u0447\u0438\u0442\u0430\u0442\u044C \u0441\u0432\u043E\u0439\u0441\u0442\u0432\u0430 \u044D\u043B\u0435\u043C\u0435\u043D\u0442\u043E\u0432","\u041F\u043E\u043D\u0438\u043C\u0430\u044E IfcWall, IfcSpace, Pset, IfcRel","\u0421\u043A\u0440\u0438\u043F\u0442: \u043F\u0440\u043E\u0432\u0435\u0440\u043A\u0430 \u043F\u043E\u043B\u043D\u043E\u0442\u044B IFC Pset","\u0421\u043A\u0440\u0438\u043F\u0442: \u0438\u0437\u0432\u043B\u0435\u0447\u0435\u043D\u0438\u0435 \u0434\u0430\u043D\u043D\u044B\u0445 IFC \u0432 Excel","\u041F\u0440\u043E\u0448\u0451\u043B IFC-101 \u043D\u0430 osarch.org","\u041F\u0440\u043E\u0448\u0451\u043B \u043A\u0443\u0440\u0441 \u043D\u0430 aeco.dev","\u0414\u043E\u0431\u0430\u0432\u0438\u043B \u0441\u043A\u0440\u0438\u043F\u0442\u044B ifcopenshell \u043D\u0430 GitHub"]},
+  {title:"buildingSMART Practitioner",duration:"10 \u043D\u0435\u0434\u0435\u043B\u044C",criteria:["\u0417\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u043B\u0441\u044F \u043D\u0430 Practitioner Coordination","\u041F\u0440\u043E\u0448\u0451\u043B Practitioner e-learning","\u041F\u043E\u0441\u0435\u0442\u0438\u043B \u0441\u0435\u043C\u0438\u043D\u0430\u0440 \u0427\u0430\u0441\u0442\u044C I","\u041F\u043E\u0441\u0435\u0442\u0438\u043B \u0441\u0435\u043C\u0438\u043D\u0430\u0440 \u0427\u0430\u0441\u0442\u044C II","\u0421\u0434\u0430\u043B \u044D\u043A\u0437\u0430\u043C\u0435\u043D Practitioner \u2713","\u041F\u043E\u043B\u0443\u0447\u0438\u043B \u0441\u0435\u0440\u0442\u0438\u0444\u0438\u043A\u0430\u0442 bCP","\u041E\u0431\u043D\u043E\u0432\u0438\u043B \u0440\u0435\u0437\u044E\u043C\u0435 \u0441 \u0441\u0435\u0440\u0442\u0438\u0444\u0438\u043A\u0430\u0442\u0430\u043C\u0438 + GitHub","\u041E\u0431\u043D\u043E\u0432\u0438\u043B \u043F\u0440\u043E\u0444\u0438\u043B\u044C LinkedIn","\u041D\u0430\u0447\u0430\u043B \u043F\u043E\u0434\u0430\u0432\u0430\u0442\u044C \u0437\u0430\u044F\u0432\u043A\u0438 \u043D\u0430 BIM-\u0434\u043E\u043B\u0436\u043D\u043E\u0441\u0442\u0438","\u041F\u0440\u043E\u0448\u0451\u043B \u043F\u0435\u0440\u0432\u043E\u0435 \u0438\u043D\u0442\u0435\u0440\u0432\u044C\u044E"]}
+];
+function getLangStages(){if(LANG==='de')return STAGES_DE;if(LANG==='ru')return STAGES_RU;return STAGES_EN;}
 
 /* \u2550\u2550\u2550 FIX M1: TRANSLATION MAP \u2550\u2550\u2550 */
 var I18N={
   en:{labLevel:"// LAB LEVEL",streak:"// STREAK BOOST",path:"// LEARNING PATH",arts:"// ARTIFACTS & TOOLS",
       total:"Total",done:"Done",left:"Left",saved:"saved",addArt:"Add Artifact",reset:"\u26A0 Reset All Data",
       nextExp:"// NEXT EXPERIMENT",progress:"// PROGRESS OVERVIEW",achievements:"// ACHIEVEMENTS",
-      daysInRow:"days in a row",ofWord:"of",critDone:"criteria completed"},
+      daysInRow:"days in a row",ofWord:"of",critDone:"criteria completed",
+      typeReference:"Reference",typeTool:"Tool",typeScript:"Script",typeDashboard:"Dashboard",typeExercise:"Exercise"},
   de:{labLevel:"// LAB-LEVEL",streak:"// SERIE",path:"// LERNPFAD",arts:"// ARTEFAKTE",
       total:"Gesamt",done:"Erledigt",left:"Offen",saved:"gespeichert",addArt:"Hinzuf\u00FCgen",reset:"\u26A0 Alles zur\u00FCcksetzen",
       nextExp:"// N\u00C4CHSTES EXPERIMENT",progress:"// FORTSCHRITT",achievements:"// ERFOLGE",
-      daysInRow:"Tage am St\u00FCck",ofWord:"von",critDone:"Kriterien erledigt"},
+      daysInRow:"Tage am St\u00FCck",ofWord:"von",critDone:"Kriterien erledigt",
+      typeReference:"Referenz",typeTool:"Werkzeug",typeScript:"Skript",typeDashboard:"Dashboard",typeExercise:"\u00DCbung"},
   ru:{labLevel:"// \u0423\u0420\u041E\u0412\u0415\u041D\u042C",streak:"// \u0421\u0415\u0420\u0418\u042F",path:"// \u041F\u0423\u0422\u042C",arts:"// \u0410\u0420\u0422\u0415\u0424\u0410\u041A\u0422\u042B",
       total:"\u0412\u0441\u0435\u0433\u043E",done:"\u0413\u043E\u0442\u043E\u0432\u043E",left:"\u041E\u0441\u0442\u0430\u043B\u043E\u0441\u044C",saved:"\u0441\u043E\u0445\u0440\u0430\u043D\u0435\u043D\u043E",addArt:"\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C",reset:"\u26A0 \u0421\u0431\u0440\u043E\u0441\u0438\u0442\u044C \u0432\u0441\u0451",
       nextExp:"// \u0421\u041B\u0415\u0414\u0423\u042E\u0429\u0418\u0419 \u0428\u0410\u0413",progress:"// \u041F\u0420\u041E\u0413\u0420\u0415\u0421\u0421",achievements:"// \u0414\u041E\u0421\u0422\u0418\u0416\u0415\u041D\u0418\u042F",
-      daysInRow:"\u0434\u043D\u0435\u0439 \u043F\u043E\u0434\u0440\u044F\u0434",ofWord:"\u0438\u0437",critDone:"\u043A\u0440\u0438\u0442\u0435\u0440\u0438\u0435\u0432 \u0432\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u043E"}
+      daysInRow:"\u0434\u043D\u0435\u0439 \u043F\u043E\u0434\u0440\u044F\u0434",ofWord:"\u0438\u0437",critDone:"\u043A\u0440\u0438\u0442\u0435\u0440\u0438\u0435\u0432 \u0432\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u043E",
+      typeReference:"\u0421\u043F\u0440\u0430\u0432\u043E\u0447\u043D\u0438\u043A",typeTool:"\u0418\u043D\u0441\u0442\u0440\u0443\u043C\u0435\u043D\u0442",typeScript:"\u0421\u043A\u0440\u0438\u043F\u0442",typeDashboard:"\u041F\u0430\u043D\u0435\u043B\u044C",typeExercise:"\u0423\u043F\u0440\u0430\u0436\u043D\u0435\u043D\u0438\u0435"}
 };
 function t(key){return (I18N[LANG]||I18N.en)[key]||(I18N.en[key]||key);}
 
@@ -766,6 +775,7 @@ function openPopup(html,eye,accent){
 }
 function closePopup(){document.getElementById("popupOv").classList.remove("open");}
 window.closePopup=closePopup;
+document.addEventListener("keydown",function(e){if(e.key==="Escape"){closePopup();}});
 function openVocab(term){showToast("VOCAB: "+term);}
 window.openVocab=openVocab;
 
@@ -859,7 +869,7 @@ function openGlossary(){
     +"<div class=\"gloss-grid\">"+nav+"</div>"
     +"<div class=\"pp-hr\"></div>"
     +"<div id=\"gloss-dets\">"+dets+"</div>";
-  openPopup(html,"// BIM + IT VOCABULARY","#00e5ff");
+  openPopup(html,"// BIM + IT VOCABULARY","var(--accent)");
   setTimeout(function(){document.querySelectorAll(".gloss-btn[data-term],.pp-tag[data-term]").forEach(function(b){b.addEventListener("click",function(){glossSel(this.getAttribute("data-term"));});});},50);
 }
 window.openGlossary=openGlossary;
@@ -891,7 +901,7 @@ function openPyVocab(){
   var html="<div class=\"pp-title\">Python Vocabulary</div>"
     +"<div class=\"pp-sub\">"+terms.length+" terms // Basics \u00B7 Types \u00B7 Flow \u00B7 Functions \u00B7 Files</div>"
     +"<div class=\"pp-hr\"></div><div class=\"py-tabs\">"+tabs+"</div><div class=\"py-body\">"+secs+"</div>";
-  openPopup(html,"// PYTHON VOCABULARY","#F59E0B");
+  openPopup(html,"// PYTHON VOCABULARY","var(--gold)");
   setTimeout(function(){document.querySelectorAll("[data-pytab]").forEach(function(t){t.addEventListener("click",function(){pyTab(this);});});},50);
 }
 window.openPyVocab=openPyVocab;
@@ -982,7 +992,7 @@ function openBim2Catalog(){
     +"<div class=\"pp-text\"><strong>Your move:</strong> Pick one tool that solves your biggest bottleneck, trial it on a real project, and build from there.</div>"
     +"</div>";
 
-  openPopup(html,"// BIM 2.0 CATALOG","#2563EB");
+  openPopup(html,"// BIM 2.0 CATALOG","var(--accent)");
 
   setTimeout(function(){
     var catsEl=document.getElementById("bim2Cats");
@@ -1006,6 +1016,97 @@ function openBim2Catalog(){
 }
 window.openBim2Catalog=openBim2Catalog;
 
+/* ═══ AI TOOLS GUIDE ═══ */
+function openAiTools(){
+  var TOOLS=[
+    {g:"llm",   name:"Claude",         maker:"Anthropic",         pricing:"freemium",rec:true, desc:"Best for long-context reasoning, technical writing, coding and structured tasks. Strong privacy focus.",uses:["Technical writing","Code review","Document analysis","Architecture docs"],price:"Free / $20–25/mo",url:"https://claude.ai"},
+    {g:"llm",   name:"ChatGPT",        maker:"OpenAI",            pricing:"freemium",         desc:"Versatile general-purpose assistant. Brainstorming, writing, research, creative work.",uses:["Brainstorming","Writing","Research","Image gen via DALL-E"],price:"Free / $20/mo",url:"https://chatgpt.com"},
+    {g:"llm",   name:"Gemini",         maker:"Google",            pricing:"freemium",         desc:"Multimodal tasks, large document analysis, deep Google Workspace integration.",uses:["Google Workspace","Research","Data analysis","Multimodal"],price:"Free / $20/mo",url:"https://gemini.google.com"},
+    {g:"llm",   name:"Copilot",        maker:"Microsoft",         pricing:"paid",             desc:"Best for M365 users — integrates into Word, Excel, Outlook and Teams.",uses:["Word","Excel","Outlook","Teams"],price:"$30/user/mo",url:"https://copilot.microsoft.com"},
+    {g:"llm",   name:"Grok",           maker:"xAI",               pricing:"freemium",         desc:"Real-time X/Twitter data. Good for trend analysis and current events.",uses:["News","Social trends","Creative writing","Quick answers"],price:"Free / $30/mo",url:"https://grok.com"},
+    {g:"llm",   name:"DeepSeek",       maker:"DeepSeek AI",       pricing:"freemium",         desc:"Strong open-source reasoning model. Excellent for coding and math. Can run locally.",uses:["Coding","Math","Research","Local deployment"],price:"Free / API",url:"https://chat.deepseek.com"},
+    {g:"image", name:"Midjourney",     maker:"Midjourney Inc.",   pricing:"paid",    rec:true, desc:"Best artistic image quality. Cinematic style, exceptional lighting. V7 released 2025.",uses:["Concept art","Architecture visuals","Brand imagery","Mood boards"],price:"From $10/mo",url:"https://midjourney.com"},
+    {g:"image", name:"DALL-E 3",       maker:"OpenAI",            pricing:"paid",             desc:"Best for following exact prompts and rendering legible text in images.",uses:["Prompt-accurate","Text in images","Product mockups","Quick visuals"],price:"Included in ChatGPT Plus",url:"https://chatgpt.com"},
+    {g:"image", name:"Adobe Firefly",  maker:"Adobe",             pricing:"paid",             desc:"Only major image AI trained on licensed content — 100% copyright safe commercially.",uses:["Commercial","Photoshop","Legal-safe","Brand assets"],price:"Included in Creative Cloud",url:"https://firefly.adobe.com"},
+    {g:"image", name:"Stable Diffusion",maker:"Stability AI",    pricing:"open",             desc:"Open source — run locally. Full control, no subscription, privacy by default.",uses:["Custom training","Local/private","Developer workflows","Fine-tuning"],price:"Free (self-hosted)",url:"https://stability.ai"},
+    {g:"image", name:"Flux 1.1 Pro",   maker:"Black Forest Labs", pricing:"paid",             desc:"Fastest high-quality image generation in 2026. 4.5s per image. Excellent realism.",uses:["Fast iteration","Realism","API","Commercial"],price:"API credits",url:"https://blackforestlabs.ai"},
+    {g:"image", name:"Ideogram",       maker:"Ideogram AI",       pricing:"freemium",         desc:"Best AI for readable text inside images. Logos, signs, posters with typography.",uses:["Logos","Posters","Social graphics","Typography"],price:"Free (40/day) / $8/mo",url:"https://ideogram.ai"},
+    {g:"image", name:"Google ImageFX", maker:"Google",            pricing:"free",             desc:"Free with Google account. Powered by Imagen 3. Photorealistic, no subscription.",uses:["Quick photorealistic","Free","Architecture refs"],price:"Free",url:"https://labs.google/fx/tools/image-fx"},
+    {g:"research",name:"Perplexity",   maker:"Perplexity AI",     pricing:"freemium",rec:true,desc:"AI search with inline citations. Real-time web data. Best for accurate fact-checking.",uses:["Fact-checking","Market research","Sourced answers","Current events"],price:"Free / $20/mo",url:"https://perplexity.ai"},
+    {g:"research",name:"NotebookLM",   maker:"Google",            pricing:"free",             desc:"Upload your own docs. AI answers only from your source material. Great for synthesis.",uses:["Document Q&A","Research synthesis","PDF analysis","Study notes"],price:"Free",url:"https://notebooklm.google.com"},
+    {g:"code",  name:"Cursor",         maker:"Anysphere",         pricing:"freemium",rec:true,desc:"AI-native code editor on VS Code. Understands entire codebase. Best tool for developers.",uses:["Code completion","Refactoring","Debugging","Full codebase context"],price:"Free / $20/mo",url:"https://cursor.com"},
+    {g:"code",  name:"GitHub Copilot", maker:"Microsoft / GitHub",pricing:"freemium",         desc:"Deep VS Code integration, works within existing Git workflow. Strong autocomplete.",uses:["VS Code","PR review","GitHub","Documentation"],price:"Free / $10–19/mo",url:"https://github.com/features/copilot"},
+    {g:"code",  name:"Claude Code",    maker:"Anthropic",         pricing:"paid",             desc:"Terminal-based agentic coding tool. Reads/writes files, runs tests, multi-step tasks.",uses:["Agentic coding","File ops","Terminal","Multi-step"],price:"API usage",url:"https://docs.anthropic.com/claude-code"},
+    {g:"prod",  name:"Notion AI",      maker:"Notion",            pricing:"paid",             desc:"AI inside Notion. Summarizes pages, writes drafts, answers questions about your notes.",uses:["Meeting notes","Project planning","Writing","Knowledge base"],price:"$10/mo",url:"https://notion.so/product/ai"},
+    {g:"prod",  name:"Granola",        maker:"Granola",           pricing:"freemium",         desc:"AI meeting notes — decisions, action items, topics. Works across all video call platforms.",uses:["Meeting summaries","Action items","Transcription","Follow-up"],price:"Free / $18/mo",url:"https://granola.so"},
+    {g:"prod",  name:"Grammarly",      maker:"Grammarly",         pricing:"freemium",         desc:"AI writing: grammar, clarity, tone. Works in browser, Word, Google Docs, email.",uses:["Grammar","Tone","Email","Report polish"],price:"Free / $12/mo",url:"https://grammarly.com"},
+    {g:"prod",  name:"Zapier",         maker:"Zapier",            pricing:"freemium",         desc:"AI automation connecting 8,000+ apps. Build workflows without code.",uses:["Workflow automation","App integrations","No-code","Data routing"],price:"Free / from $20/mo",url:"https://zapier.com"},
+    {g:"video", name:"Runway",         maker:"Runway AI",         pricing:"freemium",         desc:"Professional AI video gen and editing. Text-to-video, background removal, compositing.",uses:["Text-to-video","Video editing","VFX","Content"],price:"Free / from $15/mo",url:"https://runwayml.com"},
+    {g:"video", name:"Veo 2",          maker:"Google DeepMind",   pricing:"freemium",         desc:"Smooth camera movement, no object distortion. Excellent for branded visuals.",uses:["Brand videos","Trailers","Social clips","Cinematic"],price:"Free / from $19.99/mo",url:"https://deepmind.google/veo"},
+    {g:"video", name:"Kling AI",       maker:"Kuaishou",          pricing:"paid",             desc:"Top-tier AI video with realistic physics. Competitive pricing vs Sora.",uses:["Realistic video","Product demos","Architecture walkthroughs","Social"],price:"From $10/mo",url:"https://kling.kuaishou.com"}
+  ];
+  var GROUPS=[
+    {id:"llm",     label:"LLMs"},
+    {id:"image",   label:"Image Gen"},
+    {id:"research",label:"Research"},
+    {id:"code",    label:"Coding"},
+    {id:"prod",    label:"Productivity"},
+    {id:"video",   label:"Video"}
+  ];
+  var pricingColor={free:"var(--green)",freemium:"var(--gold)",paid:"var(--muted)",open:"var(--accent)"};
+  var pricingLabel={free:"Free",freemium:"Free+",paid:"Paid",open:"Open"};
+  function toolCard(t){
+    var badge='<span style="font-family:var(--font-mono);font-size:9px;padding:2px 7px;border-radius:4px;border:1px solid;color:'+pricingColor[t.pricing]+';border-color:'+pricingColor[t.pricing]+';opacity:0.8">'+pricingLabel[t.pricing]+'</span>';
+    var uses=t.uses.map(function(u){return '<span style="font-family:var(--font-mono);font-size:9px;padding:2px 8px;border-radius:4px;background:var(--bg-raised);border:1px solid var(--border-default);color:var(--muted)">'+esc(u)+'</span>';}).join(" ");
+    return '<div class="ait-card" data-aitg="'+t.g+'" style="background:var(--bg-raised);border:1px solid var(--border-default);border-radius:var(--radius-md);padding:14px;margin-bottom:8px;">'
+      +'<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px;">'
+      +'<div><div style="font-family:var(--font-body);font-weight:600;font-size:14px;color:var(--text-primary)">'+(t.rec?"★ ":"")+esc(t.name)+'</div>'
+      +'<div style="font-family:var(--font-mono);font-size:9px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-top:2px">'+esc(t.maker)+'</div></div>'
+      +badge+'</div>'
+      +'<div style="font-size:12px;color:var(--text-secondary);line-height:1.55;margin-bottom:8px">'+esc(t.desc)+'</div>'
+      +'<div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px">'+uses+'</div>'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid var(--border-subtle);">'
+      +'<span style="font-size:11px;color:var(--muted)">'+esc(t.price)+'</span>'
+      +'<a href="'+esc(t.url)+'" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);text-decoration:none">OPEN ↗</a>'
+      +'</div></div>';
+  }
+  var tabs=GROUPS.map(function(g){
+    return '<button class="gloss-btn" data-aitg="'+g.id+'">'+esc(g.label)+'</button>';
+  }).join("");
+  var all_cards=TOOLS.map(toolCard).join("");
+  var html='<div class="pp-title">AI Tools Guide</div>'
+    +'<div class="pp-sub">25 tools // LLMs · Image · Research · Coding · Productivity · Video</div>'
+    +'<div class="pp-hr"></div>'
+    +'<div class="pp-lbl">// Filter by category</div>'
+    +'<div class="gloss-grid" id="aitTabs" style="margin-bottom:16px">'+tabs+'</div>'
+    +'<input type="text" id="aitSearch" placeholder="Search tools..." style="width:100%;padding:8px 12px;border-radius:8px;border:1px solid var(--border-default);background:var(--bg-raised);color:var(--text-primary);font-family:var(--font-body);font-size:12px;outline:none;margin-bottom:12px">'
+    +'<div id="aitCards">'+all_cards+'</div>';
+  openPopup(html,"// AI TOOLS GUIDE","var(--gold)");
+  setTimeout(function(){
+    var tabs=document.getElementById("aitTabs");
+    if(tabs)tabs.addEventListener("click",function(e){
+      var b=e.target.closest("[data-aitg]");if(!b)return;
+      var g=b.getAttribute("data-aitg");
+      tabs.querySelectorAll(".gloss-btn").forEach(function(x){x.classList.remove("sel");});
+      b.classList.add("sel");
+      document.querySelectorAll(".ait-card").forEach(function(c){
+        c.style.display=(c.getAttribute("data-aitg")===g)?"":"none";
+      });
+    });
+    var search=document.getElementById("aitSearch");
+    if(search)search.addEventListener("input",function(){
+      var q=this.value.toLowerCase();
+      document.querySelectorAll(".ait-card").forEach(function(c){
+        c.style.display=c.textContent.toLowerCase().indexOf(q)>-1?"":"none";
+      });
+      /* clear active tab filter on search */
+      if(document.getElementById("aitTabs"))
+        document.getElementById("aitTabs").querySelectorAll(".gloss-btn").forEach(function(x){x.classList.remove("sel");});
+    });
+  },50);
+}
+window.openAiTools=openAiTools;
+
 /* === ARTIFACTS \u2014 FIX C2: seeded cards open rich popups, user cards open detail modal === */
 function openArt(id){
   var a=null;(st.artifacts||[]).forEach(function(x){if(x.id==id)a=x;});if(!a)return;
@@ -1014,6 +1115,7 @@ function openArt(id){
   if(a.bi==="pyv"){openPyVocab();return;}
   if(a.bi==="lt"){openLinktree();return;}
   if(a.bi==="bim2"){openBim2Catalog();return;}
+  if(a.bi==="ai-tools"){openAiTools();return;}
   /* User-created artifacts get detail modal */
   var accent="var(--gold)";
   /* FIX C5: show Claude URL button if url exists and is not empty */
@@ -1077,7 +1179,6 @@ function updateStreak(){
   else{data.count=1;data.lastVisit=today;}
   S.set("bim-streak",JSON.stringify(data));
   var el=document.getElementById("streakVal");if(el)renderPxNum(el,data.count);
-  var topV=document.getElementById("topStreakVal");if(topV)topV.textContent=data.count;
   var sub=document.getElementById("streakSub");if(sub)sub.textContent=t("daysInRow");
   var dotsEl=document.getElementById("streakDots");
   if(dotsEl){
@@ -1110,6 +1211,36 @@ function updateOverall(){
 }
 /* ═══ PIXEL NUMBER RENDERER ═══ */
 var PX={'0':[1,1,1,1,1,0,0,1,1,0,0,1,1,0,0,1,1,1,1,1],'1':[0,1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1],'2':[1,1,1,0,0,0,0,1,0,1,1,0,1,0,0,0,1,1,1,1],'3':[1,1,1,0,0,0,0,1,0,1,1,0,0,0,0,1,1,1,1,0],'4':[1,0,0,1,1,0,0,1,1,1,1,1,0,0,0,1,0,0,0,1],'5':[1,1,1,1,1,0,0,0,1,1,1,0,0,0,0,1,1,1,1,0],'6':[0,1,1,1,1,0,0,0,1,1,1,0,1,0,0,1,0,1,1,0],'7':[1,1,1,1,0,0,0,1,0,0,1,0,0,1,0,0,0,1,0,0],'8':[0,1,1,0,1,0,0,1,0,1,1,0,1,0,0,1,0,1,1,0],'9':[0,1,1,0,1,0,0,1,0,1,1,1,0,0,0,1,0,1,1,0]};
+/* ═══ PIXEL ALPHABET ═══ */
+Object.assign(PX,{
+'A':[0,1,1,0,1,0,0,1,1,1,1,1,1,0,0,1,1,0,0,1],
+'B':[1,1,1,0,1,0,0,1,1,1,1,0,1,0,0,1,1,1,1,0],
+'C':[0,1,1,1,1,0,0,0,1,0,0,0,1,0,0,0,0,1,1,1],
+'D':[1,1,1,0,1,0,0,1,1,0,0,1,1,0,0,1,1,1,1,0],
+'E':[1,1,1,1,1,0,0,0,1,1,1,0,1,0,0,0,1,1,1,1],
+'F':[1,1,1,1,1,0,0,0,1,1,1,0,1,0,0,0,1,0,0,0],
+'G':[0,1,1,1,1,0,0,0,1,0,1,1,1,0,0,1,0,1,1,1],
+'H':[1,0,0,1,1,0,0,1,1,1,1,1,1,0,0,1,1,0,0,1],
+'I':[1,1,1,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,0],
+'J':[0,0,1,1,0,0,0,1,0,0,0,1,1,0,0,1,0,1,1,0],
+'K':[1,0,0,1,1,0,1,0,1,1,0,0,1,0,1,0,1,0,0,1],
+'L':[1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,1,1,1],
+'M':[1,0,0,1,1,1,1,1,1,0,0,1,1,0,0,1,1,0,0,1],
+'N':[1,0,0,1,1,1,0,1,1,0,1,1,1,0,0,1,1,0,0,1],
+'O':[1,1,1,1,1,0,0,1,1,0,0,1,1,0,0,1,1,1,1,1],
+'P':[1,1,1,0,1,0,0,1,1,1,1,0,1,0,0,0,1,0,0,0],
+'Q':[0,1,1,0,1,0,0,1,1,0,1,1,1,0,0,1,0,1,1,1],
+'R':[1,1,1,0,1,0,0,1,1,1,1,0,1,0,1,0,1,0,0,1],
+'S':[0,1,1,1,1,0,0,0,0,1,1,0,0,0,0,1,1,1,1,0],
+'T':[1,1,1,1,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0],
+'U':[1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,1,1,1],
+'V':[1,0,0,1,1,0,0,1,1,0,0,1,0,1,1,0,0,1,1,0],
+'W':[1,0,0,1,1,0,0,1,1,0,1,1,1,1,0,1,1,0,0,1],
+'X':[1,0,0,1,0,1,1,0,0,1,1,0,0,1,1,0,1,0,0,1],
+'Y':[1,0,0,1,1,0,0,1,0,1,1,0,0,1,1,0,0,1,1,0],
+'Z':[1,1,1,1,0,0,0,1,0,1,1,0,1,0,0,0,1,1,1,1],
+"'":[0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+});
 function renderPxNum(el,val,suffix){
   var chars=String(val).split('');
   var h='<div class="pix-num">';
@@ -1122,6 +1253,22 @@ function renderPxNum(el,val,suffix){
   if(suffix)h+='<div class="pix-suffix">'+suffix+'</div>';
   h+='</div>';
   el.innerHTML=h;
+}
+function renderPxText(el,text,sz,colorVar){
+  sz=sz||2;colorVar=colorVar||'--gold';
+  var pad=Math.max(1,Math.floor(sz/2));
+  var br=Math.max(1,Math.round(sz*0.3));
+  var h='<div style="display:inline-flex;align-items:flex-end;gap:'+(sz+pad)+'px;">';
+  text.toUpperCase().split('').forEach(function(ch){
+    if(ch===' '){h+='<div style="width:'+(sz*2+pad)+'px;"></div>';return;}
+    var bits=PX[ch];if(!bits)return;
+    h+='<div style="display:grid;grid-template-columns:repeat(4,'+sz+'px);gap:'+pad+'px;">';
+    bits.forEach(function(b){
+      h+='<div style="width:'+sz+'px;height:'+sz+'px;border-radius:'+br+'px;'+(b?'background:var('+colorVar+');':'opacity:0;')+'"></div>';
+    });
+    h+='</div>';
+  });
+  el.innerHTML=h+'</div>';
 }
 var TORCH=[
   [0,0,1,0,0],
@@ -1184,8 +1331,9 @@ var ART_ICONS={
 /* \u2550\u2550\u2550 RENDER PATH \u2550\u2550\u2550 */
 function renderPath(){
   var el=document.getElementById("pathEl");if(!el)return;el.innerHTML="";
+  var LS=getLangStages();
   STAGES.forEach(function(stage,si){
-    var ls=STAGES_EN[si];
+    var ls=LS[si];
     var total=stage.criteria.length;var done=stage.criteria.filter(function(c){return st.checked[c.id];}).length;
     var pct=Math.round(done/total*100);var isOpen=!!st.open[stage.id];var isComplete=pct===100;
     var card=document.createElement("div");card.className="module-card fade-in"+(isComplete?" complete":"");card.id="mod-"+stage.id;
@@ -1235,7 +1383,7 @@ function toggleCheck(cid,si,stageId){
   var isOn=st.checked[cid];
 
   /* confetti for exam milestones */
-  if(isOn&&(cid==="b9"||cid==="pr5")){if(typeof confetti==="function")confetti({particleCount:100,spread:80,origin:{y:0.7},colors:["#d4a843","#4e9b6f","#00e5ff"]});}
+  if(isOn&&(cid==="b9"||cid==="pr5")){if(typeof confetti==="function")confetti({particleCount:100,spread:80,origin:{y:0.7},colors:["#b8a07a","#7abf9a","#7aaab8"]});}
 
   /* 1) Update the specific criterion row inline */
   var row=document.querySelector(".criterion[data-cid=\""+cid+"\"]");
@@ -1276,11 +1424,11 @@ function renderRightSummary(){
   var total=0,done=0;STAGES.forEach(function(s){s.criteria.forEach(function(c){total++;if(st.checked[c.id])done++;});});
   var pct=total?Math.round(done/total*100):0;
   var nextItem="\u2014";
-  outer:for(var si=0;si<STAGES.length;si++){var stage=STAGES[si];var ls=STAGES_EN[si];
+  outer:for(var si=0;si<STAGES.length;si++){var stage=STAGES[si];var ls=getLangStages()[si];
     for(var ci=0;ci<stage.criteria.length;ci++){if(!st.checked[stage.criteria[ci].id]){nextItem=ls.criteria[ci];break outer;}}}
   sum.innerHTML="<div class=\"summary-row\"><span class=\"summary-lbl\">"+t("total")+"</span><span class=\"summary-val\">"+total+"</span></div>"
-    +"<div class=\"summary-row\"><span class=\"summary-lbl\">"+t("done")+"</span><span class=\"summary-val\" style=\"color:var(--green)\">"+done+" ("+pct+"%)</span></div>"
-    +"<div class=\"summary-row\"><span class=\"summary-lbl\">"+t("left")+"</span><span class=\"summary-val\" style=\"color:var(--gold)\">"+(total-done)+"</span></div>"
+    +"<div class=\"summary-row\"><span class=\"summary-lbl\">"+t("done")+"</span><span class=\"summary-val\">"+done+" ("+pct+"%)</span></div>"
+    +"<div class=\"summary-row\"><span class=\"summary-lbl\">"+t("left")+"</span><span class=\"summary-val\">"+(total-done)+"</span></div>"
     +"<div class=\"next-up\"><div class=\"next-up-lbl\">"+t("nextExp")+"</div><div class=\"next-up-text\">"+esc(nextItem)+"</div></div>";
 }
 
@@ -1291,7 +1439,8 @@ function renderArts(){
     var c=document.createElement("div");c.className="art-card";c.style.setProperty("--art-color","var(--gold)");
     c.setAttribute("onclick","openArt("+a.id+")");
     var artIcon=ART_ICONS[a.type]||ART_ICONS['Reference'];
-    c.innerHTML="<div class=\"art-icon\">"+artIcon+"</div><div class=\"art-name\" title=\""+esc(a.name)+"\">"+esc(a.name)+"</div><div class=\"art-type\">"+esc(a.type)+"</div>"+(a.date?"<div class=\"art-date\">"+esc(a.date)+"</div>":"");
+    var typeLabel=t('type'+a.type)||a.type;
+    c.innerHTML="<div class=\"art-icon\">"+artIcon+"</div><div class=\"art-name\" title=\""+esc(a.name)+"\">"+esc(a.name)+"</div><div class=\"art-type\">"+esc(typeLabel)+"</div>"+(a.date?"<div class=\"art-date\">"+esc(a.date)+"</div>":"");
     g.appendChild(c);
   });
   var add=document.createElement("div");add.className="art-card art-card-add";
@@ -1368,12 +1517,19 @@ function renderAll(){renderPath();renderArts();updateOverall();updateStreak();re
 }
 
 /* \u2550\u2550\u2550 INIT \u2550\u2550\u2550 */
+
+
 document.addEventListener("DOMContentLoaded",function(){
   var savedLang=S.get("bim-lang");if(savedLang)LANG=savedLang;
   document.querySelectorAll(".lang-pill").forEach(function(b){b.classList.toggle("active",b.textContent.trim()===LANG.toUpperCase());});
   var savedTheme=S.get("bim-theme");if(savedTheme)document.documentElement.setAttribute("data-theme",savedTheme);
+  var bn1=document.getElementById('brandName1');
+  var bn2=document.getElementById('brandName2');
+  if(bn1)renderPxText(bn1,"NOEL'S",2,'--gold');
+  if(bn2)renderPxText(bn2,'LEARNING HUB',2,'--muted');
   load();renderAll();
 });
+
 </script>
 </body>
 </html>
