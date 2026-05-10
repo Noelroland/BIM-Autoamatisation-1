@@ -217,6 +217,56 @@ button { font: inherit; color: inherit; }
   50%      { opacity: 0.95; }
 }
 
+/* Theme-switch lamp death — rapid flicker → black */
+@keyframes tube-dying {
+  0%   { opacity: 1;    }
+  4%   { opacity: 0.15; }
+  7%   { opacity: 0.9;  }
+  13%  { opacity: 0.05; }
+  17%  { opacity: 0.85; }
+  24%  { opacity: 0;    }
+  28%  { opacity: 0.7;  }
+  36%  { opacity: 0;    }
+  41%  { opacity: 0.5;  }
+  50%  { opacity: 0;    }
+  56%  { opacity: 0.25; }
+  65%  { opacity: 0;    }
+  72%  { opacity: 0.1;  }
+  82%  { opacity: 0;    }
+  100% { opacity: 0;    }
+}
+
+/* Lamp startup in new theme — stuttery warm-up → stable */
+@keyframes tube-startup {
+  0%   { opacity: 0;    }
+  6%   { opacity: 0.6;  }
+  10%  { opacity: 0.05; }
+  16%  { opacity: 0.85; }
+  26%  { opacity: 0.2;  }
+  32%  { opacity: 1;    }
+  42%  { opacity: 0.75; }
+  50%  { opacity: 1;    }
+  62%  { opacity: 0.9;  }
+  75%  { opacity: 1;    }
+  100% { opacity: 1;    }
+}
+
+.tube-dying   { animation: tube-dying   0.72s linear    forwards !important; }
+.tube-startup { animation: tube-startup 0.55s ease-out  forwards !important; }
+
+/* Full-viewport black flash that covers the theme switch moment */
+#themeFlash {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: #000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.12s linear;
+}
+#themeFlash.on  { opacity: 1; }
+#themeFlash.off { opacity: 0; transition: opacity 0.28s ease-out; }
+
 /* BOTTOM TUBE — mirrors top tube, projects warm light upward toward cards */
 .light-tube-bottom {
   position: absolute;
@@ -259,14 +309,8 @@ button { font: inherit; color: inherit; }
 /* Day theme: tubes are dim/subtle since ambient light dominates a beige scene */
 [data-theme="day"] .light-tube,
 [data-theme="day"] .light-tube-bottom {
-  background: linear-gradient(90deg, #f8e8d0 0%, #fff5e0 50%, #f8e8d0 100%);
-  box-shadow:
-    /* Soft warm core */
-    0 0 4px 1px rgba(255,220,170,0.6),
-    0 0 12px 4px rgba(220,150,70,0.30),
-    /* Tight warm halo */
-    0 0 24px 8px rgba(200,130,50,0.18);
-  opacity: 0.55;
+  opacity: 0;
+  animation: none;
 }
 [data-theme="day"] #particlesCanvas { opacity: 0.10; }
 
@@ -2506,6 +2550,385 @@ button { font: inherit; color: inherit; }
 }
 
 /* ============================================================
+   VOCAB PANEL
+   ============================================================ */
+.vocab-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 0 0 20px;
+}
+.vocab-search-wrap {
+  flex: 1;
+  min-width: 180px;
+  position: relative;
+}
+.vocab-search {
+  width: 100%;
+  padding: 10px 14px 10px 38px;
+  border-radius: var(--r-full);
+  background: var(--glass-thin);
+  border: 1px solid var(--separator);
+  color: var(--text-1);
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color var(--dur-fast) var(--ease-std);
+}
+.vocab-search:focus { border-color: var(--amber); }
+.vocab-search::placeholder { color: var(--text-3); }
+.vocab-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-3);
+  pointer-events: none;
+  width: 14px; height: 14px;
+}
+.vocab-pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.vocab-pill {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--separator);
+  background: transparent;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-std),
+              color var(--dur-fast) var(--ease-std),
+              border-color var(--dur-fast) var(--ease-std);
+}
+.vocab-pill:hover { color: var(--text-1); border-color: var(--edge-hi); }
+.vocab-pill.active { background: var(--amber-soft); color: var(--amber); border-color: var(--amber-glow); }
+.vocab-pill.active-info { background: var(--info-soft); color: var(--info); border-color: rgba(100,210,255,0.30); }
+.vocab-sort {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  padding: 8px 12px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--separator);
+  background: var(--glass-thin);
+  color: var(--text-2);
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.vocab-sort:focus { border-color: var(--amber); color: var(--text-1); }
+
+.vocab-folders {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--separator);
+  margin-bottom: 20px;
+}
+.vocab-folder-pill {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 11px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--separator);
+  background: transparent;
+  color: var(--text-3);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-std),
+              color var(--dur-fast) var(--ease-std),
+              border-color var(--dur-fast) var(--ease-std);
+}
+.vocab-folder-pill:hover { color: var(--text-2); border-color: var(--separator); }
+.vocab-folder-pill.active { background: var(--info-soft); color: var(--info); border-color: rgba(100,210,255,0.30); }
+
+.vocab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+.vocab-card {
+  padding: 16px 18px;
+  border-radius: var(--r-md);
+  background: var(--glass-thin);
+  border: 1px solid var(--separator);
+  border-top-color: var(--edge-hi);
+  position: relative;
+  transition: border-color var(--dur-fast) var(--ease-std),
+              background var(--dur-fast) var(--ease-std),
+              box-shadow var(--dur-fast) var(--ease-std);
+}
+.vocab-card:hover { border-color: rgba(255,235,205,0.12); background: var(--glass-regular); }
+.vocab-card.flash {
+  border-color: var(--amber);
+  box-shadow: var(--glow-amber-sm);
+  animation: vocab-flash 0.8s var(--ease-out) forwards;
+}
+@keyframes vocab-flash {
+  0%   { box-shadow: var(--glow-amber); border-color: var(--amber); }
+  100% { box-shadow: none; border-color: var(--separator); }
+}
+
+.vocab-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.vocab-card-term {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-1);
+  line-height: 1.2;
+}
+.vocab-card-actions {
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-std);
+  flex-shrink: 0;
+}
+.vocab-card:hover .vocab-card-actions { opacity: 1; }
+.vocab-card-btn {
+  width: 24px; height: 24px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid var(--separator);
+  color: var(--text-3);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  transition: background var(--dur-fast) var(--ease-std), color var(--dur-fast) var(--ease-std);
+}
+.vocab-card-btn:hover { background: var(--bg-elev-2); color: var(--text-1); }
+.vocab-card-btn.del:hover { color: #ff453a; border-color: rgba(255,69,58,0.40); }
+
+.vocab-card-folder {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--info);
+  margin-bottom: 8px;
+}
+.vocab-card-def {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-2);
+  margin-bottom: 10px;
+}
+.vocab-card-aliases {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-3);
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+.vocab-card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.vocab-badge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border-radius: 4px;
+}
+.vocab-badge-IT     { background: rgba(191,90,242,0.18); color: var(--purple); }
+.vocab-badge-AI     { background: rgba(100,210,255,0.14); color: var(--info); }
+.vocab-badge-BIM    { background: rgba(232,145,58,0.15); color: var(--amber); }
+.vocab-badge-Architecture { background: rgba(48,209,88,0.14); color: var(--green); }
+
+.vocab-related {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 6px;
+}
+.vocab-rel-chip {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: var(--r-full);
+  background: var(--glass-thin);
+  border: 1px solid var(--separator);
+  color: var(--text-3);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-std), border-color var(--dur-fast) var(--ease-std);
+}
+.vocab-rel-chip:hover { color: var(--amber); border-color: var(--amber-glow); }
+
+.vocab-empty {
+  grid-column: 1 / -1;
+  padding: 48px 0;
+  text-align: center;
+  color: var(--text-3);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+}
+
+.vocab-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: var(--r-full);
+  background: var(--amber-soft);
+  border: 1px solid var(--amber-glow);
+  color: var(--amber);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-std), box-shadow var(--dur-fast) var(--ease-std);
+  white-space: nowrap;
+}
+.vocab-add-btn:hover { background: rgba(232,145,58,0.20); box-shadow: var(--glow-amber-sm); }
+
+/* VOCAB FORM OVERLAY */
+.vocab-form-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0,0,0,0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-base) var(--ease-std);
+}
+.vocab-form-overlay.open { opacity: 1; pointer-events: auto; }
+.vocab-form-box {
+  width: min(540px, 92vw);
+  max-height: 88vh;
+  overflow-y: auto;
+  background: var(--glass-elev);
+  border: 1px solid var(--separator);
+  border-top-color: var(--edge-hi);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-modal);
+  padding: 28px 30px 32px;
+  transform: translateY(10px) scale(0.97);
+  transition: transform var(--dur-modal) var(--ease-out);
+}
+.vocab-form-overlay.open .vocab-form-box { transform: translateY(0) scale(1); }
+.vocab-form-box::-webkit-scrollbar { width: 6px; }
+.vocab-form-box::-webkit-scrollbar-thumb { background: var(--separator); border-radius: 3px; }
+
+.vocab-form-title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-1);
+  margin-bottom: 20px;
+}
+.vocab-form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 14px;
+}
+.vocab-form-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.vocab-form-label::before { content: '// '; color: var(--amber); opacity: 0.7; }
+.vocab-form-input, .vocab-form-textarea, .vocab-form-select {
+  padding: 10px 14px;
+  border-radius: var(--r-md);
+  background: var(--bg-elev-1);
+  border: 1px solid var(--separator);
+  color: var(--text-1);
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color var(--dur-fast) var(--ease-std);
+}
+.vocab-form-input:focus, .vocab-form-textarea:focus, .vocab-form-select:focus { border-color: var(--amber); }
+.vocab-form-input::placeholder, .vocab-form-textarea::placeholder { color: var(--text-3); }
+.vocab-form-textarea { resize: vertical; min-height: 80px; font-size: 13px; line-height: 1.5; }
+.vocab-form-select { appearance: none; -webkit-appearance: none; }
+
+.vocab-form-vocab-picks {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.vocab-form-vocab-pick {
+  padding: 6px 13px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--separator);
+  background: transparent;
+  color: var(--text-2);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-std);
+}
+.vocab-form-vocab-pick:hover { border-color: var(--edge-hi); color: var(--text-1); }
+.vocab-form-vocab-pick.sel-IT { background: rgba(191,90,242,0.18); color: var(--purple); border-color: rgba(191,90,242,0.40); }
+.vocab-form-vocab-pick.sel-AI { background: rgba(100,210,255,0.14); color: var(--info); border-color: rgba(100,210,255,0.30); }
+.vocab-form-vocab-pick.sel-BIM { background: rgba(232,145,58,0.15); color: var(--amber); border-color: var(--amber-glow); }
+.vocab-form-vocab-pick.sel-Architecture { background: rgba(48,209,88,0.14); color: var(--green); border-color: rgba(48,209,88,0.30); }
+
+.vocab-form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+.vocab-form-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-3);
+  letter-spacing: 0.04em;
+  margin-top: 3px;
+}
+.vocab-count-bar {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-3);
+  letter-spacing: 0.08em;
+  padding-bottom: 16px;
+}
+.vocab-count-bar strong { color: var(--text-2); }
+
+/* ============================================================
    RESPONSIVE
    ============================================================ */
 @media (max-width: 1023px) {
@@ -2597,6 +3020,7 @@ button { font: inherit; color: inherit; }
 </style>
 </head>
 <body>
+<div id="themeFlash" aria-hidden="true"></div>
 
 <!-- LIGHTING — top + bottom tubes projecting warm light toward the cards -->
 <div class="lighting" aria-hidden="true">
@@ -2802,7 +3226,7 @@ button { font: inherit; color: inherit; }
 <div class="route-panel" id="route-library" role="dialog" aria-modal="true" aria-labelledby="route-library-title">
   <div class="route-header">
     <div>
-      <div class="route-sub" data-i18n="lib-sub">4 saved · vocabulary, tools, references</div>
+      <div class="route-sub" data-i18n="lib-sub">5 saved · vocabulary, tools, references</div>
       <div class="route-title" id="route-library-title" data-i18n="lib-title">Library</div>
     </div>
     <button class="route-close" type="button" aria-label="Close">
@@ -3035,6 +3459,17 @@ button { font: inherit; color: inherit; }
         { name: 'SWAPP',     tag: 'AI-automated construction documentation',         cat: 'AI Documentation',      stage: 'DD → Construction Docs',        url: 'https://swapp.ai',      desc: 'Automates construction documents: learns firm standards, auto-generates plans, elevations, RCPs, schedules, MEP layouts. Potentially halves documentation time. Leader in automated drawing production.', price: 'Enterprise pricing', founded: '2018' },
       ],
     },
+    {
+      id: 'vocab',
+      type: { en: 'Living vocab', de: 'Lebendiges Glossar', ru: 'Живой словарь' },
+      name: { en: 'Vocabulary', de: 'Vokabular', ru: 'Словарь' },
+      desc: {
+        en: '80 cross-linked terms across IT, AI, BIM, Architecture — filterable, searchable, editable.',
+        de: '80 vernetzte Begriffe aus IT, KI, BIM, Architektur — filterbar, durchsuchbar, editierbar.',
+        ru: '80 взаимосвязанных терминов: IT, AI, BIM, Архитектура — фильтруемые, редактируемые.',
+      },
+      color: 'info', date: '2026-05-10', icon: '🔗', preview: 'vocab',
+    },
   ];
 
   // ---------- STAGES — full criteria with EN/DE/RU ----------
@@ -3140,6 +3575,128 @@ button { font: inherit; color: inherit; }
 
   // Total criterion count across all stages (used for cert card live %)
   const TOTAL_CRITERIA = STAGES_DATA.reduce((n, s) => n + s.criteria.length, 0);
+
+  // ---------- VOCAB SEED DATA ----------
+  const VOCAB_KEY = 'bim-hub-vocab-v1';
+  const TODAY_ISO = (function(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); })();
+
+  const VOCAB_SEED_FOLDERS = ['Languages','Libraries','Software','Standards','Protocols','Concepts'];
+
+  const VOCAB_SEED_TERMS = [
+    // IT — Languages (7)
+    { id:'v-python',      term:'Python',            aliases:['py'],                          vocabs:['IT'],              folder:'Languages',  shortDef:'High-level scripting language used for BIM automation, data processing, and IFC manipulation.',          related:['v-pip','v-vscode','v-ifcopenshell','v-pandas'] },
+    { id:'v-js',          term:'JavaScript',         aliases:['JS','ECMAScript'],             vocabs:['IT'],              folder:'Languages',  shortDef:'Scripting language of the web. Powers interactive dashboards, hub UIs, and browser-based BIM viewers.',  related:['v-html','v-css','v-nodejs'] },
+    { id:'v-html',        term:'HTML',               aliases:['HyperText Markup Language'],   vocabs:['IT'],              folder:'Languages',  shortDef:'Markup language defining the structure of web pages. Every Hub panel is HTML.',                          related:['v-css','v-js'] },
+    { id:'v-css',         term:'CSS',                aliases:['Cascading Style Sheets'],      vocabs:['IT'],              folder:'Languages',  shortDef:'Style layer controlling layout, color, typography, and animations in web UIs.',                           related:['v-html','v-js'] },
+    { id:'v-sql',         term:'SQL',                aliases:['Structured Query Language'],   vocabs:['IT'],              folder:'Languages',  shortDef:'Language for querying relational databases. Used in BIM databases and BI tools.',                         related:['v-python'] },
+    { id:'v-json',        term:'JSON',               aliases:['JavaScript Object Notation'],  vocabs:['IT'],              folder:'Languages',  shortDef:'Lightweight data-interchange format. Used for IFC metadata, API responses, and Hub state.',                related:['v-python','v-api'] },
+    { id:'v-xml',         term:'XML',                aliases:['eXtensible Markup Language'],  vocabs:['IT'],              folder:'Languages',  shortDef:'Markup language used for BCF files, COBie spreadsheets, and older BIM data exchange formats.',             related:['v-bcf','v-json'] },
+
+    // IT — Libraries (6)
+    { id:'v-ifcopenshell',term:'ifcopenshell',       aliases:['IfcOpenShell'],                vocabs:['IT','BIM'],        folder:'Libraries',  shortDef:'Open-source Python library for reading, writing, and manipulating IFC files programmatically.',             related:['v-ifc','v-python','v-pip'] },
+    { id:'v-pandas',      term:'pandas',             aliases:[],                              vocabs:['IT'],              folder:'Libraries',  shortDef:'Python data-manipulation library. Organises IFC element data into tables for analysis and Excel export.',    related:['v-python','v-openpyxl','v-ifcopenshell'] },
+    { id:'v-openpyxl',    term:'openpyxl',           aliases:[],                              vocabs:['IT'],              folder:'Libraries',  shortDef:'Python library for reading and writing Excel (.xlsx) files with cell-level control.',                       related:['v-python','v-pandas'] },
+    { id:'v-numpy',       term:'NumPy',              aliases:['numpy'],                       vocabs:['IT'],              folder:'Libraries',  shortDef:'Numerical computing library for Python. Used for geometry calculations in IFC coordinate processing.',       related:['v-python','v-pandas'] },
+    { id:'v-requests',    term:'requests',           aliases:[],                              vocabs:['IT'],              folder:'Libraries',  shortDef:'Python HTTP library. Used to call REST APIs, including the Claude API and BIM platform endpoints.',          related:['v-python','v-api','v-claude-api'] },
+    { id:'v-archicad-pkg',term:'archicad',           aliases:['archicad package'],            vocabs:['IT','BIM'],        folder:'Libraries',  shortDef:'Official Graphisoft Python package for controlling ArchiCAD via scripts — connect, query, modify elements.',  related:['v-python','v-archicad','v-ifc'] },
+
+    // IT — Software (5)
+    { id:'v-vscode',      term:'VS Code',            aliases:['Visual Studio Code'],          vocabs:['IT'],              folder:'Software',   shortDef:'Free, extensible code editor by Microsoft. Primary IDE for Python BIM scripting.',                          related:['v-python','v-pip','v-github'] },
+    { id:'v-git',         term:'Git',                aliases:[],                              vocabs:['IT'],              folder:'Software',   shortDef:'Distributed version-control system. Tracks changes in code. Used with GitHub to publish BIM scripts.',       related:['v-github','v-vscode'] },
+    { id:'v-github',      term:'GitHub',             aliases:[],                              vocabs:['IT'],              folder:'Software',   shortDef:'Cloud hosting for Git repositories. Your BIM automation portfolio lives here.',                              related:['v-git','v-python','v-archicad-pkg'] },
+    { id:'v-nodejs',      term:'Node.js',            aliases:['Node'],                        vocabs:['IT'],              folder:'Software',   shortDef:'JavaScript runtime for server-side scripting. Runs JS outside the browser; used by BIM web tooling.',        related:['v-js','v-npm'] },
+    { id:'v-npm',         term:'npm',                aliases:['Node Package Manager'],        vocabs:['IT'],              folder:'Software',   shortDef:'Package manager for JavaScript / Node.js. Like pip but for the JS ecosystem.',                               related:['v-nodejs','v-pip'] },
+
+    // IT — Protocols / Concepts (9)
+    { id:'v-pip',         term:'pip',                aliases:[],                              vocabs:['IT'],              folder:'Protocols',  shortDef:"Python's package installer. `pip install ifcopenshell` downloads and installs a library.",                   related:['v-python','v-ifcopenshell','v-archicad-pkg'] },
+    { id:'v-api',         term:'API',                aliases:['Application Programming Interface'], vocabs:['IT'],       folder:'Protocols',  shortDef:'Defined interface for software components to communicate. IFC viewers, BIM platforms, and Claude expose APIs.', related:['v-rest','v-json','v-claude-api','v-mcp'] },
+    { id:'v-rest',        term:'REST',               aliases:['RESTful API'],                 vocabs:['IT'],              folder:'Protocols',  shortDef:'Architectural style for HTTP APIs using verbs (GET/POST/PUT/DELETE) and JSON payloads.',                     related:['v-api','v-json','v-http'] },
+    { id:'v-http',        term:'HTTP',               aliases:['HTTPS'],                       vocabs:['IT'],              folder:'Protocols',  shortDef:'Hypertext Transfer Protocol — the foundation of data transfer on the web. Secure version is HTTPS.',          related:['v-rest','v-api'] },
+    { id:'v-csp',         term:'CSP',                aliases:['Content Security Policy'],     vocabs:['IT'],              folder:'Protocols',  shortDef:'Browser security header restricting resource loading. The Hub uses connect-src none — no network calls.',      related:['v-html','v-js'] },
+    { id:'v-localStorage',term:'localStorage',       aliases:['local storage'],               vocabs:['IT'],              folder:'Concepts',   shortDef:'Browser key-value store persisting data across page reloads. Hub state, vocab, and notes all live here.',      related:['v-js','v-json'] },
+    { id:'v-dom',         term:'DOM',                aliases:['Document Object Model'],       vocabs:['IT'],              folder:'Concepts',   shortDef:'Tree representation of an HTML page. JavaScript manipulates the DOM to update UI without page reloads.',     related:['v-html','v-js'] },
+    { id:'v-regex',       term:'Regex',              aliases:['Regular Expression'],          vocabs:['IT'],              folder:'Concepts',   shortDef:'Pattern syntax for searching and validating strings. Used for IFC GUID checks, name validation.',              related:['v-python','v-js'] },
+    { id:'v-csv',         term:'CSV',                aliases:['Comma-Separated Values'],      vocabs:['IT'],              folder:'Concepts',   shortDef:'Plain-text table format. Simple export target for BIM element lists before Excel formatting.',                related:['v-python','v-pandas'] },
+
+    // AI (12)
+    { id:'v-llm',         term:'LLM',                aliases:['Large Language Model'],        vocabs:['AI'],              folder:'Concepts',   shortDef:'Neural network trained on text at scale. Powers Claude, GPT-4, Gemini. Core of AI assistant tools.',         related:['v-claude-api','v-prompt','v-token','v-mcp'] },
+    { id:'v-claude-api',  term:'Claude API',         aliases:['Anthropic API'],               vocabs:['AI','IT'],         folder:'Protocols',  shortDef:"Anthropic's API for programmatic Claude access — send IFC data, receive analysis or generated code.",         related:['v-mcp','v-llm','v-python','v-requests'] },
+    { id:'v-mcp',         term:'MCP',                aliases:['Model Context Protocol'],      vocabs:['AI','IT'],         folder:'Protocols',  shortDef:"Anthropic's open protocol for Claude to interact with external tools, files, and APIs in real time.",         related:['v-claude-api','v-archicad-mcp','v-llm'] },
+    { id:'v-archicad-mcp',term:'archicad-mcp',       aliases:['ArchiCAD MCP server'],        vocabs:['AI','BIM'],        folder:'Software',   shortDef:'Community MCP server that connects Claude to a live ArchiCAD session via the Tapir add-on.',                  related:['v-mcp','v-archicad','v-archicad-pkg','v-ifc'] },
+    { id:'v-prompt',      term:'Prompt',             aliases:['system prompt','user prompt'], vocabs:['AI'],              folder:'Concepts',   shortDef:'Input text given to an LLM. Prompt engineering shapes how Claude responds to BIM queries.',                   related:['v-llm','v-claude-api','v-context'] },
+    { id:'v-token',       term:'Token',              aliases:['tokens'],                      vocabs:['AI'],              folder:'Concepts',   shortDef:'Smallest unit of text an LLM processes (~4 chars). API billing and context limits are measured in tokens.',    related:['v-llm','v-context','v-claude-api'] },
+    { id:'v-context',     term:'Context window',     aliases:['context length'],              vocabs:['AI'],              folder:'Concepts',   shortDef:'Maximum tokens an LLM can process in one call. Claude\'s window is very large — can hold entire IFC files.',  related:['v-token','v-llm','v-prompt'] },
+    { id:'v-rag',         term:'RAG',                aliases:['Retrieval-Augmented Generation'], vocabs:['AI'],           folder:'Concepts',   shortDef:'Pattern: retrieve relevant documents, then include them in the LLM prompt. Used to ground BIM answers.',      related:['v-llm','v-prompt','v-vector-db'] },
+    { id:'v-vector-db',   term:'Vector database',    aliases:['vector store','embeddings db'],vocabs:['AI','IT'],         folder:'Software',   shortDef:'Database storing high-dimensional embeddings. Powers semantic search in RAG pipelines for BIM documentation.', related:['v-rag','v-llm'] },
+    { id:'v-embedding',   term:'Embedding',          aliases:['text embedding'],              vocabs:['AI'],              folder:'Concepts',   shortDef:'Numerical representation of text meaning. Similar concepts cluster in vector space — basis of semantic search.',related:['v-vector-db','v-rag','v-llm'] },
+    { id:'v-function-call',term:'Tool use',          aliases:['function calling'],            vocabs:['AI'],              folder:'Concepts',   shortDef:'Capability for LLMs to call defined functions/tools. Claude uses it to call MCP servers and read IFC data.',   related:['v-mcp','v-claude-api','v-llm'] },
+    { id:'v-fine-tune',   term:'Fine-tuning',        aliases:['finetuning'],                  vocabs:['AI'],              folder:'Concepts',   shortDef:'Additional training on domain-specific data. Less needed now with large context windows and RAG.',             related:['v-llm','v-rag','v-prompt'] },
+
+    // BIM — Standards (10)
+    { id:'v-ifc',         term:'IFC',                aliases:['Industry Foundation Classes','ISO 16739'], vocabs:['BIM'],folder:'Standards',  shortDef:'Open ISO standard (16739) for sharing BIM models between software vendors. The lingua franca of openBIM.',      related:['v-ifcopenshell','v-buildingsmart','v-archicad','v-bcf','v-mvd'] },
+    { id:'v-iso19650',    term:'ISO 19650',          aliases:['19650'],                       vocabs:['BIM'],             folder:'Standards',  shortDef:"International standard for BIM information management across a building's lifecycle (design, build, operate).",  related:['v-bim','v-openbim','v-buildingsmart','v-bcf'] },
+    { id:'v-bcf',         term:'BCF',                aliases:['BIM Collaboration Format'],    vocabs:['BIM'],             folder:'Standards',  shortDef:'Open format for communicating model issues — attaches comments to specific BIM elements in any IFC viewer.',    related:['v-ifc','v-openbim','v-buildingsmart','v-idm'] },
+    { id:'v-idm',         term:'IDM',                aliases:['Information Delivery Manual'], vocabs:['BIM'],             folder:'Standards',  shortDef:'Defines who needs what information, when, and in what form. Maps workflows to IFC data deliverables.',          related:['v-mvd','v-buildingsmart','v-bcf','v-openbim'] },
+    { id:'v-mvd',         term:'MVD',                aliases:['Model View Definition'],       vocabs:['BIM'],             folder:'Standards',  shortDef:'Subset of the IFC schema for a specific use case (e.g., Coordination View). Defines exchange requirements.',    related:['v-ifc','v-idm','v-buildingsmart','v-openbim'] },
+    { id:'v-bsdd',        term:'bSDD',               aliases:['buildingSMART Data Dictionary'], vocabs:['BIM'],           folder:'Standards',  shortDef:'Online library of classification systems and property set definitions. Adds meaning to IFC properties.',         related:['v-openbim','v-buildingsmart','v-ifc','v-pset'] },
+    { id:'v-pset',        term:'Pset',               aliases:['Property Set','PropertySet'],  vocabs:['BIM'],             folder:'Concepts',   shortDef:'Named group of properties attached to an IFC element. Checking Pset completeness is core BIM QA work.',        related:['v-ifc','v-ifcopenshell','v-bsdd','v-ifcwall'] },
+    { id:'v-lod',         term:'LOD',                aliases:['Level of Detail','Level of Development'], vocabs:['BIM'], folder:'Concepts',   shortDef:'Scale (100–500) defining geometry and information detail in a BIM model at each project phase.',                related:['v-bim','v-ifc','v-iso19650'] },
+    { id:'v-cobie',       term:'COBie',              aliases:['Construction Operations Building Information Exchange'], vocabs:['BIM'], folder:'Standards', shortDef:'Spreadsheet-based standard for handover data — rooms, systems, equipment — to facility managers.',         related:['v-ifc','v-iso19650','v-bim'] },
+    { id:'v-omniclass',   term:'OmniClass',          aliases:[],                              vocabs:['BIM'],             folder:'Standards',  shortDef:'North American construction classification system. Often used alongside Uniformat and MasterFormat in BIM.',     related:['v-bim','v-bsdd','v-ifc'] },
+
+    // BIM — Software (5)
+    { id:'v-archicad',    term:'ArchiCAD',           aliases:['Archicad'],                    vocabs:['BIM'],             folder:'Software',   shortDef:"Graphisoft's BIM authoring software. Exports IFC natively; scriptable via the archicad Python package.",         related:['v-ifc','v-archicad-pkg','v-archicad-mcp','v-bim'] },
+    { id:'v-revit',       term:'Revit',              aliases:[],                              vocabs:['BIM'],             folder:'Software',   shortDef:"Autodesk's BIM platform. Industry-dominant, especially in structural and MEP. Exports IFC.",                      related:['v-ifc','v-bim','v-dynamo'] },
+    { id:'v-dynamo',      term:'Dynamo',             aliases:[],                              vocabs:['BIM'],             folder:'Software',   shortDef:'Visual scripting environment for Revit (and standalone). Equivalent to ArchiCAD\'s Python API for automation.', related:['v-revit','v-python','v-bim'] },
+    { id:'v-navisworks',  term:'Navisworks',         aliases:[],                              vocabs:['BIM'],             folder:'Software',   shortDef:'Autodesk coordination and clash-detection tool. Aggregates IFC/Revit/CAD models for review.',                    related:['v-ifc','v-bim','v-bcf'] },
+    { id:'v-blenderbim',  term:'BlenderBIM',         aliases:['Bonsai'],                      vocabs:['BIM'],             folder:'Software',   shortDef:'Free, open-source IFC authoring add-on for Blender. Built on ifcopenshell — edit IFC natively.',                related:['v-ifcopenshell','v-ifc','v-python'] },
+
+    // BIM — Concepts (10)
+    { id:'v-bim',         term:'BIM',                aliases:['Building Information Modeling'], vocabs:['BIM'],          folder:'Concepts',   shortDef:'Process of creating and managing digital representations of a facility. More than 3D — it\'s structured data.',  related:['v-ifc','v-openbim','v-iso19650','v-lod'] },
+    { id:'v-openbim',     term:'openBIM',            aliases:['open BIM'],                    vocabs:['BIM'],             folder:'Concepts',   shortDef:'Vendor-neutral approach to BIM collaboration using open standards: IFC, BCF, bSDD. Championed by buildingSMART.', related:['v-ifc','v-bcf','v-buildingsmart','v-mvd','v-bsdd'] },
+    { id:'v-buildingsmart',term:'buildingSMART',     aliases:['bSI'],                         vocabs:['BIM'],             folder:'Concepts',   shortDef:'International non-profit maintaining IFC, BCF, IDM, MVD, and bSDD standards. Runs Foundation + Practitioner certs.', related:['v-ifc','v-openbim','v-bcf','v-idm','v-mvd','v-bsdd'] },
+    { id:'v-clash',       term:'Clash detection',    aliases:['clash','MEP clash'],           vocabs:['BIM'],             folder:'Concepts',   shortDef:'Finding geometric conflicts between model disciplines (structure vs MEP) before construction. Done in Navisworks.', related:['v-navisworks','v-bim','v-ifc','v-bcf'] },
+    { id:'v-ifcwall',     term:'IfcWall',            aliases:[],                              vocabs:['BIM'],             folder:'Concepts',   shortDef:'IFC entity representing a vertical building element. One of the most-queried entity types in ifcopenshell.',      related:['v-ifc','v-ifcopenshell','v-pset','v-ifcspace'] },
+    { id:'v-ifcspace',    term:'IfcSpace',           aliases:[],                              vocabs:['BIM'],             folder:'Concepts',   shortDef:'IFC entity representing a room or spatial zone — carries area, volume, and occupancy properties.',                related:['v-ifc','v-ifcopenshell','v-ifcwall','v-pset'] },
+    { id:'v-ifcrel',      term:'IfcRelDefinesByProperties', aliases:['IfcRel'],              vocabs:['BIM'],             folder:'Concepts',   shortDef:'IFC relationship entity linking a property set to one or more building elements. Core of data association.',      related:['v-ifc','v-ifcopenshell','v-pset'] },
+    { id:'v-guid',        term:'GUID',               aliases:['GlobalId','IfcGloballyUniqueId'], vocabs:['BIM','IT'],    folder:'Concepts',   shortDef:'Globally Unique Identifier assigned to every IFC element. Stable across exports — used by BCF to reference elements.', related:['v-ifc','v-bcf','v-ifcopenshell'] },
+    { id:'v-cde',         term:'CDE',                aliases:['Common Data Environment'],     vocabs:['BIM'],             folder:'Concepts',   shortDef:'Central platform for managing project information and BIM data — e.g., BIMcollab, Autodesk Docs, ProjectWise.',     related:['v-iso19650','v-bim','v-bcf'] },
+    { id:'v-digital-twin',term:'Digital Twin',       aliases:['DT'],                          vocabs:['BIM','AI'],        folder:'Concepts',   shortDef:'Live virtual replica of a physical asset, fed by sensors and BIM data. AI/LLM integration is an emerging use case.', related:['v-bim','v-ifc','v-llm','v-mcp'] },
+
+    // BIM — Learning resources (4)
+    { id:'v-osarch',      term:'osarch.org',         aliases:['Open Source Architecture'],    vocabs:['BIM'],             folder:'Concepts',   shortDef:'Community platform hosting IFC-101 course and ifcopenshell examples. Free and practitioner-focused.',             related:['v-ifcopenshell','v-ifc','v-openbim'] },
+    { id:'v-aeco-dev',    term:'aeco.dev',           aliases:[],                              vocabs:['BIM'],             folder:'Concepts',   shortDef:'Learning platform for AEC developers with ifcopenshell courses. Great intermediate resource.',                      related:['v-ifcopenshell','v-ifc','v-python'] },
+    { id:'v-edubim',      term:'edubim-campus.de',   aliases:['edubim'],                      vocabs:['BIM'],             folder:'Software',   shortDef:'Official buildingSMART Germany e-learning platform for Foundation and Practitioner certification prep.',            related:['v-buildingsmart','v-openbim','v-iso19650'] },
+    { id:'v-bim-foundation', term:'bSF',             aliases:['buildingSMART Foundation cert'], vocabs:['BIM'],          folder:'Concepts',   shortDef:'Entry-level buildingSMART certification covering openBIM principles, IFC basics, and ISO 19650.',                  related:['v-buildingsmart','v-openbim','v-ifc','v-bcp'] },
+    { id:'v-bcp',         term:'bCP',                aliases:['buildingSMART Practitioner','Practitioner Coordination'], vocabs:['BIM'], folder:'Concepts', shortDef:'Advanced buildingSMART certification for BIM coordinators. Requires Foundation + seminars + exam.',         related:['v-buildingsmart','v-bim-foundation','v-openbim'] },
+
+    // Architecture (25)
+    { id:'v-arch-plan',   term:'Floor plan',         aliases:['plan','Grundriss'],            vocabs:['Architecture'],    folder:'Concepts',   shortDef:'Horizontal section view of a building showing room layout, walls, doors, and windows at a given level.',          related:['v-arch-section','v-archicad','v-bim'] },
+    { id:'v-arch-section',term:'Section',            aliases:['cross-section','Schnitt'],     vocabs:['Architecture'],    folder:'Concepts',   shortDef:'Vertical cut through a building revealing floor heights, ceiling profiles, and structural elements.',              related:['v-arch-plan','v-archicad','v-elevation'] },
+    { id:'v-elevation',   term:'Elevation',          aliases:['facade','Ansicht'],            vocabs:['Architecture'],    folder:'Concepts',   shortDef:'Orthographic projection of a building\'s exterior face. Shows facade articulation, window placement, height.',    related:['v-arch-section','v-arch-plan','v-archicad'] },
+    { id:'v-detail',      term:'Detail drawing',     aliases:['detail','Detailzeichnung'],    vocabs:['Architecture'],    folder:'Concepts',   shortDef:'Large-scale drawing (1:5 to 1:20) showing construction assembly — connections, layers, materials.',               related:['v-arch-section','v-bim','v-lod'] },
+    { id:'v-massing',     term:'Massing model',      aliases:['massing','Baumasse'],          vocabs:['Architecture'],    folder:'Concepts',   shortDef:'Simplified 3D volume study. Used early in design to test GFA, daylight, shadowing before detailed modeling.',     related:['v-bim','v-archicad','v-lod'] },
+    { id:'v-gfa',         term:'GFA',                aliases:['Gross Floor Area','BGF'],      vocabs:['Architecture'],    folder:'Concepts',   shortDef:'Total floor area of all levels of a building. Key metric for development feasibility and regulatory compliance.', related:['v-massing','v-bim','v-ifcspace'] },
+    { id:'v-structural',  term:'Structural engineer',aliases:['SE','Tragwerksplaner'],        vocabs:['Architecture'],    folder:'Concepts',   shortDef:'Discipline calculating load-bearing structure. BIM coordination resolves clashes between arch, structure, MEP.',  related:['v-mep','v-clash','v-bim','v-ifc'] },
+    { id:'v-mep',         term:'MEP',                aliases:['Mechanical Electrical Plumbing','TGA'], vocabs:['Architecture','BIM'], folder:'Concepts', shortDef:'Building services disciplines. MEP models are the primary source of coordination clashes in BIM projects.', related:['v-structural','v-clash','v-navisworks','v-bim'] },
+    { id:'v-programme',   term:'Programme',          aliases:['Raumprogramm','space program'], vocabs:['Architecture'],   folder:'Concepts',   shortDef:'Schedule of required spaces, areas, and adjacencies. Starting point for architectural brief and BIM model setup.', related:['v-gfa','v-arch-plan','v-ifcspace'] },
+    { id:'v-zoning',      term:'Zoning',             aliases:['Nutzungsplanung','land use'],  vocabs:['Architecture'],    folder:'Concepts',   shortDef:'Legal designation controlling land use, height, setbacks, and density. Determines what can be built on a site.',  related:['v-gfa','v-massing'] },
+    { id:'v-parcel',      term:'Site / Parcel',      aliases:['Grundstück','plot'],           vocabs:['Architecture'],    folder:'Concepts',   shortDef:'Land unit on which a building stands. Defined by cadastral boundaries, orientation, and topography.',             related:['v-zoning','v-massing','v-archicad'] },
+    { id:'v-topography',  term:'Topography',         aliases:['terrain','Geländemodell'],     vocabs:['Architecture'],    folder:'Concepts',   shortDef:'Shape of the ground surface. BIM tools import survey data as terrain meshes to design site-specific solutions.',   related:['v-parcel','v-bim','v-archicad'] },
+    { id:'v-facade',      term:'Facade',             aliases:['curtain wall','Fassade'],      vocabs:['Architecture'],    folder:'Concepts',   shortDef:'Building envelope facing the public realm. Facade design balances daylight, thermal performance, and aesthetics.', related:['v-elevation','v-arch-section','v-bim'] },
+    { id:'v-core',        term:'Building core',      alias:['core','Kern'],                   vocabs:['Architecture'],    folder:'Concepts',   shortDef:'Central service zone of a building: lifts, stairs, toilets, ducts. Efficiency of the core drives rentable area.', related:['v-gfa','v-arch-plan','v-structural'] },
+    { id:'v-structural-grid', term:'Structural grid', aliases:['column grid','Raster'],      vocabs:['Architecture'],    folder:'Concepts',   shortDef:'Regular matrix of columns defining the structural bays. The grid governs floor planning and construction logic.', related:['v-structural','v-arch-plan','v-bim'] },
+    { id:'v-span',        term:'Span',               aliases:['Spannweite'],                  vocabs:['Architecture'],    folder:'Concepts',   shortDef:'Distance between two structural supports. Longer spans = more flexible floor plans but heavier, costlier structure.', related:['v-structural-grid','v-structural'] },
+    { id:'v-storey',      term:'Storey',             aliases:['floor level','Geschoss','story'], vocabs:['Architecture','BIM'], folder:'Concepts', shortDef:'One horizontal level of a building. In IFC this is IfcBuildingStorey — the organisational container for elements.', related:['v-arch-plan','v-ifc','v-gfa'] },
+    { id:'v-circulation', term:'Circulation',        aliases:['Erschließung','movement'],     vocabs:['Architecture'],    folder:'Concepts',   shortDef:'Network of corridors, stairs, and lifts enabling movement. Good circulation is compact and legible.',               related:['v-arch-plan','v-programme','v-core'] },
+    { id:'v-daylight',    term:'Daylight analysis',  aliases:['daylighting','Tageslicht'],    vocabs:['Architecture'],    folder:'Concepts',   shortDef:'Simulation of natural light penetration. Regulatory requirement in many countries; BIM tools integrate sun studies.',related:['v-massing','v-archicad','v-bim'] },
+    { id:'v-thermal',     term:'Thermal envelope',   aliases:['U-value','Wärmedämmung'],      vocabs:['Architecture'],    folder:'Concepts',   shortDef:'Building skin controlling heat loss/gain. Material layers in IFC Psets carry U-values for energy compliance.',     related:['v-facade','v-pset','v-ifc','v-mep'] },
+    { id:'v-spec',        term:'Specification',      aliases:['spec','Leistungsbeschreibung'],vocabs:['Architecture'],    folder:'Concepts',   shortDef:'Written document describing materials, standards, and workmanship for each building element.',                       related:['v-bim','v-lod','v-ifc'] },
+    { id:'v-tender',      term:'Tender',             aliases:['procurement','Ausschreibung'], vocabs:['Architecture'],    folder:'Concepts',   shortDef:'Competitive bidding process for construction. BIM models increasingly used to generate BOQ for tendering.',         related:['v-boq','v-bim','v-ifc'] },
+    { id:'v-boq',         term:'BOQ',                aliases:['Bill of Quantities','Massenermittlung'], vocabs:['Architecture','BIM'], folder:'Concepts', shortDef:'Itemised list of materials, parts, and labour. ifcopenshell can extract quantities directly from IFC elements.', related:['v-tender','v-ifcopenshell','v-ifc','v-pset'] },
+    { id:'v-pm',          term:'Project manager',    aliases:['PM','Projektleiter'],          vocabs:['Architecture'],    folder:'Concepts',   shortDef:'Person responsible for scope, schedule, and cost. In BIM projects, the PM chairs BIM coordination meetings.',      related:['v-bim','v-bcf','v-cde'] },
+    { id:'v-handover',    term:'Handover',           aliases:['as-built','Übergabe'],         vocabs:['Architecture','BIM'], folder:'Concepts', shortDef:'Transfer of the completed building to the client. BIM handover includes as-built IFC model and COBie data.',     related:['v-cobie','v-ifc','v-cde','v-digital-twin'] },
+  ].map(t => ({ ...t, addedDate: TODAY_ISO }));
 
   // ---------- STATE ----------
   const STATE_KEY = 'bim-hub-v6';
@@ -3476,7 +4033,7 @@ button { font: inherit; color: inherit; }
       'this-week': 'This week', done: 'done',
       velocity: 'Velocity', wk: 'wk', 'velocity-sub': 'target 2.5 · ahead',
       'path-title': 'Learning Path', 'path-sub': '5 stages · 57 criteria', here: 'you are here',
-      'lib-title': 'Library', 'lib-sub': '4 saved · vocabulary, tools, references',
+      'lib-title': 'Library', 'lib-sub': '5 saved · vocabulary, tools, references',
       'stats-title': 'Stats', 'stats-sub': 'velocity · predictions · history',
       'settings-title': 'Settings', 'settings-sub': 'preferences · data · export',
       'add-new': 'Add new', 'paste-link': 'Paste link or upload', 'any-format': 'any format',
@@ -3567,7 +4124,7 @@ button { font: inherit; color: inherit; }
       'this-week': 'Diese Woche', done: 'erledigt',
       velocity: 'Tempo', wk: 'Wo', 'velocity-sub': 'Ziel 2.5 · voraus',
       'path-title': 'Lernpfad', 'path-sub': '5 Stufen · 57 Kriterien', here: 'du bist hier',
-      'lib-title': 'Bibliothek', 'lib-sub': '4 gespeichert · Glossar, Werkzeuge, Referenzen',
+      'lib-title': 'Bibliothek', 'lib-sub': '5 gespeichert · Glossar, Werkzeuge, Referenzen',
       'stats-title': 'Statistik', 'stats-sub': 'Tempo · Prognose · Verlauf',
       'settings-title': 'Einstellungen', 'settings-sub': 'Präferenzen · Daten · Export',
       'add-new': 'Neu', 'paste-link': 'Link einfügen / hochladen', 'any-format': 'jedes Format',
@@ -3657,7 +4214,7 @@ button { font: inherit; color: inherit; }
       'this-week': 'Эта неделя', done: 'готово',
       velocity: 'Темп', wk: 'нед', 'velocity-sub': 'цель 2.5 · впереди',
       'path-title': 'Учебный путь', 'path-sub': '5 этапов · 57 критериев', here: 'вы здесь',
-      'lib-title': 'Библиотека', 'lib-sub': '4 сохранено · словарь, инструменты, справочники',
+      'lib-title': 'Библиотека', 'lib-sub': '5 сохранено · словарь, инструменты, справочники',
       'stats-title': 'Статистика', 'stats-sub': 'темп · прогноз · история',
       'settings-title': 'Настройки', 'settings-sub': 'предпочтения · данные · экспорт',
       'add-new': 'Добавить', 'paste-link': 'Вставить ссылку', 'any-format': 'любой формат',
@@ -3771,6 +4328,7 @@ button { font: inherit; color: inherit; }
     renderLibrary();
     renderPath();
     if (cmdkOpen) renderCmdk();
+    if (activeRoute && activeRoute.id === 'route-vocab') renderVocabPanel();
 
     // If artifact modal is open, refresh its localized content
     if (activeArtifact) {
@@ -3845,6 +4403,12 @@ button { font: inherit; color: inherit; }
         preview = '<div class="preview-grid">' +
           a.tools.slice(0, 9).map(tool => `<div class="preview-tool">${esc(tool.name.toUpperCase())}</div>`).join('') +
           '</div>';
+      } else if (a.preview === 'vocab') {
+        const vs = loadVocabState();
+        const sample = vs.terms.slice(0, 6);
+        preview = '<div class="preview-list">' +
+          sample.map(t => `<div class="preview-list-item"><span class="key">${esc(t.term)}</span><span class="val">${esc(t.vocabs.join('·'))}</span></div>`).join('') +
+          '</div>';
       }
 
       card.innerHTML = `
@@ -3855,8 +4419,10 @@ button { font: inherit; color: inherit; }
           <div class="artifact-date">${esc(formatDate(a.date))}</div>
         </div>`;
 
-      // The fix: actually wire up the click
-      card.addEventListener('click', () => openArtifact(a.id));
+      card.addEventListener('click', () => {
+        if (a.preview === 'vocab') { openVocabPanel(); }
+        else { openArtifact(a.id); }
+      });
       grid.appendChild(card);
     });
 
@@ -4580,13 +5146,14 @@ button { font: inherit; color: inherit; }
       <div class="settings-meta">${esc(t('settings-meta'))}</div>
     `;
 
-    // Wire theme segmented control
+    // Wire theme segmented control — route through animated handler
     root.querySelectorAll('#settingsTheme .seg-option').forEach(btn => {
       btn.addEventListener('click', () => {
         const newTheme = btn.dataset.theme;
-        document.documentElement.dataset.theme = newTheme;
-        try { localStorage.setItem('hub-theme', newTheme); } catch (e) {}
-        renderSettings();  // re-render to update active class
+        if (newTheme === document.documentElement.dataset.theme) return;
+        // Trigger the same lamp-flicker sequence as the topbar button
+        const tb = document.getElementById('themeToggle');
+        if (tb) tb.click();
       });
     });
 
@@ -4703,6 +5270,349 @@ button { font: inherit; color: inherit; }
     }
   }
 
+
+  // ---------- VOCABULARY MODULE ----------
+
+  function loadVocabState() {
+    try {
+      const raw = localStorage.getItem(VOCAB_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && Array.isArray(parsed.terms)) return parsed;
+      }
+    } catch (e) {}
+    return { terms: VOCAB_SEED_TERMS.slice(), folders: VOCAB_SEED_FOLDERS.slice() };
+  }
+
+  function saveVocabState(vs) {
+    try { localStorage.setItem(VOCAB_KEY, JSON.stringify(vs)); } catch (e) {}
+  }
+
+  // Vocab filter state
+  let vocabFilter = { vocabs: [], folder: null, query: '', sort: 'az' };
+  let vocabEditingId = null;
+
+  function slugify(s) {
+    return 'v-' + s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  }
+
+  function applyVocabFilter(terms) {
+    let result = terms.slice();
+
+    if (vocabFilter.vocabs.length) {
+      result = result.filter(t => vocabFilter.vocabs.some(v => t.vocabs.includes(v)));
+    }
+    if (vocabFilter.folder) {
+      result = result.filter(t => t.folder === vocabFilter.folder);
+    }
+    if (vocabFilter.query.trim()) {
+      const q = vocabFilter.query.trim().toLowerCase();
+      result = result.filter(t =>
+        t.term.toLowerCase().includes(q) ||
+        (t.shortDef || '').toLowerCase().includes(q) ||
+        (t.aliases || []).some(a => a.toLowerCase().includes(q))
+      );
+    }
+
+    const dir = vocabFilter.sort;
+    if (dir === 'az') result.sort((a, b) => a.term.localeCompare(b.term));
+    else if (dir === 'za') result.sort((a, b) => b.term.localeCompare(a.term));
+    else if (dir === 'newest') result.sort((a, b) => (b.addedDate || '').localeCompare(a.addedDate || '') || a.term.localeCompare(b.term));
+    else if (dir === 'oldest') result.sort((a, b) => (a.addedDate || '').localeCompare(b.addedDate || '') || a.term.localeCompare(b.term));
+    else if (dir === 'connected') result.sort((a, b) => (b.related || []).length - (a.related || []).length || a.term.localeCompare(b.term));
+
+    return result;
+  }
+
+  function renderVocabPanel() {
+    const body = document.getElementById('vocabPanelBody');
+    if (!body) return;
+    const vs = loadVocabState();
+    const filtered = applyVocabFilter(vs.terms);
+
+    const allFolders = [...new Set(vs.terms.map(t => t.folder).filter(Boolean))].sort();
+    const VOCABS = ['IT', 'AI', 'BIM', 'Architecture'];
+
+    const vocabCounts = {};
+    VOCABS.forEach(v => { vocabCounts[v] = vs.terms.filter(t => t.vocabs.includes(v)).length; });
+
+    body.innerHTML = `
+      <div class="vocab-count-bar">Showing <strong>${filtered.length}</strong> of <strong>${vs.terms.length}</strong> terms</div>
+      <div class="vocab-toolbar">
+        <div class="vocab-search-wrap">
+          <svg class="vocab-search-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 L14 14"/></svg>
+          <input class="vocab-search" id="vocabSearch" type="search" placeholder="Search terms, aliases, definitions…" value="${esc(vocabFilter.query)}">
+        </div>
+        <div class="vocab-pills" id="vocabVocabPills">
+          ${VOCABS.map(v => `<button type="button" class="vocab-pill${vocabFilter.vocabs.includes(v) ? ' active' : ''}" data-vocab="${esc(v)}">${esc(v)} <span style="opacity:.6">${vocabCounts[v]}</span></button>`).join('')}
+        </div>
+        <select class="vocab-sort" id="vocabSort">
+          <option value="az"${vocabFilter.sort==='az'?' selected':''}>A → Z</option>
+          <option value="za"${vocabFilter.sort==='za'?' selected':''}>Z → A</option>
+          <option value="newest"${vocabFilter.sort==='newest'?' selected':''}>Newest</option>
+          <option value="oldest"${vocabFilter.sort==='oldest'?' selected':''}>Oldest</option>
+          <option value="connected"${vocabFilter.sort==='connected'?' selected':''}>Most connected</option>
+        </select>
+        <button type="button" class="vocab-add-btn" id="vocabAddBtn">+ Add term</button>
+      </div>
+      <div class="vocab-folders" id="vocabFolderPills">
+        <button type="button" class="vocab-folder-pill${!vocabFilter.folder?' active':''}  " data-folder="">All folders</button>
+        ${allFolders.map(f => `<button type="button" class="vocab-folder-pill${vocabFilter.folder===f?' active':''}" data-folder="${esc(f)}">${esc(f)}</button>`).join('')}
+      </div>
+      <div class="vocab-grid" id="vocabGrid">
+        ${filtered.length === 0
+          ? '<div class="vocab-empty">No terms match — try a different filter or search.</div>'
+          : filtered.map(t => renderVocabCard(t, vs.terms)).join('')}
+      </div>`;
+
+    // Update sub-header count
+    const sub = document.getElementById('vocabPanelSub');
+    if (sub) sub.textContent = `${vs.terms.length} terms · IT · AI · BIM · Architecture`;
+
+    wireVocabEvents(vs);
+  }
+
+  function renderVocabCard(t, allTerms) {
+    const badges = (t.vocabs || []).map(v => `<span class="vocab-badge vocab-badge-${esc(v)}">${esc(v)}</span>`).join('');
+    const aliasLine = t.aliases && t.aliases.length
+      ? `<div class="vocab-card-aliases">aka: ${esc(t.aliases.join(', '))}</div>` : '';
+    const relChips = (t.related || []).map(rid => {
+      const found = allTerms.find(x => x.id === rid);
+      const label = found ? found.term : rid;
+      return `<button type="button" class="vocab-rel-chip" data-jump="${esc(rid)}">${esc(label)}</button>`;
+    }).join('');
+    const relRow = relChips ? `<div class="vocab-related">${relChips}</div>` : '';
+    const folder = t.folder ? `<div class="vocab-card-folder">${esc(t.folder)}</div>` : '';
+
+    return `<div class="vocab-card" id="vc-${esc(t.id)}" data-id="${esc(t.id)}">
+      <div class="vocab-card-head">
+        <div class="vocab-card-term">${esc(t.term)}</div>
+        <div class="vocab-card-actions">
+          <button type="button" class="vocab-card-btn edit" data-edit="${esc(t.id)}" title="Edit">✎</button>
+          <button type="button" class="vocab-card-btn del" data-del="${esc(t.id)}" title="Delete">✕</button>
+        </div>
+      </div>
+      ${folder}
+      <div class="vocab-card-badges">${badges}</div>
+      ${aliasLine}
+      <div class="vocab-card-def">${esc(t.shortDef || '')}</div>
+      ${relRow}
+    </div>`;
+  }
+
+  function wireVocabEvents(vs) {
+    // Search
+    const searchEl = document.getElementById('vocabSearch');
+    if (searchEl) {
+      searchEl.addEventListener('input', () => {
+        vocabFilter.query = searchEl.value;
+        renderVocabPanel();
+      });
+    }
+
+    // Vocab pills (multi-select)
+    document.querySelectorAll('#vocabVocabPills .vocab-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const v = btn.dataset.vocab;
+        const idx = vocabFilter.vocabs.indexOf(v);
+        if (idx === -1) vocabFilter.vocabs.push(v);
+        else vocabFilter.vocabs.splice(idx, 1);
+        renderVocabPanel();
+      });
+    });
+
+    // Folder pills (single-select)
+    document.querySelectorAll('#vocabFolderPills .vocab-folder-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        vocabFilter.folder = btn.dataset.folder || null;
+        renderVocabPanel();
+      });
+    });
+
+    // Sort
+    const sortEl = document.getElementById('vocabSort');
+    if (sortEl) {
+      sortEl.addEventListener('change', () => {
+        vocabFilter.sort = sortEl.value;
+        renderVocabPanel();
+      });
+    }
+
+    // Add button
+    const addBtn = document.getElementById('vocabAddBtn');
+    if (addBtn) addBtn.addEventListener('click', () => openVocabForm(null));
+
+    // Edit / delete buttons
+    document.querySelectorAll('.vocab-card-btn.edit').forEach(btn => {
+      btn.addEventListener('click', () => openVocabForm(btn.dataset.edit));
+    });
+    document.querySelectorAll('.vocab-card-btn.del').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.del;
+        const vs2 = loadVocabState();
+        vs2.terms = vs2.terms.filter(t => t.id !== id);
+        saveVocabState(vs2);
+        renderVocabPanel();
+      });
+    });
+
+    // Related chip jump
+    document.querySelectorAll('.vocab-rel-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.jump;
+        // Clear folder/vocab filters so the target card is visible
+        vocabFilter.folder = null;
+        vocabFilter.vocabs = [];
+        vocabFilter.query = '';
+        renderVocabPanel();
+        requestAnimationFrame(() => {
+          const el = document.getElementById('vc-' + targetId);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            el.classList.add('flash');
+            setTimeout(() => el.classList.remove('flash'), 1000);
+          }
+        });
+      });
+    });
+
+    // Close button
+    const closeBtn = document.getElementById('vocabPanelClose');
+    if (closeBtn) closeBtn.addEventListener('click', closeRoute);
+  }
+
+  // FORM
+  function populateFolderSelect(vs, selectedFolder) {
+    const sel = document.getElementById('vf-folder');
+    if (!sel) return;
+    const folders = [...new Set([...VOCAB_SEED_FOLDERS, ...vs.folders, ...vs.terms.map(t => t.folder).filter(Boolean)])].sort();
+    sel.innerHTML = folders.map(f => `<option value="${esc(f)}"${f === selectedFolder ? ' selected' : ''}>${esc(f)}</option>`).join('');
+  }
+
+  function openVocabForm(editId) {
+    const overlay = document.getElementById('vocabFormOverlay');
+    if (!overlay) return;
+    const vs = loadVocabState();
+    vocabEditingId = editId || null;
+
+    const term = editId ? vs.terms.find(t => t.id === editId) : null;
+
+    document.getElementById('vocabFormTitle').textContent = term ? 'Edit term' : 'Add term';
+    document.getElementById('vf-term').value = term ? term.term : '';
+    document.getElementById('vf-aliases').value = term ? (term.aliases || []).join(', ') : '';
+    document.getElementById('vf-def').value = term ? (term.shortDef || '') : '';
+    document.getElementById('vf-related').value = term ? (term.related || []).join(', ') : '';
+    document.getElementById('vf-new-folder').value = '';
+
+    // Vocab picks
+    document.querySelectorAll('#vf-vocabs .vocab-form-vocab-pick').forEach(btn => {
+      const v = btn.dataset.v;
+      const active = term ? term.vocabs.includes(v) : false;
+      btn.classList.toggle('sel-' + v, active);
+    });
+
+    populateFolderSelect(vs, term ? term.folder : 'Concepts');
+    overlay.classList.add('open');
+
+    setTimeout(() => {
+      const inp = document.getElementById('vf-term');
+      if (inp) inp.focus();
+    }, 50);
+  }
+
+  function closeVocabForm() {
+    const overlay = document.getElementById('vocabFormOverlay');
+    if (overlay) overlay.classList.remove('open');
+    vocabEditingId = null;
+  }
+
+  function saveVocabForm() {
+    const termVal = (document.getElementById('vf-term').value || '').trim();
+    if (!termVal) { document.getElementById('vf-term').focus(); return; }
+
+    const aliasesRaw = (document.getElementById('vf-aliases').value || '').trim();
+    const aliases = aliasesRaw ? aliasesRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+
+    const selectedVocabs = [];
+    document.querySelectorAll('#vf-vocabs .vocab-form-vocab-pick').forEach(btn => {
+      const v = btn.dataset.v;
+      if (btn.classList.contains('sel-' + v)) selectedVocabs.push(v);
+    });
+    if (!selectedVocabs.length) selectedVocabs.push('IT');
+
+    const newFolderVal = (document.getElementById('vf-new-folder').value || '').trim();
+    const folder = newFolderVal || document.getElementById('vf-folder').value || 'Concepts';
+
+    const defVal = (document.getElementById('vf-def').value || '').trim();
+    const relRaw = (document.getElementById('vf-related').value || '').trim();
+    const related = relRaw ? relRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+
+    const vs = loadVocabState();
+
+    if (newFolderVal && !vs.folders.includes(newFolderVal)) {
+      vs.folders.push(newFolderVal);
+    }
+
+    if (vocabEditingId) {
+      const idx = vs.terms.findIndex(t => t.id === vocabEditingId);
+      if (idx !== -1) {
+        vs.terms[idx] = { ...vs.terms[idx], term: termVal, aliases, vocabs: selectedVocabs, folder, shortDef: defVal, related };
+      }
+    } else {
+      const id = slugify(termVal);
+      vs.terms.push({ id, term: termVal, aliases, vocabs: selectedVocabs, folder, shortDef: defVal, related, addedDate: TODAY_ISO });
+    }
+
+    saveVocabState(vs);
+    closeVocabForm();
+    renderVocabPanel();
+  }
+
+  // Wire form buttons (once, after full DOM parsed — form overlay HTML is after this script tag)
+  setTimeout(function wireVocabForm() {
+    const cancelBtn = document.getElementById('vocabFormCancel');
+    const saveBtn = document.getElementById('vocabFormSave');
+    if (!cancelBtn || !saveBtn) return;
+    cancelBtn.addEventListener('click', closeVocabForm);
+    saveBtn.addEventListener('click', saveVocabForm);
+
+    // Vocab pick toggles
+    document.querySelectorAll('#vf-vocabs .vocab-form-vocab-pick').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const v = btn.dataset.v;
+        btn.classList.toggle('sel-' + v);
+      });
+    });
+
+    // Close overlay on backdrop click
+    const overlay = document.getElementById('vocabFormOverlay');
+    if (overlay) overlay.addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeVocabForm();
+    });
+
+    // ESC closes form
+    document.addEventListener('keydown', (e) => {
+      const ov = document.getElementById('vocabFormOverlay');
+      if (e.key === 'Escape' && ov && ov.classList.contains('open')) closeVocabForm();
+    });
+  }, 0);
+
+  function openVocabPanel() {
+    closeRoute();
+    const panel = document.getElementById('route-vocab');
+    if (!panel) return;
+    routeOpener = document.activeElement;
+    vocabFilter = { vocabs: [], folder: null, query: '', sort: 'az' };
+    renderVocabPanel();
+    panel.classList.add('open');
+    routeBackdrop.classList.add('open');
+    activeRoute = panel;
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => {
+      const el = document.getElementById('vocabSearch');
+      if (el) el.focus();
+    }, 60);
+  }
 
   // ---------- ROUTES (focus-trapped) ----------
   const routeBackdrop = document.getElementById('routeBackdrop');
@@ -4964,9 +5874,62 @@ button { font: inherit; color: inherit; }
     if (stored === 'day' || stored === 'night') html.dataset.theme = stored;
   } catch (e) {}
   themeBtn.addEventListener('click', () => {
-    const next = html.dataset.theme === 'night' ? 'day' : 'night';
-    html.dataset.theme = next;
-    try { localStorage.setItem('hub-theme', next); } catch (e) {}
+    if (themeBtn.dataset.busy) return;
+    themeBtn.dataset.busy = '1';
+
+    const tubes = document.querySelectorAll('.light-tube, .light-tube-bottom');
+    const flash = document.getElementById('themeFlash');
+    const current = html.dataset.theme;
+    const next    = current === 'night' ? 'day' : 'night';
+
+    if (current === 'day') {
+      // Day → Night: lamps were off, skip dying, just flash black then start up
+      if (flash) flash.className = 'on';
+      setTimeout(() => {
+        html.dataset.theme = next;
+        try { localStorage.setItem('hub-theme', next); } catch (e) {}
+        requestAnimationFrame(() => {
+          tubes.forEach(t => { t.classList.remove('tube-dying'); t.classList.add('tube-startup'); });
+          if (flash) flash.className = 'off';
+          setTimeout(() => {
+            tubes.forEach(t => t.classList.remove('tube-startup'));
+            delete themeBtn.dataset.busy;
+          }, 600);
+        });
+      }, 140);
+      return;
+    }
+
+    // Night → Day: lamps die first
+    // Phase 1: lamps die (720ms)
+    tubes.forEach(t => { t.classList.remove('tube-startup'); t.classList.add('tube-dying'); });
+
+    // Phase 2: black flash covers the switch (at ~640ms into dying)
+    setTimeout(() => { if (flash) { flash.className = 'on'; } }, 620);
+
+    // Phase 3: switch theme while screen is black (at 720ms)
+    setTimeout(() => {
+      html.dataset.theme = next;
+      try { localStorage.setItem('hub-theme', next); } catch (e) {}
+
+      requestAnimationFrame(() => {
+        if (next === 'night') {
+          // Phase 4a: lamps start up in night mode
+          tubes.forEach(t => { t.classList.remove('tube-dying'); t.classList.add('tube-startup'); });
+          if (flash) flash.className = 'off';
+          // Phase 5a: cleanup — restore idle flicker
+          setTimeout(() => {
+            tubes.forEach(t => t.classList.remove('tube-startup', 'tube-dying'));
+            delete themeBtn.dataset.busy;
+          }, 600);
+        } else {
+          // Phase 4b: day mode — lamps stay off, just lift the black flash
+          tubes.forEach(t => t.classList.remove('tube-dying', 'tube-startup'));
+          if (flash) flash.className = 'off';
+          setTimeout(() => { delete themeBtn.dataset.busy; }, 300);
+        }
+      });
+    }, 720);
   });
 
   // ---------- LANG SETUP ----------
@@ -5077,5 +6040,66 @@ button { font: inherit; color: inherit; }
   });
 })();
 </script>
+<!-- VOCAB ROUTE PANEL -->
+<div class="route-panel" id="route-vocab" role="dialog" aria-modal="true" aria-labelledby="route-vocab-title">
+  <div class="route-header">
+    <div>
+      <div class="route-sub" id="vocabPanelSub">80 terms · IT · AI · BIM · Architecture</div>
+      <div class="route-title" id="route-vocab-title">Vocabulary</div>
+    </div>
+    <button class="route-close" type="button" id="vocabPanelClose" aria-label="Close">
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3.5 3.5 L10.5 10.5 M10.5 3.5 L3.5 10.5"/></svg>
+    </button>
+  </div>
+  <div class="route-body" id="vocabPanelBody">
+    <!-- rendered by renderVocabPanel() -->
+  </div>
+</div>
+
+<!-- VOCAB ADD/EDIT FORM OVERLAY -->
+<div class="vocab-form-overlay" id="vocabFormOverlay" role="dialog" aria-modal="true" aria-labelledby="vocabFormTitle">
+  <div class="vocab-form-box">
+    <div class="vocab-form-title" id="vocabFormTitle">Add term</div>
+    <div class="vocab-form-row">
+      <label class="vocab-form-label" for="vf-term">Term</label>
+      <input class="vocab-form-input" id="vf-term" type="text" placeholder="e.g. IfcWall" autocomplete="off">
+    </div>
+    <div class="vocab-form-row">
+      <label class="vocab-form-label" for="vf-aliases">Aliases</label>
+      <input class="vocab-form-input" id="vf-aliases" type="text" placeholder="comma-separated, e.g. wall, Industry Foundation wall">
+      <div class="vocab-form-sub">Also searched in the filter bar</div>
+    </div>
+    <div class="vocab-form-row">
+      <div class="vocab-form-label">Vocabularies</div>
+      <div class="vocab-form-vocab-picks" id="vf-vocabs">
+        <button type="button" class="vocab-form-vocab-pick" data-v="IT">IT</button>
+        <button type="button" class="vocab-form-vocab-pick" data-v="AI">AI</button>
+        <button type="button" class="vocab-form-vocab-pick" data-v="BIM">BIM</button>
+        <button type="button" class="vocab-form-vocab-pick" data-v="Architecture">Architecture</button>
+      </div>
+    </div>
+    <div class="vocab-form-row">
+      <label class="vocab-form-label" for="vf-folder">Folder</label>
+      <select class="vocab-form-input vocab-form-select" id="vf-folder"></select>
+    </div>
+    <div class="vocab-form-row">
+      <label class="vocab-form-label" for="vf-new-folder">Or create new folder</label>
+      <input class="vocab-form-input" id="vf-new-folder" type="text" placeholder="New folder name">
+    </div>
+    <div class="vocab-form-row">
+      <label class="vocab-form-label" for="vf-def">Short definition</label>
+      <textarea class="vocab-form-textarea" id="vf-def" placeholder="One clear sentence."></textarea>
+    </div>
+    <div class="vocab-form-row">
+      <label class="vocab-form-label" for="vf-related">Related term IDs</label>
+      <input class="vocab-form-input" id="vf-related" type="text" placeholder="e.g. v-ifc, v-python (comma-separated)">
+      <div class="vocab-form-sub">Use existing term IDs. New terms get id = v-{term-slug}</div>
+    </div>
+    <div class="vocab-form-actions">
+      <button type="button" class="btn btn-secondary" id="vocabFormCancel">Cancel</button>
+      <button type="button" class="btn btn-primary" id="vocabFormSave">Save term</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
